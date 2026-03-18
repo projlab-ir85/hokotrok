@@ -21,4 +21,19 @@ public class RoadSection implements Updateable{
     protected RoadSection right;
 
     protected Lane lane;
+
+    public void SnowReduce(int amount){}
+    public void SnowIncrease(int amount){}
+
+    public void IceReduce(int amount){}
+    public void IceIncrease(int amount){}
+
+    public void Update(){}
+
+    public boolean Accept(Vehicle v){
+        return true;
+    }
+
+    public void AddConsumable(Consumable c){}
+
 }

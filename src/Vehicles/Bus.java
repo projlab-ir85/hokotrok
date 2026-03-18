@@ -2,6 +2,7 @@ package Vehicles;
 
 import Attachments.Snowchain;
 import RoadComponents.Intersection;
+import RoadComponents.RoadSection;
 
 public class Bus extends Vehicle{
     protected Snowchain snowchain;
@@ -11,4 +12,8 @@ public class Bus extends Vehicle{
     protected Intersection start;
     protected Intersection end;
     protected Intersection next;
+
+    public void Step(){}
+
+    public void Interact(RoadSection rs){}
 }
