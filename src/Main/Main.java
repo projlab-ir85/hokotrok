@@ -7,6 +7,6 @@ public class Main {
         Tests tests = new Tests();
         Skeleton sk = new Skeleton(tests);
 
-        sk.Menu();
+        sk.menu();
     }
 }

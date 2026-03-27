@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 public class Skeleton {
     private List<Runnable> tests = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static int indent = 0;
 
     public Skeleton(Tests t){
         tests.add(t::test1);
@@ -33,7 +35,27 @@ public class Skeleton {
         tests.add(t::test23);
     }
 
-    public void Menu(){
+    private static void increaseIndent(){
+        indent += 1;
+    }
+
+    private static void decreaseIndent(){
+        indent -= 1;
+        if(indent < 0) indent = 0;
+    }
+
+    public static void call(String object, String method, boolean increase){
+        System.out.println("\t".repeat(indent) +"--> " + object + "." + method);
+
+        if(increase) increaseIndent();
+    }
+
+    public static void returnCall(String method, String result){
+        decreaseIndent();
+        System.out.println("\t".repeat(indent)+ "<-- " + method + ": " +result);
+    }
+
+    public void menu(){
         System.out.println("[MENU]");
 
         for(int i = 0; i < tests.size(); i++){
@@ -42,16 +64,46 @@ public class Skeleton {
 
         System.out.print(">");
 
-        Scanner scanner = new Scanner(System.in);
         int index = scanner.nextInt();
 
         if(index < 1 || index > tests.size()){
             System.out.println("Invalid index.");
             return;
         }
+
+        info("Started test"+(index));
         tests.get(index-1).run();
+        decreaseIndent();
     }
 
+    private static void info(String message){
+        System.out.println("[INFO] "+message);
+    }
 
+    protected static boolean question(String message){
+        System.out.println("[Question] "+message);
+        System.out.print(">");
 
+        while(true){
+            String ans = scanner.next().toLowerCase();
+
+            if(ans.equals("y")){
+                System.out.println("[DECISION] " + message + ": yes");
+                return true;
+            }else if(ans.equals("n")){
+                System.out.println("[DECISION] " + message + ": no");
+                return false;
+            }else{
+                System.out.println("Please answer with 'y' or 'n'");
+            }
+        }
+    }
+
+    protected static void error(String message){
+        System.out.println("[ERROR] "+message);
+    }
+
+    protected static void result(boolean result){
+        System.out.println("[RESULT] "+ (result ? "Test successful" : "Test unsuccessful"));
+    }
 }
