@@ -7,5 +7,5 @@ public class Consumable {
     protected int price;
     protected int strength;
 
-    public boolean Effect(RoadSection rs){};
+    public boolean Effect(RoadSection rs){return true;};
 }
