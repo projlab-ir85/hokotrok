@@ -19,6 +19,19 @@ public class Tests {
 
     protected void test5(){
         System.out.println("holanc javitasa");
+
+        var s = TestSetup.createSnowchainFix();
+
+        Skeleton.call("Tester", "Snowchain", "Fix()", true);
+        s.snowchain.Fix();
+
+        Skeleton.returnCall("Snowchain", "Tester", "Fix()", "void");
+
+        if(s.snowchain.getTimeToLive() == 999){
+            Skeleton.result(true);
+        }else{
+            Skeleton.result(false);
+        }
     }
 
     protected void test6(){

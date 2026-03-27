@@ -9,6 +9,14 @@ public class Skeleton {
     private static final Scanner scanner = new Scanner(System.in);
     private static int indent = 0;
 
+    private static final String RESETCOLOR = "\u001B[0m";
+    private static final String BLUE = "\u001B[34m";
+    private static final String PURPLE = "\u001B[35m";
+    private static final String YELLOW = "\u001B[38;5;226m";
+    private static final String RED = "\u001B[31m";
+    private static final String GREEN = "\u001B[92m";
+    private static final String ORANGE = "\u001B[38;5;214m";
+
     public Skeleton(Tests t){
         tests.add(t::test1);
         tests.add(t::test2);
@@ -45,21 +53,35 @@ public class Skeleton {
     }
 
     public static void call(String caller, String callee, String method, boolean increase){
-        System.out.println("\t".repeat(indent) + caller + " --> " + callee + "." + method);
+        System.out.println("\t".repeat(indent)
+                + ORANGE + caller + RESETCOLOR
+                + " --> "
+                + ORANGE + callee + RESETCOLOR
+                + "."
+                + BLUE + method + RESETCOLOR
+        );
 
         if(increase) increaseIndent();
     }
 
     public static void returnCall(String caller, String callee, String method, String result){
         decreaseIndent();
-        System.out.println("\t".repeat(indent) + callee + " <-- " + caller + "." +method + ": " +result);
+        System.out.println("\t".repeat(indent)
+                + ORANGE + callee + RESETCOLOR
+                + " <-- "
+                + ORANGE + caller + RESETCOLOR
+                + "."
+                + BLUE + method + RESETCOLOR
+                + ": "
+                + PURPLE + result + RESETCOLOR
+        );
     }
 
     public void menu(){
-        System.out.println("[MENU]");
+        System.out.println(GREEN + "[MENU]");
 
         for(int i = 0; i < tests.size(); i++){
-            System.out.println((i+1) + " - test" + (i+1));
+            System.out.println(BLUE + (i+1) + RESETCOLOR + " - test" + (i+1));
         }
 
         System.out.print(">");
@@ -67,7 +89,7 @@ public class Skeleton {
         int index = scanner.nextInt();
 
         if(index < 1 || index > tests.size()){
-            System.out.println("Invalid index.");
+            System.out.println(RED + "Invalid index." + RESETCOLOR);
             return;
         }
 
@@ -77,33 +99,36 @@ public class Skeleton {
     }
 
     private static void info(String message){
-        System.out.println("[INFO] "+message);
+        System.out.println(YELLOW + "[INFO] " + RESETCOLOR + message + "\n" + RESETCOLOR);
     }
 
     protected static boolean question(String message){
-        System.out.println("[Question] "+message);
+        System.out.println(GREEN + "[Question] " + RESETCOLOR + message);
         System.out.print(">");
 
         while(true){
             String ans = scanner.next().toLowerCase();
 
             if(ans.equals("y")){
-                System.out.println("[DECISION] " + message + ": yes");
+                System.out.println(YELLOW + "[DECISION] "+ RESETCOLOR + message + GREEN +": yes\n" + RESETCOLOR);
                 return true;
             }else if(ans.equals("n")){
-                System.out.println("[DECISION] " + message + ": no");
+                System.out.println(YELLOW + "[DECISION] " + RESETCOLOR + message + RED + ": no\n" + RESETCOLOR);
                 return false;
             }else{
-                System.out.println("Please answer with 'y' or 'n'");
+                System.out.println(RED + "Please answer with 'y' or 'n'" + RESETCOLOR);
+                System.out.print(">");
             }
         }
     }
 
     protected static void error(String message){
-        System.out.println("[ERROR] "+message);
+        System.out.println(RED + "[ERROR] " + RESETCOLOR + message+"\n");
     }
 
     protected static void result(boolean result){
-        System.out.println("[RESULT] "+ (result ? "Test successful" : "Test unsuccessful"));
+        System.out.println(YELLOW + "[RESULT] " + RESETCOLOR
+                + (result ? GREEN + "Test successful" : RED + "Test unsuccessful")
+                + "\n" + RESETCOLOR);
     }
 }

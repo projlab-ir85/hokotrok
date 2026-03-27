@@ -13,6 +13,10 @@ public class Bus extends Vehicle{
     protected Intersection end;
     protected Intersection next;
 
+    public void addSnowchain(Snowchain snowchain){
+        this.snowchain = snowchain;
+    }
+
     public void Step(){}
 
     public void Interact(RoadSection rs){}
