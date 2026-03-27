@@ -44,15 +44,15 @@ public class Skeleton {
         if(indent < 0) indent = 0;
     }
 
-    public static void call(String object, String method, boolean increase){
-        System.out.println("\t".repeat(indent) +"--> " + object + "." + method);
+    public static void call(String caller, String callee, String method, boolean increase){
+        System.out.println("\t".repeat(indent) + caller + " --> " + callee + "." + method);
 
         if(increase) increaseIndent();
     }
 
-    public static void returnCall(String method, String result){
+    public static void returnCall(String caller, String callee, String method, String result){
         decreaseIndent();
-        System.out.println("\t".repeat(indent)+ "<-- " + method + ": " +result);
+        System.out.println("\t".repeat(indent) + callee + " <-- " + caller + "." +method + ": " +result);
     }
 
     public void menu(){

@@ -92,10 +92,10 @@ public class Tests {
     protected void test23(){
         System.out.println("baleset");
 
-        Skeleton.call("Object1", "Method1", true);
-        Skeleton.call("Object2", "Method2", false);
-        Skeleton.call("Object1", "Method3", false);
-        Skeleton.returnCall("Method1", "void");
+        Skeleton.call("Tester","Object1", "Method1", true);
+        Skeleton.call("Object1","Object2", "Method2", false);
+        Skeleton.call("Object2","Object1", "Method3", false);
+        Skeleton.returnCall("Object1","Tester","Method1", "void");
 
         boolean asd = Skeleton.question("question?");
 
