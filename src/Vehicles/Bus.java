@@ -12,7 +12,18 @@ public class Bus extends Vehicle{
     protected Intersection start;
     protected Intersection end;
     protected Intersection next;
-    protected boolean hasSnowchain; 
+    protected boolean hasSnowchain;
+
+    public Bus(Intersection start, Intersection end) {
+        this.start = start;
+        this.end = end;
+        stuck = false;
+        stuckTime = 0;
+        lapsDone = 0;
+        accidentTime = 0;
+        finishedLap = false;
+        hasSnowchain = false;
+    }
 
     public void addSnowchain(Snowchain snowchain){
         this.snowchain = snowchain;

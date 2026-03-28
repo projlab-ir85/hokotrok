@@ -10,7 +10,8 @@ public class Snowplow extends Vehicle{
     protected List<PlowHead> plowHeads;
     protected PlowHead activePlowHead;
 
-    public Snowplow() {
+    public Snowplow(Intersection start) {
+        this.start = start;
         BroomHead bh = new BroomHead();
         IceBreakerHead ih = new IceBreakerHead();
         plowHeads.add(bh);

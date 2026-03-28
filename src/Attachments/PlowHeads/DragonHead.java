@@ -5,6 +5,8 @@ import Consumable.Consumable;
 import RoadComponents.RoadSection;
 
 public class DragonHead extends PlowHead {
+    public DragonHead() {}
+
     private Consumable kerosene = new Consumable(1, 100);
     
     public void use(RoadSection rs){

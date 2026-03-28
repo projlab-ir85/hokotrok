@@ -5,6 +5,8 @@ import Vehicles.*;
 
 public class Shop {
 
+    public Shop() {}
+
     void buySnowplow(Player player){
         player.decrease(2000);
         player.addVehicle(new Snowplow());
