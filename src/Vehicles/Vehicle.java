@@ -10,4 +10,8 @@ public abstract class Vehicle implements Movable{
     protected int stuckTime;
 
     public abstract void Interact(RoadSection rs);
+
+    public void setCurrRoadSection(RoadSection roadSection){
+        currRoadSection = roadSection;
+    }
 }
