@@ -15,10 +15,10 @@ public class RoadSection implements Updateable{
     protected List<Consumable> consumables;
     protected List<Vehicle> vehicles;
 
-    protected RoadSection next;
-    protected RoadSection previous;
-    protected RoadSection left;
-    protected RoadSection right;
+    public RoadSection next;
+    public RoadSection previous;
+    public RoadSection left;
+    public RoadSection right;
 
     protected Lane lane;
 

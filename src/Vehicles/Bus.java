@@ -12,12 +12,25 @@ public class Bus extends Vehicle{
     protected Intersection start;
     protected Intersection end;
     protected Intersection next;
+    protected boolean hasSnowchain; 
 
     public void addSnowchain(Snowchain snowchain){
         this.snowchain = snowchain;
+        hasSnowchain = true;
     }
 
-    public void Step(){}
-
-    public void Interact(RoadSection rs){}
+    public void Step(){
+        if(stuck) {
+            stuckTime--;
+            return;
+        }
+        currRoadSection.Accept(this);
+        if(hasSnowchain) {
+            snowchain.Use();
+        }
+        
+    }
+    public void Interact(RoadSection rs){
+        rs.IceIncrease(1);
+    }
 }
