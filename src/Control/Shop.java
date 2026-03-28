@@ -1,20 +1,23 @@
 package Control;
 
-import Vehicles.Snowplow;
+import Attachments.PlowHead;
+import Vehicles.*;
 
 public class Shop {
 
-
     void buySnowplow(Player player){
-
+        player.decrease(2000);
+        player.addVehicle(new Snowplow());
     }
     void buyBus(Player player){
-
+        player.decrease(2000);
+        player.addVehicle(new Bus());
     }
     void buyConsumeable(Player player, Snowplow vehicle, String consumeable){
-
+        
     }
-    void buyAttachment(Player player,Snowplow vehicle, String plow){
-
+    void buyAttachment(Player player, Snowplow vehicle, PlowHead plow){
+        player.decrease(500);
+        vehicle.addPlow(plow);
     }
 }
