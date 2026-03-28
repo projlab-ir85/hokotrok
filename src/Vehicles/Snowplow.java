@@ -9,7 +9,11 @@ public class Snowplow extends Vehicle{
     protected List<PlowHead> plowHeads;
     protected PlowHead activePlowHead;
 
-    public void Step(){}
+    public void Step(){
+        currRoadSection.next.Accept(this);
+    }
 
-    public void Interact(RoadSection rs){}
+    public void Interact(RoadSection rs){
+        activePlowHead.Use(rs);
+    }
 }

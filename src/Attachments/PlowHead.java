@@ -1,9 +1,11 @@
 package Attachments;
 
+import RoadComponents.RoadSection;
+
 public abstract class PlowHead extends Attachment{
     protected int snowClean;
     protected int iceClean;
     protected int consumableAmountLeft;
 
-    public abstract void Use();
+    public abstract void Use(RoadSection rs);
 }
