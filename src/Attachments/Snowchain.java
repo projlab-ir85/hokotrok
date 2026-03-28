@@ -9,12 +9,12 @@ public class Snowchain extends Attachment {
         this.timeToLive = timeToLive;
     }
 
-    public void Use(RoadSection rs){
+    public void use(RoadSection rs){
         timeToLive--;
     }
 
-    public void Fix(){
-        timeToLive = 999;
+    public void fix(){
+        timeToLive = 30;
     }
 
     public int getTimeToLive(){return timeToLive;}

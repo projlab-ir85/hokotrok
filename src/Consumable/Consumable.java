@@ -7,5 +7,17 @@ public class Consumable {
     protected int price;
     protected int strength;
 
-    public boolean Effect(RoadSection rs){return true;};
+    public Consumable(int ttl, int strength) {
+        timeToLive = ttl;
+        this.strength = strength;
+    }
+
+    public void effect(RoadSection rs){
+        if(timeToLive>0) {
+            timeToLive--;
+            rs.SnowReduce(strength);
+            rs.IceReduce(strength);
+        }
+    }
+
 }

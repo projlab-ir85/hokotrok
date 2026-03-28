@@ -23,7 +23,7 @@ public class Tests {
         var s = TestSetup.createSnowchainFix();
 
         Skeleton.call("Tester", "Snowchain", "Fix()", true);
-        s.snowchain.Fix();
+        s.snowchain.fix();
 
         Skeleton.returnCall("Snowchain", "Tester", "Fix()", "void");
 

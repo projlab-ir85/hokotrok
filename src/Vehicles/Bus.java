@@ -26,7 +26,7 @@ public class Bus extends Vehicle{
         }
         currRoadSection.Accept(this);
         if(hasSnowchain) {
-            snowchain.Use();
+            snowchain.use(currRoadSection);
         }
         
     }

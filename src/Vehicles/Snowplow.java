@@ -14,6 +14,6 @@ public class Snowplow extends Vehicle{
     }
 
     public void Interact(RoadSection rs){
-        activePlowHead.Use(rs);
+        activePlowHead.use(rs);
     }
 }

@@ -7,5 +7,5 @@ public abstract class Attachment {
     protected int price;
     protected Vehicle vehicle;
 
-    public abstract void Use(RoadSection rs);
+    public abstract void use(RoadSection rs);
 }
