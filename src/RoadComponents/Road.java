@@ -17,13 +17,22 @@ public class Road {
         if(way == Way.ONEWAY){
             this.lanes = new Lane[1];
             this.lanes[0] = new Lane(lanes, length, start, end);
-        }else{
+        }else if(way == Way.TWOWAY){
             this.lanes = new Lane[2];
             this.lanes[0] = new Lane(lanes, length, start, end);
-            this.lanes[1] = new Lane(lanes, length, start, end);
+            this.lanes[1] = new Lane(lanes, length, end, start);
         }
 
         startPoint = start;
         endPoint = end;
+    }
+
+    public RoadSection getDriveableRoadSection(Intersection destination){
+        for (Lane lane : lanes) {
+            if (lane.end.equals(destination)) {
+                return lane.getDriveableRoadSection();
+            }
+        }
+        return null;
     }
 }

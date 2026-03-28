@@ -13,7 +13,14 @@ public class TestSetup {
         public Snowchain snowchain;
 
         public Road road = new Road(i1, i2, Road.Way.ONEWAY, 2, 2);
+    }
 
+    public static BusMovement createBusMovemement(){
+        BusMovement bm = new BusMovement();
+
+        bm.i1.addRoad(bm.road);
+
+        return bm;
     }
 
 

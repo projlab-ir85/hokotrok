@@ -22,8 +22,9 @@ public class RoadSection implements Updateable{
     public RoadSection right;
 
     protected Lane lane;
+    protected int sublaneIndex;
 
-    public RoadSection(Lane lane){
+    public RoadSection(Lane lane, int sublaneIndex){
         snowLevel = 0;
         iceLevel = 0;
         accidentHappened = false;
@@ -38,20 +39,21 @@ public class RoadSection implements Updateable{
         right = null;
 
         this.lane = lane;
+        this.sublaneIndex = sublaneIndex;
     }
 
-    public void SnowReduce(int amount){}
-    public void SnowIncrease(int amount){}
+    public void snowReduce(int amount){}
+    public void snowIncrease(int amount){}
 
-    public void IceReduce(int amount){}
-    public void IceIncrease(int amount){}
+    public void iceReduce(int amount){}
+    public void iceIncrease(int amount){}
 
-    public void Update(){}
+    public void update(){}
 
-    public boolean Accept(Vehicle v){
+    public boolean accept(Vehicle v){
         return true;
     }
 
-    public void AddConsumable(Consumable c){}
+    public void addConsumable(Consumable c){}
 
 }
