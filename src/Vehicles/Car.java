@@ -8,7 +8,15 @@ public class Car extends Vehicle{
     protected Intersection end;
     protected int stuckTime;
 
-    public void Step(){}
+    public void Step(){
+        if(stuck) {
+            stuckTime--;
+            return;
+        }
+        currRoadSection.next.Accept(this);
+    }
 
-    public void Interact(RoadSection rs){}
+    public void Interact(RoadSection rs){
+        rs.IceIncrease(1);
+    }
 }
