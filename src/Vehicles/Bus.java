@@ -18,6 +18,7 @@ public class Bus extends Vehicle{
     public Bus(Intersection start, Intersection end){
         this.start = start;
         this.end = end;
+        this.currIntersection = start;
     }
 
     public void addSnowchain(Snowchain snowchain){
