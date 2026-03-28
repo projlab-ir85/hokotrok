@@ -13,6 +13,13 @@ public class Bus extends Vehicle{
     protected Intersection end;
     protected Intersection next;
 
+    public Bus(){}
+
+    public Bus(Intersection start, Intersection end){
+        this.start = start;
+        this.end = end;
+    }
+
     public void addSnowchain(Snowchain snowchain){
         this.snowchain = snowchain;
     }

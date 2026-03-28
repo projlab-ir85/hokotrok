@@ -1,9 +1,22 @@
 package Skeleton;
 
 import Attachments.Snowchain;
+import RoadComponents.Intersection;
+import RoadComponents.Road;
 import Vehicles.Bus;
 
 public class TestSetup {
+    public static class BusMovement{
+        public Intersection i1 = new Intersection();
+        public Intersection i2 = new Intersection();
+        public Bus bus = new Bus(i1, i2);
+        public Snowchain snowchain;
+
+        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 2, 2);
+
+    }
+
+
     public static class SnowchainFix{
         public Bus bus;
         public Snowchain snowchain;
