@@ -2,20 +2,33 @@ package Vehicles;
 
 import Attachments.PlowHead;
 import Attachments.PlowHeads.*;
+import RoadComponents.Intersection;
 import RoadComponents.RoadSection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Snowplow extends Vehicle{
     protected List<PlowHead> plowHeads;
     protected PlowHead activePlowHead;
+    protected Intersection start;
 
     public Snowplow(Intersection start) {
         this.start = start;
-        BroomHead bh = new BroomHead();
-        IceBreakerHead ih = new IceBreakerHead();
-        plowHeads.add(bh);
-        plowHeads.add(ih);
+        currIntersection = start;
+        plowHeads = new ArrayList<>();
+        plowHeads.add(new BroomHead());
+        plowHeads.add(new IceBreakerHead());
+        stuck = false;
+        stuckTime = 0;
+    }
+
+    public Snowplow() {
+        plowHeads = new ArrayList<>();
+        plowHeads.add(new BroomHead());
+        plowHeads.add(new IceBreakerHead());
+        stuck = false;
+        stuckTime = 0;
     }
 
     public void addPlow(PlowHead plow) {
@@ -23,7 +36,7 @@ public class Snowplow extends Vehicle{
     }
 
     public void Step(){
-        currRoadSection.next.Accept(this);
+        currRoadSection.next.accept(this);
     }
 
     public void Interact(RoadSection rs){

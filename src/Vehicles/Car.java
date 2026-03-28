@@ -19,10 +19,10 @@ public class Car extends Vehicle{
             stuckTime--;
             return;
         }
-        currRoadSection.next.Accept(this);
+        currRoadSection.next.accept(this);
     }
 
     public void Interact(RoadSection rs){
-        rs.IceIncrease(1);
+        rs.iceIncrease(1);
     }
 }

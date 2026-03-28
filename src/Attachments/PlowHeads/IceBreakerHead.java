@@ -7,7 +7,8 @@ public class IceBreakerHead extends PlowHead {
     public IceBreakerHead() {}
 
     public void use(RoadSection rs){
-        rs.IceReduce(rs.getIce());
-        rs.SnowIncrease(rs.getIce());
+        int ice = rs.getIce();
+        rs.iceReduce(ice);
+        rs.snowIncrease(ice);
     }
 }
