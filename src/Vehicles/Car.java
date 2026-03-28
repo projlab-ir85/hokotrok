@@ -6,9 +6,23 @@ import RoadComponents.RoadSection;
 public class Car extends Vehicle{
     protected Intersection start;
     protected Intersection end;
-    protected int stuckTime;
 
-    public void Step(){}
+    public Car(Intersection start, Intersection end) {
+        this.start = start;
+        this.end = end;
+        stuck = false;
+        stuckTime = 0;
+    }
 
-    public void Interact(RoadSection rs){}
+    public void Step(){
+        if(stuck) {
+            stuckTime--;
+            return;
+        }
+        currRoadSection.next.Accept(this);
+    }
+
+    public void Interact(RoadSection rs){
+        rs.IceIncrease(1);
+    }
 }

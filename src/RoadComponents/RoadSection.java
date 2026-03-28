@@ -54,6 +54,11 @@ public class RoadSection implements Updateable{
         return true;
     }
 
-    public void addConsumable(Consumable c){}
-
+    public void AddConsumable(Consumable c){}
+    public int getSnow() {
+        return snowLevel;
+    }
+    public int getIce() {
+        return iceLevel;
+    }
 }

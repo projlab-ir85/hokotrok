@@ -1,5 +1,7 @@
 package Attachments;
 
+import RoadComponents.RoadSection;
+
 public class Snowchain extends Attachment {
     protected int timeToLive;
 
@@ -7,9 +9,13 @@ public class Snowchain extends Attachment {
         this.timeToLive = timeToLive;
     }
 
-    public void Use(){}
+    public void use(RoadSection rs){
+        timeToLive--;
+    }
 
-    public void Fix(){}
+    public void fix(){
+        timeToLive = 30;
+    }
 
     public int getTimeToLive(){return timeToLive;}
 }
