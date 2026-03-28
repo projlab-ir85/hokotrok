@@ -19,6 +19,11 @@ public class TestSetup {
         BusMovement bm = new BusMovement();
 
         bm.i1.addRoad(bm.road);
+        bm.i2.addRoad(bm.road);
+
+        bm.i1.addVehicle(bm.bus);
+
+        bm.bus.addSnowchain(bm.snowchain);
 
         return bm;
     }
