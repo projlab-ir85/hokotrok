@@ -7,10 +7,11 @@ public abstract class PlowHead extends Attachment{
     protected int snowClean;
     protected int iceClean;
     protected int consumableAmountLeft;
-    /** Használ függvény, a jármű ezen a metóduson keresztül szól a kiegészítőnek, hogy használja.
-     * @param roadsection az az útszakasz amin használjuk az adott kiegészítőt
+    /** Használ függvény, a jármű ezen a metóduson
+     * keresztül szól a kiegészítőnek, hogy használja.
      */
-    public abstract void use(RoadSection roadsection);
+        @Override
+    public void use() {}
 
     /** Kotrófej megtöltése fogyóeszközzel
      * @param amount mennyit töltünk bele
