@@ -40,7 +40,7 @@ public class Bus extends Vehicle{
         }
         currRoadSection.next.accept(this);
         if(hasSnowchain) {
-            snowchain.use(currRoadSection);
+            snowchain.use();
         }
         
     }
@@ -48,4 +48,10 @@ public class Bus extends Vehicle{
     public void interact(RoadSection roadsection){
         roadsection.iceIncrease(1);
     }
+
+    public boolean getHasSnowchain() { return hasSnowchain; }
+
+    public Intersection getCurrIntersection() { return currIntersection; }
+
+    public void setCurrIntersection(Intersection i) { currIntersection = i; }
 }

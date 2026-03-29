@@ -42,23 +42,42 @@ public class RoadSection implements Updateable{
         this.sublaneIndex = sublaneIndex;
     }
 
-    public void snowReduce(int amount){}
-    public void snowIncrease(int amount){}
+    public void snowReduce(int amount){ snowLevel = Math.max(0, snowLevel - amount); }
 
-    public void iceReduce(int amount){}
-    public void iceIncrease(int amount){}
+    public void snowIncrease(int amount){ snowLevel += amount; }
 
-    public void update(){}
+    public void iceReduce(int amount){ iceLevel = Math.max(0, iceLevel - amount); }
+
+    public void iceIncrease(int amount){ iceLevel += amount; }
+
+    public void update(){
+        java.util.Iterator<Consumable> it = consumables.iterator();
+        while(it.hasNext()){
+            Consumable c = it.next();
+            boolean alive = c.effect(this);
+            if(!alive) it.remove();
+        }
+        snowIncrease(1);
+    }
 
     public boolean accept(Vehicle v){
+        if(accidentHappened){
+            v.setStuck(true);
+            return false;
+        }
+        vehicles.add(v);
+        v.setCurrRoadSection(this);
+        v.interact(this);
         return true;
     }
 
-    public void AddConsumable(Consumable c){}
-    public int getSnow() {
-        return snowLevel;
-    }
-    public int getIce() {
-        return iceLevel;
-    }
+    public void addConsumable(Consumable c){ consumables.add(c); }
+
+    public int getSnow() { return snowLevel; }
+
+    public int getIce() { return iceLevel; }
+
+    public int getConsumableCount() { return consumables.size(); }
+
+    public void setAccident(boolean happened){ accidentHappened = happened; }
 }

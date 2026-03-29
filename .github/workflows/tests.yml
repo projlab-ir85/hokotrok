@@ -1,0 +1,40 @@
+name: Skeleton Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Compile
+        run: |
+          mkdir -p out
+          javac -sourcepath src -d out $(find src -name "*.java")
+
+      - name: Run tests
+        run: |
+          pass=0; fail=0
+          for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23; do
+            case $n in
+              3|8|11) inp="$n\nn\ny" ;;
+              4|5|12|13|14|15|16) inp="$n" ;;
+              *) inp="$n\ny" ;;
+            esac
+            result=$(printf "$inp" | java -cp out Main.Main 2>&1 | grep '\[RESULT\]' | tail -1)
+            echo "Test$n: $result"
+            if echo "$result" | grep -q "successful"; then
+              pass=$((pass+1))
+            else
+              fail=$((fail+1))
+            fi
+          done
+          echo "Passed: $pass / 23"
+          [ $fail -eq 0 ]
