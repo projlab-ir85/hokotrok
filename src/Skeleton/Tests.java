@@ -97,9 +97,9 @@ public class Tests {
 
         Skeleton.call("Tesztelő", "Busz", "lep()", true);
         Skeleton.call("Busz", "Utszakasz", "accept(busz)", false);
-        Skeleton.call("Busz", "Holanc", "hasznal(utszakasz)", false);
-        s.snowchain.use(s.busSection);
-        Skeleton.returnCall("Holanc", "Busz", "hasznal(utszakasz)", "void");
+        Skeleton.call("Busz", "Holanc", "use()", false);
+        s.snowchain.use();
+        Skeleton.returnCall("Holanc", "Busz", "use()", "void");
         Skeleton.returnCall("Busz", "Tesztelő", "lep()", "void");
 
         Skeleton.result(s.snowchain.getTimeToLive() == ttlBefore - 1);

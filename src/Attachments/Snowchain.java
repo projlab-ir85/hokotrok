@@ -9,7 +9,7 @@ public class Snowchain extends Attachment {
         this.timeToLive = timeToLive;
     }
 
-    public void use(RoadSection roadsection){
+    public void use(){
         timeToLive--;
     }
 

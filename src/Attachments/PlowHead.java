@@ -7,6 +7,9 @@ public abstract class PlowHead extends Attachment{
     protected int iceClean;
     protected int consumableAmountLeft;
 
+    @Override
+    public void use() {}
+
     public abstract void use(RoadSection roadsection);
 
     public void fillConsumable(int amount) {

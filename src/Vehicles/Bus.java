@@ -40,7 +40,7 @@ public class Bus extends Vehicle{
         }
         currRoadSection.next.accept(this);
         if(hasSnowchain) {
-            snowchain.use(currRoadSection);
+            snowchain.use();
         }
         
     }
