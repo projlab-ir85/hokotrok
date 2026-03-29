@@ -10,9 +10,11 @@ public abstract class PlowHead extends Attachment{
     /** Használ függvény, a jármű ezen a metóduson
      * keresztül szól a kiegészítőnek, hogy használja.
      */
-        @Override
+    @Override
     public void use() {}
-
+    
+    public abstract void use(RoadSection roadsection);
+    
     /** Kotrófej megtöltése fogyóeszközzel
      * @param amount mennyit töltünk bele
      */
