@@ -30,7 +30,7 @@ public class Shop {
      * @param vehicle melyik hókotrónak adjuk a fogyóeszközt
      * 
      */
-    public void buyConsumeable(Player player, Snowplow vehicle, String type){
+    public void buyConsumeable(Player player, Snowplow vehicle){
         player.decreaseCash(100);
         vehicle.fillActiveHead(10);
     }

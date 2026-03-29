@@ -5,6 +5,12 @@ import RoadComponents.RoadSection;
 
 public class Tests {
 
+    /**
+     * Teszt1: Busz kereszteződésnél.
+     * Ellenőrzi, hogy a busz kereszteződésnél képes-e a megfelelő útszakaszra váltani.
+     * Sikeres, ha a busz egy érvényes útszakasz referenciát kap.
+     * Forgatókönyv szerinti válasz: y
+     */
     protected void test1() {
         System.out.println("busz keresztezodes");
 
@@ -24,6 +30,12 @@ public class Tests {
         Skeleton.result(s.bus.getCurrRoadSection() != null);
     }
 
+    /**
+     * Teszt2: Busz előre megy.
+     * Ellenőrzi, hogy a busz járható útszakaszon képes-e tovább lépni,
+     * és hogy az útszakaszon megnő-e a jégszint az interakció során.
+     * Forgatókönyv szerinti válasz: y (az útszakasz járható)
+     */
     protected void test2() {
         System.out.println("busz elore megy");
 
@@ -50,7 +62,12 @@ public class Tests {
         Skeleton.returnCall("Busz", "Tesztelő", "lep()", "void");
         Skeleton.result(s.nextSection.getIce() > 0);
     }
-
+    /**
+     * Teszt3: Busz sávot vált.
+     * Ellenőrzi, hogy ha az aktuális sáv járhatatlan,
+     * a busz sikeresen átlép-e a szomszédos sávra.
+     * Forgatókönyv szerinti helyes válaszok sorrendben: n (aktuális sáv járhatatlan), y (szomszédos sáv járható)
+     */    
     protected void test3() {
         System.out.println("busz savot valt");
 
@@ -89,6 +106,12 @@ public class Tests {
         Skeleton.returnCall("Busz", "Tesztelő", "lep()", "void");
     }
 
+    /**
+     * Teszt4: Busz hóláncot használ.
+     * Ellenőrzi, hogy lépéskor a busz meghívja-e a hólánc use() metódusát,
+     * és hogy a hólánc élettartama csökken-e eggyel.
+     * Nincs interaktív kérdés.
+     */
     protected void test4() {
         System.out.println("busz holancot hasznal");
 
@@ -105,6 +128,12 @@ public class Tests {
         Skeleton.result(s.snowchain.getTimeToLive() == ttlBefore - 1);
     }
 
+    /**
+     * Teszt5: Hólánc javítása.
+     * Ellenőrzi, hogy a fix() metódus visszaállítja-e a
+     * hólánc élettartamát az eredeti értékre.
+     * Nincs interaktív kérdés.
+     */
     protected void test5() {
         System.out.println("holanc javitasa");
 
@@ -122,6 +151,12 @@ public class Tests {
         }
     }
 
+    /**
+     * Teszt6: Autó kereszteződésnél.
+     * Ellenőrzi, hogy az autó kereszteződésnél képes-e a megfelelő útszakaszra váltani.
+     * Sikeres, ha az autó kap egy érvényes útszakasz referenciát a kereszteződés után.
+     * Forgatókönyv szerinti helyes válasz: y
+     */
     protected void test6() {
         System.out.println("auto keresztezodesnel");
 
@@ -141,6 +176,12 @@ public class Tests {
         Skeleton.result(s.car.getCurrRoadSection() != null);
     }
 
+    /**
+     * Teszt7: Autó előre megy.
+     * Ellenőrzi, hogy az autó járható útszakaszon képes-e tovább lépni,
+     * és hogy az útszakaszon megnő-e a jégszint az interakció során.
+     * Forgatókönyv szerinti helyes válasz: y (az útszakasz járható)
+     */
     protected void test7() {
         System.out.println("auto elore megy");
 
@@ -167,7 +208,12 @@ public class Tests {
         Skeleton.returnCall("Auto", "Tesztelő", "lep()", "void");
         Skeleton.result(s.nextSection.getIce() > 0);
     }
-
+    /**
+     * Teszt8: Autó sávot vált.
+     * Ellenőrzi, hogy ha az aktuális sáv járhatatlan, az autó átlép-e a szomszédos sávra.
+     * Ha mindkét sáv járhatatlan, az autó várakozik.
+     * Forgatókönyv szerinti helyes válaszok: n (aktuális sáv járhatatlan), y (szomszédos sáv járható)
+     */ 
     protected void test8() {
         System.out.println("auto savot valt");
 
@@ -205,7 +251,12 @@ public class Tests {
 
         Skeleton.returnCall("Auto", "Tesztelő", "lep()", "void");
     }
-
+     /**
+     * Teszt9: Hókotró kereszteződésnél.
+     * Ellenőrzi, hogy a hókotró kereszteződésnél képes-e a megfelelő útszakaszra váltani.
+     * Sikeres, ha a hókotrónak van érvényes útszakasz referenciája a kereszteződés után.
+     * Forgatókönyv szerinti helyes válasz: y
+     */
     protected void test9() {
         System.out.println("hokotro keresztezodesnel");
 
@@ -225,6 +276,12 @@ public class Tests {
         Skeleton.result(s.snowplowSection != null);
     }
 
+    /**
+     * Teszt10: Hókotró előre megy.
+     * Ellenőrzi, hogy a hókotró lépéskor használja-e az aktív kotrófejét,
+     * és hogy az útszakaszon csökken-e a hómennyiség.
+     * Forgatókönyv szerinti helyes válasz: y (az útszakasz járható)
+     */
     protected void test10() {
         System.out.println("hokotro elore megy");
 
@@ -253,6 +310,12 @@ public class Tests {
         Skeleton.result(s.nextSection.getSnow() < snowBefore);
     }
 
+    /**
+     * Teszt11: Hókotró sávot vált.
+     * Ellenőrzi, hogy ha az aktuális sáv járhatatlan, a hókotró átlép-e a szomszédos sávra
+     * és ott használja-e a kotrófejét. Ha mindkét sáv járhatatlan, a hókotró várakozik.
+     * Forgatókönyv szerinti helyes válaszok: n (aktuális sáv járhatatlan), y (szomszédos sáv járható)
+     */
     protected void test11() {
         System.out.println("hokotro savot valt");
 
@@ -291,6 +354,12 @@ public class Tests {
         Skeleton.returnCall("Hokotro", "Tesztelő", "lep()", "void");
     }
 
+    /**
+     * Teszt12: Söprőfej használata.
+     * Ellenőrzi, hogy a söprőfej eltávolítja-e a havat az útszakaszról
+     * és áthelyezi-e a szomszédos sávra.
+     * Nincs interaktív kérdés.
+     */
     protected void test12() {
         System.out.println("soprofej hasznalata");
 
@@ -311,6 +380,12 @@ public class Tests {
         Skeleton.result(p.section.getSnow() == 0 && p.rightSection.getSnow() > 0);
     }
 
+    /**
+     * Teszt13: Hányófej használata.
+     * Ellenőrzi, hogy a hányófej eltávolítja-e a havat az útszakaszról
+     * anélkül, hogy szomszédos sávra tolná.
+     * Nincs interaktív kérdés.
+     */
     protected void test13() {
         System.out.println("hanyofej hasznalata");
 
@@ -329,6 +404,12 @@ public class Tests {
         Skeleton.result(p.section.getSnow() == 0);
     }
 
+    /**
+     * Teszt14: Jégtörő fej használata.
+     * Ellenőrzi, hogy a jégtörő fej nullára csökkenti-e a jégszintet,
+     * miközben a hómennyiség változatlan marad.
+     * Nincs interaktív kérdés.
+     */
     protected void test14() {
         System.out.println("jegtoro fej hasznalata");
 
@@ -350,6 +431,11 @@ public class Tests {
         Skeleton.result(p.section.getIce() == 0 && p.section.getSnow() == iceBefore);
     }
 
+    /**
+     * Teszt15: Sószóró fej használata.
+     * Ellenőrzi, hogy a sószóró fej elhelyez-eegy só fogyóeszközt az útszakaszon.
+     * Nincs interaktív kérdés.
+     */
     protected void test15() {
         System.out.println("soszoro fej hasznalata");
 
@@ -368,6 +454,11 @@ public class Tests {
         Skeleton.result(p.section.getConsumableCount() > 0);
     }
 
+    /**
+     * Teszt16: Sárkányfej használata.
+     * Ellenőrzi, hogy a sárkányfej elhelyez-e egy kerozin fogyóeszközt az útszakaszon.
+     * Nincs interaktív kérdés.
+     */
     protected void test16() {
         System.out.println("sarkanyfej hasznalata");
 
@@ -386,6 +477,12 @@ public class Tests {
         Skeleton.result(p.section.getConsumableCount() > 0);
     }
 
+    /**
+     * Teszt17: Útszakasz frissítése, fogyóeszköz hatása.
+     * Ellenőrzi, hogy az útszakasz update() híváskor meghívja-e a rajta lévő
+     * fogyóeszközök hatas() metódusát, aminek következtében csökken a hómennyiség.
+     * Forgatókönyv szerinti helyes válasz: y (a fogyóeszköz még él)
+     */
     protected void test17() {
         System.out.println("utszakasz frissitese, fogyoeszkoz hatasa");
 
@@ -406,6 +503,12 @@ public class Tests {
         Skeleton.result(r.section.getSnow() < snowBefore);
     }
 
+    /**
+     * Teszt18: Hókotró vásárlása.
+     * Ellenőrzi, hogy a bolt levon-e megfelelő összeget a játékostól
+     * és hozzáadja-e az új hókotrót. Ha nincs elég pénz, a vásárlás megszakad.
+     * Forgatókönyv szerinti helyes válasz: y (van elég pénz)
+     */
     protected void test18() {
         System.out.println("hokotro vasarlas");
 
@@ -430,6 +533,12 @@ public class Tests {
         Skeleton.returnCall("Shop", "Tesztelő", "hokotroVasarol(player)", "void");
     }
 
+    /**
+     * Teszt19: Busz vásárlása.
+     * Ellenőrzi, hogy a bolt levon-e megfelelő összeget a játékostól
+     * és hozzáadja-e az új buszt. Ha nincs elég pénz, a vásárlás megszakad.
+     * Forgatókönyv szerinti helyes válasz: y (van elég pénz)
+     */
     protected void test19() {
         System.out.println("busz vasarlas");
 
@@ -454,6 +563,13 @@ public class Tests {
         Skeleton.returnCall("Shop", "Tesztelő", "buszVasarol(player)", "void");
     }
 
+    /**
+     * Teszt20: Söprőfej vásárlása.
+     * Ellenőrzi, hogy a bolt levon-e megfelelő összeget a játékostól
+     * és hozzáadja-e az új söprőfejet a hókotróhoz.
+     * Ha nincs elég pénz, a vásárlás megszakad.
+     * Forgatókönyv szerinti helyes válasz: y (van elég pénz)
+     */
     protected void test20() {
         System.out.println("soprofej vasarlas");
 
@@ -480,6 +596,13 @@ public class Tests {
         Skeleton.returnCall("Shop", "Tesztelő", "kotrofejVasarol(player, hokotro, Soprofej)", "void");
     }
 
+    /**
+     * Teszt21: Fogyóeszköz vásárlása.
+     * Ellenőrzi, hogy a bolt levon-e megfelelő összeget a játékostól
+     * és feltölti-e az aktív kotrófej fogyóeszköz-készletét.
+     * Ha nincs elég pénz, a vásárlás megszakad.
+     * Forgatókönyv szerinti helyes válasz: y (van elég pénz)
+     */
     protected void test21() {
         System.out.println("fogyoeszkoz vasarlas");
 
@@ -492,7 +615,7 @@ public class Tests {
         if (hasEnough) {
             Skeleton.call("Shop", "Player", "vonLe(ar)", false);
             Skeleton.call("Shop", "Hokotro", "aktivFejFeltolt(mennyiseg)", false);
-            ps.shop.buyConsumeable(ps.player, ps.snowplow, "salt");
+            ps.shop.buyConsumeable(ps.player, ps.snowplow);
             Skeleton.returnCall("Hokotro", "Shop", "aktivFejFeltolt(mennyiseg)", "void");
             Skeleton.result(ps.player.getCash() == cashBefore - 100);
         } else {
@@ -503,6 +626,12 @@ public class Tests {
         Skeleton.returnCall("Shop", "Tesztelő", "fogyoeszkozVasarol(player, hokotro, so)", "void");
     }
 
+    /**
+     * Teszt22: Hólánc vásárlása.
+     * Ellenőrzi, hogy a bolt levon-e megfelelő összeget a játékostól
+     * és felszereli-e az új hóláncot a buszra. Ha nincs elég pénz, a vásárlás megszakad.
+     * Forgatókönyv szerinti helyes válasz: y (van elég pénz)
+     */
     protected void test22() {
         System.out.println("holanc vasarlas");
 
@@ -527,6 +656,13 @@ public class Tests {
         Skeleton.returnCall("Shop", "Tesztelő", "holancVasarol(player, busz)", "void");
     }
 
+    /**
+     * Teszt23: Baleset.
+     * Ellenőrzi, hogy jeges úton, ahol már tartózkodik egy jármű,
+     * mindkét érintett jármű elakad-e baleset következtében.
+     * Ha nem jeges az út vagy nincs másik jármű, nem történik baleset.
+     * Forgatókönyv szerinti helyes válasz: y (jeges az út és van már jármű rajta)
+     */
     protected void test23() {
         System.out.println("baleset");
 
