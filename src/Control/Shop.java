@@ -28,8 +28,9 @@ public class Shop {
      * Levonjuk a játékostól a pénzt és megtöltjük az adott hókotró kotrófejét
      * @param player melyik játékostól vonjuk le a pénzt
      * @param vehicle melyik hókotrónak adjuk a fogyóeszközt
+     * 
      */
-    public void buyConsumeable(Player player, Snowplow vehicle){
+    public void buyConsumeable(Player player, Snowplow vehicle, String type){
         player.decreaseCash(100);
         vehicle.fillActiveHead(10);
     }
