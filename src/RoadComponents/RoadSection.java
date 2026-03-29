@@ -50,7 +50,9 @@ public class RoadSection implements Updateable{
 
     public void update(){}
 
+    //demo
     public boolean accept(Vehicle v){
+        vehicles.add(v);
         return true;
     }
 

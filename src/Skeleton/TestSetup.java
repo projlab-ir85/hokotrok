@@ -16,29 +16,26 @@ public class TestSetup {
         public Snowchain snowchain;
     }
 
-    private static BusMovement createBusMovemementBase(){
+    private static BusMovement createBusMovemement(){
         BusMovement bm = new BusMovement();
 
         bm.i1.addRoad(bm.road);
         bm.i2.addRoad(bm.road);
 
-        bm.bus.addSnowchain(bm.snowchain);
+        //mind a ket fele teszt esetet le lehet ezzel tesztelni
+        //(egyszerre van keresztezodesnel es utszakaszon mert ugyis a tesztelo dont es kulon tesztesetek)
 
-        return bm;
-    }
-
-    public static BusMovement createBusMovementIntersection(){
-        BusMovement bm = createBusMovemementBase();
-
+        //keresztezodeshez busz (busz konstruktoraban egybol keresztezodesnel kezd igy forditva itt nem kell)
         bm.i1.addVehicle(bm.bus);
 
-        return bm;
-    }
+        //utszakaszhoz busz
+        bm.road.getFirstRoadSection(bm.i2).accept(bm.bus);
 
-    public static BusMovement createBusMovementRoad(){
-        BusMovement bm = createBusMovemementBase();
+        //buszhoz utszakasz
+        bm.bus.setCurrRoadSection(bm.road.getFirstRoadSection(bm.i2));
 
-        //buszt utszakaszra
+        //holanc is mindenkepp lesz, ennek a hasznalatarol is a felhasznalo dont ugyis
+        bm.bus.addSnowchain(bm.snowchain);
 
         return bm;
     }
@@ -51,11 +48,20 @@ public class TestSetup {
         public Car car = new Car(i1, i2);
     }
 
-    private static CarMovement createCarMovementBase(){
+    private static CarMovement createCarMovement(){
         CarMovement cm = new CarMovement();
 
         cm.i1.addRoad(cm.road);
         cm.i2.addRoad(cm.road);
+
+        //keresztezodeshez auto (auto konstruktoraban egybol keresztezodesnel kezd igy forditva itt nem kell)
+        cm.i1.addVehicle(cm.car);
+
+        //utszakaszhoz auto
+        cm.road.getFirstRoadSection(cm.i2).accept(cm.car);
+
+        //autohoz utszakasz
+        cm.car.setCurrRoadSection(cm.road.getFirstRoadSection(cm.i2));
 
         return cm;
     }
@@ -80,4 +86,6 @@ public class TestSetup {
         System.out.println("\n");
         return s;
     }
+
+
 }
