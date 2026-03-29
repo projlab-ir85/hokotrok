@@ -10,6 +10,7 @@ public class Snowchain extends Attachment {
      */
     public Snowchain(int timeToLive){
         this.timeToLive = timeToLive;
+        this.initialTimeToLive = timeToLive;
     }
     /** Használ függvény megvalósítása, a hólánc élettartama csökken.
      * @param roadsection itt most nincs használva
@@ -20,7 +21,7 @@ public class Snowchain extends Attachment {
     /** Hólánc megjavítása, visszaállítja a hólánc élattartamát
      */
     public void fix(){
-        timeToLive = 30;
+        timeToLive = initialTimeToLive;
     }
     /** Megmondja a hólánc maradék élettartamát
      * @return mennyi ideig él még a hólánc

@@ -1,6 +1,5 @@
 package Attachments;
 
-import RoadComponents.RoadSection;
 import Vehicles.Vehicle;
 
 /**Kiegészítő ősosztály deklarálása */

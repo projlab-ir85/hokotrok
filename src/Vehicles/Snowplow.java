@@ -13,6 +13,11 @@ public class Snowplow extends Vehicle{
     protected PlowHead activePlowHead;
     protected Intersection start;
 
+    /**
+     * Új hókotró példány létrehozása
+     * @param start kezdőkereszteződés, ahonnét indul
+     * inicializálja az alapállapotot a hokotrónak
+     */
     public Snowplow(Intersection start) {
         this.start = start;
         currIntersection = start;
@@ -20,51 +25,61 @@ public class Snowplow extends Vehicle{
         plowHeads.add(new BroomHead());
         plowHeads.add(new IceBreakerHead());
         activePlowHead = plowHeads.get(0);
+        /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
     }
 
+    /**
+     * Paraméter nélküli konstruktor
+     * inicializálja a hókotrófejek listáját, és felszereli a gépet seprűvel és jégtörővel
+     */
     public Snowplow() {
         plowHeads = new ArrayList<>();
         plowHeads.add(new BroomHead());
         plowHeads.add(new IceBreakerHead());
         activePlowHead = plowHeads.get(0);
+        /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
     }
 
+    /**
+     * Új kotrófejet felszerel a hókotróra
+     * @param plow kotrófej, amit felrak
+     */
     public void addPlow(PlowHead plow) {
         plowHeads.add(plow);
     }
 
+    /**
+     * Hókotrónak lép egyet
+     */
     public void step(){
+        /* átlép a következő útszakaszra */
         currRoadSection.next.accept(this);
     }
 
+    /**
+     * Interakcióba lép az adott útszakasszal
+     * @param rs útszakasz
+     */
     public void interact(RoadSection rs){
+        /* az éppen aktív kotrófejet használja */
         activePlowHead.use(rs);
     }
 
-    /**
-     * Felölti az aktív kotrófej fogyóeszközét a megadott mennyiséggel.
-     * @param amount a feltöltendő mennyiség
-     */
     public void fillActiveHead(int amount) {
         if(activePlowHead != null) activePlowHead.fillConsumable(amount);
     }
 
-    /** @return a kotrófejek száma */
     public int getPlowHeadCount() { return plowHeads.size(); }
 
-    /** @return az aktív kotrófej */
     public PlowHead getActivePlowHead() { return activePlowHead; }
 
-    /** Beállítja az aktív kotrófejet. */
     public void setActivePlowHead(PlowHead head) { activePlowHead = head; }
 
-    /** @return az aktuális kereszteződés */
     public Intersection getCurrIntersection() { return currIntersection; }
 
-    /** Beállítja az aktuális kereszteződést. */
     public void setCurrIntersection(Intersection i) { currIntersection = i; }
 }

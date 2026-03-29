@@ -28,23 +28,40 @@ public class Bus extends Vehicle{
 
     public Bus(){}
 
+    /**
+     *
+     * Hóláncot felszereli a buszra
+     * @param snowchain hólánc, amit felrakunk a buszra
+     *
+     */
     public void addSnowchain(Snowchain snowchain){
         this.snowchain = snowchain;
         hasSnowchain = true;
     }
 
+    /**
+     * Busznak lép egyet
+     */
     public void step(){
+        /* ha el van akadva, akkor csökkenti az elakadási időt, és véget ér a lépés */
         if(stuck) {
             stuckTime--;
             return;
         }
+        /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
         currRoadSection.next.accept(this);
+        /* ha van rajta hólánc, akkor azt használja az adott útszakaszon */
         if(hasSnowchain) {
-            snowchain.use(currRoadSection);
+            snowchain.use();
         }
         
     }
 
+    /**
+     * Interakcióba lép az adott útszakasszal
+     * @param roadsection útszakasz, amivel a busz interaktál
+     * 1 egységgel növeli a jégszintet a busz a haladása során
+     */
     public void interact(RoadSection roadsection){
         roadsection.iceIncrease(1);
     }
