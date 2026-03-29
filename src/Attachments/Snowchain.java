@@ -4,9 +4,11 @@ import RoadComponents.RoadSection;
 
 public class Snowchain extends Attachment {
     protected int timeToLive;
+    private int initialTimeToLive;
 
     public Snowchain(int timeToLive){
         this.timeToLive = timeToLive;
+        this.initialTimeToLive = timeToLive;
     }
 
     public void use(){
@@ -14,7 +16,7 @@ public class Snowchain extends Attachment {
     }
 
     public void fix(){
-        timeToLive = 30;
+        timeToLive = initialTimeToLive;
     }
 
     public int getTimeToLive(){return timeToLive;}
