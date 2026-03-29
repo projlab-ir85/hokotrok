@@ -15,9 +15,10 @@ public class Snowchain extends Attachment {
         this.initialTimeToLive = timeToLive;
     }
     /** Használ függvény megvalósítása, a hólánc élettartama csökken.
-     */
+     */  
     public void use(){
-    
+        timeToLive--;
+    }
     /** Hólánc megjavítása, visszaállítja a hólánc élattartamát
      */
     public void fix(){
