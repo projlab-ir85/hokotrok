@@ -25,4 +25,13 @@ public abstract class Vehicle implements Movable{
         /* frissíti a jelenlegi útszakaszt az újra */
         currRoadSection = roadSection;
     }
+
+    public RoadSection getCurrRoadSection() { return currRoadSection; }
+
+    public boolean isStuck() { return stuck; }
+
+    public void setStuck(boolean value) {
+        stuck = value;
+        if(value) stuckTime = 3;
+    }
 }

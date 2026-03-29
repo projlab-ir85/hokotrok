@@ -66,4 +66,18 @@ public class Snowplow extends Vehicle{
         /* az éppen aktív kotrófejet használja */
         activePlowHead.use(rs);
     }
+
+    public void fillActiveHead(int amount) {
+        if(activePlowHead != null) activePlowHead.fillConsumable(amount);
+    }
+
+    public int getPlowHeadCount() { return plowHeads.size(); }
+
+    public PlowHead getActivePlowHead() { return activePlowHead; }
+
+    public void setActivePlowHead(PlowHead head) { activePlowHead = head; }
+
+    public Intersection getCurrIntersection() { return currIntersection; }
+
+    public void setCurrIntersection(Intersection i) { currIntersection = i; }
 }

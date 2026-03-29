@@ -12,14 +12,15 @@ public class Consumable {
         this.strength = strength;
     }
 
-    public void effect(RoadSection roadsection){
-        if(timeToLive>0) {
+    public boolean effect(RoadSection roadsection){
+        if(timeToLive > 0) {
             timeToLive--;
             roadsection.snowReduce(strength);
             roadsection.iceReduce(strength);
-        }else{
-            //nem emlekszem mit beszeltunk de szol az utszakasznak hogy remove-olja?
+            return true;
         }
+        return false;
     }
 
+    public int getTimeToLive() { return timeToLive; }
 }

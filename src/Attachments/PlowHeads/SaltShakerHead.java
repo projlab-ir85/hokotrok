@@ -10,7 +10,7 @@ public class SaltShakerHead extends PlowHead {
     private Consumable salt = new Consumable(60, 2);
     public void use(RoadSection roadsection){
         if(consumableAmountLeft>0) {
-        roadsection.AddConsumable(salt);
+        roadsection.addConsumable(salt);
         consumableAmountLeft--;
         }
     }

@@ -1,5 +1,7 @@
 package RoadComponents;
 
+import java.util.List;
+
 public class Road {
     public enum Way{
         ONEWAY,
@@ -34,5 +36,25 @@ public class Road {
             }
         }
         return null;
+    }
+
+    public RoadSection getFirstRoadSection(Intersection destination){
+        for (Lane lane : lanes) {
+            if (lane.end.equals(destination)) {
+                return lane.subLanes.getFirst().getFirst();
+            }
+        }
+        return null;
+    }
+
+    //demo
+    public void setIceshield(){
+        for(Lane lane : lanes){
+            for(List<RoadSection> sublane : lane.subLanes){
+                for(RoadSection rs : sublane){
+                    rs.iceIncrease(100);
+                }
+            }
+        }
     }
 }

@@ -52,7 +52,7 @@ public class Bus extends Vehicle{
         currRoadSection.next.accept(this);
         /* ha van rajta hólánc, akkor azt használja az adott útszakaszon */
         if(hasSnowchain) {
-            snowchain.use(currRoadSection);
+            snowchain.use();
         }
         
     }
@@ -65,4 +65,10 @@ public class Bus extends Vehicle{
     public void interact(RoadSection roadsection){
         roadsection.iceIncrease(1);
     }
+
+    public boolean getHasSnowchain() { return hasSnowchain; }
+
+    public Intersection getCurrIntersection() { return currIntersection; }
+
+    public void setCurrIntersection(Intersection i) { currIntersection = i; }
 }
