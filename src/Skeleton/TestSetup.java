@@ -1,10 +1,15 @@
 package Skeleton;
 
+import Attachments.PlowHeads.BroomHead;
 import Attachments.Snowchain;
+import Consumable.Consumable;
+import Control.Player;
+import Control.Shop;
 import RoadComponents.Intersection;
 import RoadComponents.Road;
 import Vehicles.Bus;
 import Vehicles.Car;
+import Vehicles.Snowplow;
 
 public class TestSetup {
     public static class BusMovement{
@@ -16,7 +21,7 @@ public class TestSetup {
         public Snowchain snowchain;
     }
 
-    private static BusMovement createBusMovemement(){
+    private static BusMovement createBusMovemementSetup(){
         BusMovement bm = new BusMovement();
 
         bm.i1.addRoad(bm.road);
@@ -48,7 +53,7 @@ public class TestSetup {
         public Car car = new Car(i1, i2);
     }
 
-    private static CarMovement createCarMovement(){
+    private static CarMovement createCarMovementSetup(){
         CarMovement cm = new CarMovement();
 
         cm.i1.addRoad(cm.road);
@@ -66,12 +71,42 @@ public class TestSetup {
         return cm;
     }
 
+    public static class SnowplowMovement{
+        public Intersection i1 = new Intersection();
+        public Intersection i2 = new Intersection();
+        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 2, 2);
+
+        public Snowplow snowplow = new Snowplow(i1);
+        public BroomHead broomHead = new BroomHead();
+    }
+
+    public static SnowplowMovement createSnowplowMovementSetup(){
+        SnowplowMovement sm = new SnowplowMovement();
+
+        sm.i1.addRoad(sm.road);
+        sm.i2.addRoad(sm.road);
+
+        //keresztezodeshez hokotro (hokotro konstruktoraban egybol keresztezodesnel kezd igy forditva itt nem kell)
+        sm.i1.addVehicle(sm.snowplow);
+
+        //utszakaszhoz hokotro
+        sm.road.getFirstRoadSection(sm.i2).accept(sm.snowplow);
+
+        //hokotrohoz utszakasz
+        sm.snowplow.setCurrRoadSection(sm.road.getFirstRoadSection(sm.i2));
+
+        //kotrofej is mindenkeppen lesz legfeljebb keresztezodesnel nem hasznalja
+        sm.snowplow.addPlow(sm.broomHead);
+
+        return sm;
+    }
+
     public static class SnowchainFix{
         public Bus bus;
         public Snowchain snowchain;
     }
 
-    public static SnowchainFix createSnowchainFix(){
+    public static SnowchainFix createSnowchainFixSetup(){
         SnowchainFix s = new SnowchainFix();
 
         Skeleton.call("Skeleton", "Bus", "new Bus()", false);
@@ -87,5 +122,57 @@ public class TestSetup {
         return s;
     }
 
+    public static class ConsumableUsage{
+        public Intersection i1 = new Intersection();
+        public Intersection i2 = new Intersection();
+        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 1, 1);
 
+        public Consumable consumable = new Consumable(60, 2);
+    }
+
+    public static ConsumableUsage createConsumableUsageSetup(){
+        ConsumableUsage cu = new ConsumableUsage();
+
+        cu.i1.addRoad(cu.road);
+        cu.i2.addRoad(cu.road);
+
+        cu.road.getFirstRoadSection(cu.i2).addConsumable(cu.consumable);
+
+        return cu;
+    }
+
+    public static class ShopUsage{
+        public Shop shop = new Shop();
+        public Player player = new Player(6942067);
+    }
+
+    public static ShopUsage createShopUsageSetup(){
+        ShopUsage su = new ShopUsage();
+
+        return su;
+    }
+
+    public static class AccidentSim{
+        public Intersection i1 = new Intersection();
+        public Intersection i2 = new Intersection();
+        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 1, 2);
+
+        public Car c1 = new Car(i1, i2);
+        public Car c2 = new Car(i1, i2);
+    }
+
+    public static AccidentSim createAccidentSimSetup(){
+        AccidentSim as = new AccidentSim();
+
+        as.i1.addRoad(as.road);
+        as.i2.addRoad(as.road);
+
+        //demo
+        as.road.setIceshield();
+
+        as.road.getFirstRoadSection(as.i2).accept(as.c1);
+        as.road.getFirstRoadSection(as.i2).accept(as.c2);
+
+        return as;
+    }
 }

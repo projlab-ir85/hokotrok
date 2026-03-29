@@ -20,7 +20,7 @@ public class Tests {
     protected void test5(){
         System.out.println("holanc javitasa");
 
-        var s = TestSetup.createSnowchainFix();
+        var s = TestSetup.createSnowchainFixSetup();
 
         Skeleton.call("Tester", "Snowchain", "Fix()", true);
         s.snowchain.fix();

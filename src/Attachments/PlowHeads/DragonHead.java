@@ -11,7 +11,7 @@ public class DragonHead extends PlowHead {
     
     public void use(RoadSection roadsection){
         if(consumableAmountLeft>0) {
-        roadsection.AddConsumable(kerosene);
+        roadsection.addConsumable(kerosene);
         consumableAmountLeft--;
         }
     }

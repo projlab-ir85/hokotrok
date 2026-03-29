@@ -9,6 +9,9 @@ public class BroomHead extends PlowHead {
     public void use(RoadSection roadsection){
         int snow = roadsection.getSnow();
         roadsection.snowReduce(snow);
-        roadsection.right.snowIncrease(snow);
+
+        if(roadsection.right != null){
+            roadsection.right.snowIncrease(snow);
+        }
     }
 }
