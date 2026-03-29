@@ -7,5 +7,5 @@ public abstract class PlowHead extends Attachment{
     protected int iceClean;
     protected int consumableAmountLeft;
 
-    public abstract void use(RoadSection rs);
+    public abstract void use(RoadSection roadsection);
 }

@@ -14,7 +14,7 @@ public class Car extends Vehicle{
         stuckTime = 0;
     }
 
-    public void Step(){
+    public void step(){
         if(stuck) {
             stuckTime--;
             return;
@@ -22,7 +22,7 @@ public class Car extends Vehicle{
         currRoadSection.next.accept(this);
     }
 
-    public void Interact(RoadSection rs){
+    public void interact(RoadSection rs){
         rs.iceIncrease(1);
     }
 }

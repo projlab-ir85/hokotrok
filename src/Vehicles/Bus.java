@@ -33,18 +33,19 @@ public class Bus extends Vehicle{
         hasSnowchain = true;
     }
 
-    public void Step(){
+    public void step(){
         if(stuck) {
             stuckTime--;
             return;
         }
-        currRoadSection.accept(this);
+        currRoadSection.next.accept(this);
         if(hasSnowchain) {
             snowchain.use(currRoadSection);
         }
         
     }
-    public void Interact(RoadSection rs){
-        rs.iceIncrease(1);
+
+    public void interact(RoadSection roadsection){
+        roadsection.iceIncrease(1);
     }
 }

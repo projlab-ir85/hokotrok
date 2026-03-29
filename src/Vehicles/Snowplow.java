@@ -35,11 +35,11 @@ public class Snowplow extends Vehicle{
         plowHeads.add(plow);
     }
 
-    public void Step(){
+    public void step(){
         currRoadSection.next.accept(this);
     }
 
-    public void Interact(RoadSection rs){
+    public void interact(RoadSection rs){
         activePlowHead.use(rs);
     }
 }

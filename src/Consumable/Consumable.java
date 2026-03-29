@@ -12,11 +12,13 @@ public class Consumable {
         this.strength = strength;
     }
 
-    public void effect(RoadSection rs){
+    public void effect(RoadSection roadsection){
         if(timeToLive>0) {
             timeToLive--;
-            rs.SnowReduce(strength);
-            rs.IceReduce(strength);
+            roadsection.snowReduce(strength);
+            roadsection.iceReduce(strength);
+        }else{
+            //nem emlekszem mit beszeltunk de szol az utszakasznak hogy remove-olja?
         }
     }
 

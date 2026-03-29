@@ -6,9 +6,9 @@ import RoadComponents.RoadSection;
 public class IceBreakerHead extends PlowHead {
     public IceBreakerHead() {}
 
-    public void use(RoadSection rs){
-        int ice = rs.getIce();
-        rs.iceReduce(ice);
-        rs.snowIncrease(ice);
+    public void use(RoadSection roadsection){
+        int ice = roadsection.getIce();
+        roadsection.iceReduce(ice);
+        roadsection.snowIncrease(ice);
     }
 }

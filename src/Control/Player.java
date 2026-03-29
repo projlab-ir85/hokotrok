@@ -17,7 +17,7 @@ public class Player {
         vehicles.add(v);
     }
 
-    public void decrease(int amount) {
+    public void decreaseCash(int amount) {
         cash -= amount;
     }
 }
