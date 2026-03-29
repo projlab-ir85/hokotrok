@@ -24,6 +24,7 @@ public class Snowplow extends Vehicle{
         plowHeads = new ArrayList<>();
         plowHeads.add(new BroomHead());
         plowHeads.add(new IceBreakerHead());
+        activePlowHead = plowHeads.get(0);
         /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
@@ -37,6 +38,7 @@ public class Snowplow extends Vehicle{
         plowHeads = new ArrayList<>();
         plowHeads.add(new BroomHead());
         plowHeads.add(new IceBreakerHead());
+        activePlowHead = plowHeads.get(0);
         /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
