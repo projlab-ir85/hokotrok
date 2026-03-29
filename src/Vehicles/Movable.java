@@ -1,5 +1,5 @@
 package Vehicles;
 
 public interface Movable {
-    public void Step();
+    public void step();
 }

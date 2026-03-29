@@ -9,6 +9,11 @@ public class Intersection {
     protected List<Road> roads;
     protected List<Vehicle> vehicles;
 
+    public Intersection() {
+        roads = new java.util.ArrayList<>();
+        vehicles = new java.util.ArrayList<>();
+    }
+
     public RoadSection roadSelection(Intersection destination){
         for(Road road : roads){
             if(road.startPoint.equals(destination) || road.endPoint.equals(destination)){

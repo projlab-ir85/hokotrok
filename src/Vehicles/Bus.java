@@ -17,6 +17,7 @@ public class Bus extends Vehicle{
     public Bus(Intersection start, Intersection end) {
         this.start = start;
         this.end = end;
+        currIntersection = start;
         stuck = false;
         stuckTime = 0;
         lapsDone = 0;
@@ -27,29 +28,24 @@ public class Bus extends Vehicle{
 
     public Bus(){}
 
-    public Bus(Intersection start, Intersection end){
-        this.start = start;
-        this.end = end;
-        this.currIntersection = start;
-    }
-
     public void addSnowchain(Snowchain snowchain){
         this.snowchain = snowchain;
         hasSnowchain = true;
     }
 
-    public void Step(){
+    public void step(){
         if(stuck) {
             stuckTime--;
             return;
         }
-        currRoadSection.Accept(this);
+        currRoadSection.next.accept(this);
         if(hasSnowchain) {
             snowchain.use(currRoadSection);
         }
         
     }
-    public void Interact(RoadSection rs){
-        rs.IceIncrease(1);
+
+    public void interact(RoadSection roadsection){
+        roadsection.iceIncrease(1);
     }
 }

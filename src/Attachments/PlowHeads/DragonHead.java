@@ -9,9 +9,9 @@ public class DragonHead extends PlowHead {
 
     private Consumable kerosene = new Consumable(1, 100);
     
-    public void use(RoadSection rs){
+    public void use(RoadSection roadsection){
         if(consumableAmountLeft>0) {
-        rs.AddConsumable(kerosene);
+        roadsection.AddConsumable(kerosene);
         consumableAmountLeft--;
         }
     }

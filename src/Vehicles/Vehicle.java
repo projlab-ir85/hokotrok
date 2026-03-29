@@ -7,9 +7,10 @@ public abstract class Vehicle implements Movable{
     protected boolean stuck;
     protected List<Intersection> junctions;
     protected RoadSection currRoadSection;
+    protected Intersection currIntersection;
     protected int stuckTime;
 
-    public abstract void Interact(RoadSection rs);
+    public abstract void interact(RoadSection rs);
 
     public void setCurrRoadSection(RoadSection roadSection){
         currRoadSection = roadSection;

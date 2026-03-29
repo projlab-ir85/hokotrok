@@ -14,15 +14,15 @@ public class Car extends Vehicle{
         stuckTime = 0;
     }
 
-    public void Step(){
+    public void step(){
         if(stuck) {
             stuckTime--;
             return;
         }
-        currRoadSection.next.Accept(this);
+        currRoadSection.next.accept(this);
     }
 
-    public void Interact(RoadSection rs){
-        rs.IceIncrease(1);
+    public void interact(RoadSection rs){
+        rs.iceIncrease(1);
     }
 }
