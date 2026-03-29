@@ -43,20 +43,14 @@ public class Bus extends Vehicle{
      * Busznak lép egyet
      */
     public void step(){
-        /**
-         * ha el van akadva, akkor csökkenti az elakadási időt, és véget ér a lépés
-         */
+        /* ha el van akadva, akkor csökkenti az elakadási időt, és véget ér a lépés */
         if(stuck) {
             stuckTime--;
             return;
         }
-        /**
-         * amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra
-         */
+        /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
         currRoadSection.next.accept(this);
-        /**
-         * ha van rajta hólánc, akkor azt használja az adott útszakaszon
-         */
+        /* ha van rajta hólánc, akkor azt használja az adott útszakaszon */
         if(hasSnowchain) {
             snowchain.use(currRoadSection);
         }
