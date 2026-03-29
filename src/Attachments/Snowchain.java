@@ -5,6 +5,8 @@ import RoadComponents.RoadSection;
 /** Hólánc megvalósítása */
 public class Snowchain extends Attachment {
     protected int timeToLive;
+    private int initialTimeToLive;
+
     /** Konstruktor amiben bele lehet állítani mennyi ideig él a hólánc
      * @param timeToLive hólánc élettartama
      */
@@ -13,11 +15,9 @@ public class Snowchain extends Attachment {
         this.initialTimeToLive = timeToLive;
     }
     /** Használ függvény megvalósítása, a hólánc élettartama csökken.
-     * @param roadsection itt most nincs használva
      */
-    public void use(RoadSection roadsection){
-        timeToLive--;
-    }
+    public void use(){
+    
     /** Hólánc megjavítása, visszaállítja a hólánc élattartamát
      */
     public void fix(){
