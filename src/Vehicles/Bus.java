@@ -31,7 +31,7 @@ public class Bus extends Vehicle{
     /**
      *
      * Hóláncot felszereli a buszra
-     * @param snowchain
+     * @param snowchain hólánc, amit felrakunk a buszra
      *
      */
     public void addSnowchain(Snowchain snowchain){
@@ -59,7 +59,7 @@ public class Bus extends Vehicle{
 
     /**
      * Interakcióba lép az adott útszakasszal
-     * @param roadsection
+     * @param roadsection útszakasz, amivel a busz interaktál
      * 1 egységgel növeli a jégszintet a busz a haladása során
      */
     public void interact(RoadSection roadsection){

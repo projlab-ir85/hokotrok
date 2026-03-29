@@ -36,7 +36,7 @@ public class Car extends Vehicle{
 
     /**
      * Interakcióba lép az adott útszakasszal
-     * @param rs
+     * @param rs útszakasz, amivel interaktál
      * 1 egységgel növeli a jégszintet az autó a haladása során
      */
     public void interact(RoadSection rs){

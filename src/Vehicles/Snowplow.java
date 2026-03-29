@@ -15,7 +15,7 @@ public class Snowplow extends Vehicle{
 
     /**
      * Új hókotró példány létrehozása
-     * @param start
+     * @param start kezdőkereszteződés, ahonnét indul
      * inicializálja az alapállapotot a hokotrónak
      */
     public Snowplow(Intersection start) {
@@ -44,7 +44,7 @@ public class Snowplow extends Vehicle{
 
     /**
      * Új kotrófejet felszerel a hókotróra
-     * @param plow
+     * @param plow kotrófej, amit felrak
      */
     public void addPlow(PlowHead plow) {
         plowHeads.add(plow);
@@ -60,7 +60,7 @@ public class Snowplow extends Vehicle{
 
     /**
      * Interakcióba lép az adott útszakasszal
-     * @param rs
+     * @param rs útszakasz
      */
     public void interact(RoadSection rs){
         /* az éppen aktív kotrófejet használja */

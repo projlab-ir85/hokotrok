@@ -12,14 +12,14 @@ public abstract class Vehicle implements Movable{
 
     /**
      * Interakcióba lép az adott útszakasszal
-     * @param rs
+     * @param rs útszakasz
      * absztrakt metódus, leszármazott osztályok definiálják
      */
     public abstract void interact(RoadSection rs);
 
     /**
      * beállítja a jármú aktuális útszakaszát
-     * @param roadSection
+     * @param roadSection útszakasz
      */
     public void setCurrRoadSection(RoadSection roadSection){
         /* frissíti a jelenlegi útszakaszt az újra */
