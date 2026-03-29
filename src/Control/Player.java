@@ -20,4 +20,8 @@ public class Player {
     public void decreaseCash(int amount) {
         cash -= amount;
     }
+
+    public int getCash() { return cash; }
+
+    public int getVehicleCount() { return vehicles.size(); }
 }

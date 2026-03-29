@@ -8,4 +8,10 @@ public abstract class PlowHead extends Attachment{
     protected int consumableAmountLeft;
 
     public abstract void use(RoadSection roadsection);
+
+    public void fillConsumable(int amount) {
+        consumableAmountLeft += amount;
+    }
+
+    public int getConsumableAmountLeft() { return consumableAmountLeft; }
 }
