@@ -5,10 +5,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Skeleton {
+    /** attríbutumok:
+     * Runnable lista ami a teszteket tartalmazza
+     * Scanner a bemenet kezelésére
+     * indent a behúzást kezeli
+     */
     private List<Runnable> tests = new ArrayList<>();
     private static final Scanner scanner = new Scanner(System.in);
     private static int indent = 0;
-
+    /** Színek definiálása
+     */
     private static final String RESETCOLOR = "\u001B[0m";
     private static final String BLUE = "\u001B[34m";
     private static final String PURPLE = "\u001B[35m";
@@ -16,7 +22,10 @@ public class Skeleton {
     private static final String RED = "\u001B[31m";
     private static final String GREEN = "\u001B[92m";
     private static final String ORANGE = "\u001B[38;5;214m";
-
+    /** Konstruktor
+     * minden tesztesetet hozzáadunk a tests listánkhoz
+     * @param t egy teszt példány amit
+     */
     public Skeleton(Tests t){
         tests.add(t::test1);
         tests.add(t::test2);
@@ -42,16 +51,26 @@ public class Skeleton {
         tests.add(t::test22);
         tests.add(t::test23);
     }
-
+    /** Behúzás növelése, növeli a behúzást egyel
+     */
     private static void increaseIndent(){
         indent += 1;
     }
-
+    /** Behúzása csökkentése, csökkenti a behúzást
+     * Ha 0-nál kisebb lenne a behúzás akkor visszaállítja 0-ra
+     */
     private static void decreaseIndent(){
         indent -= 1;
         if(indent < 0) indent = 0;
     }
-
+    /** Előre irányuló metódus hívás függvény
+     * Kiírja a standard kimenetre, hogy ki hívta a metódust, kin hívta a metódust,
+     * melyik metódust hívta. Ha kell akkor a behúzást is növeljük
+     * @param caller a metódus hívója
+     * @param callee akin hívták a metódust
+     * @param method melyik metódust hívták
+     * @param increase igaz ha növelni kell a behúzást
+     */
     public static void call(String caller, String callee, String method, boolean increase){
         System.out.println("\t".repeat(indent)
                 + ORANGE + caller + RESETCOLOR
@@ -63,7 +82,14 @@ public class Skeleton {
 
         if(increase) increaseIndent();
     }
-
+    /** Visszafelé irányuló metódus hívás függvény
+     * Kiírja a standard kimenetre, hogy ki hívta a metódust, kin hívta a metódust,
+     * melyik metódust hívta. Azt is megadja mi a hívás visszatérési értéke
+     * @param caller a metódus hívója
+     * @param callee akin hívták a metódust
+     * @param method melyik metódust hívták
+     * @param result
+     */
     public static void returnCall(String caller, String callee, String method, String result){
         decreaseIndent();
         System.out.println("\t".repeat(indent)
@@ -76,7 +102,11 @@ public class Skeleton {
                 + PURPLE + result + RESETCOLOR
         );
     }
-
+    /** A program főmenüje
+     * Felsorolja a teszteket, majd várja, hogy a tesztelő válasszon
+     * A tesztelő beírja teszt számát és ekkor a program lefuttatja az adott tesztet
+     * Ha a tesztelő rossz számot adott akkor jelzi a hibát
+     */
     public void menu(){
         System.out.println(GREEN + "[MENU]");
 
@@ -97,11 +127,19 @@ public class Skeleton {
         tests.get(index-1).run();
         decreaseIndent();
     }
-
+    /** Információt ír ki a standart kimenetre
+     * @param message az üzenet amit kiír
+     */
     private static void info(String message){
         System.out.println(YELLOW + "[INFO] " + RESETCOLOR + message + "\n" + RESETCOLOR);
     }
-
+    /** Kérdés függvény
+     * Kiírja a szabványos kimenetre a kérdés, majd várja a választ a tesztelőtől
+     * A tesztelő válasza alapján (y/n) visszaad egy igazat vagy hamisat
+     * Ha a tesztelő nem az elvárt módón válaszol akkor kiírja, hogy hiba és várja a választ
+     * @param message a kérdés amit felteszünk
+     * @return true vagy false a tesztelő válasza alapján
+     */
     protected static boolean question(String message){
         System.out.println(GREEN + "[Question] " + RESETCOLOR + message);
         System.out.print(">");
@@ -121,11 +159,15 @@ public class Skeleton {
             }
         }
     }
-
+    /** Hibaüzenetet ír ki a standard kimenetre
+     * @param message az üzenet ami kiír
+     */
     protected static void error(String message){
         System.out.println(RED + "[ERROR] " + RESETCOLOR + message+"\n");
     }
-
+    /** Kiírja az adott teszt eredményét a standard kimenetre
+     * @param result az eredmény amit kiír
+     */
     protected static void result(boolean result){
         System.out.println(YELLOW + "[RESULT] " + RESETCOLOR
                 + (result ? GREEN + "Test successful" : RED + "Test unsuccessful")
