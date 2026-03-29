@@ -2,17 +2,47 @@ package RoadComponents;
 
 import java.util.List;
 
+/**
+ * Két kereszteződést összekötő utat reprezentáló osztály.
+ * Egy út lehet egyirányú vagy kétirányú.
+ */
 public class Road {
+    /**
+     * Az út irányultságát meghatározó felsorolás (enum).
+     */
     public enum Way{
+        /** Egyirányú út. */
         ONEWAY,
+        /** Kétirányú út. */
         TWOWAY
     }
 
+    /**
+     * Az út hossza (az útszakaszok számában kifejezve).
+     */
     protected int length;
+    /**
+     * Az utat alkotó sávokat tartalmazó tömb. Egyirányú út esetén 1, kétirányú esetén 2 sávot tartalmaz.
+     */
     protected Lane[] lanes;
+    /**
+     * Az út egyik végpontját (kezdőpontját) jelentő kereszteződés.
+     */
     protected Intersection startPoint;
+    /**
+     * Az út másik végpontját jelentő kereszteződés.
+     */
     protected Intersection endPoint;
 
+    /**
+     * A Road osztály konstruktora.
+     * Létrehozza az utat a két megadott kereszteződés között, beállítja az irányultságot, és legenerálja a megfelelő számú sávot.
+     * @param start Az út kezdőpontját jelentő kereszteződés.
+     * @param end Az út végpontját jelentő kereszteződés.
+     * @param way Az út irányultsága (egyirányú vagy kétirányú).
+     * @param lanes A sávon belüli párhuzamos alsávok száma.
+     * @param length Az út hossza.
+     */
     public Road(Intersection start, Intersection end, Way way, int lanes, int length){
         this.length = length;
 
@@ -29,6 +59,11 @@ public class Road {
         endPoint = end;
     }
 
+    /**
+     * Kikeresi a célkereszteződés felé vezető sávból az első szabad (vezethető) útszakaszt.
+     * @param destination A kereszteződés, ahová a jármű tart.
+     * @return Az első szabad RoadSection, amire rá lehet hajtani, vagy null, ha a sáv teljesen blokkolt.
+     */
     public RoadSection getDriveableRoadSection(Intersection destination){
         for (Lane lane : lanes) {
             if (lane.end.equals(destination)) {
