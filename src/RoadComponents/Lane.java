@@ -70,20 +70,20 @@ public class Lane {
             for(int j = 0; j < currLane.size(); j++){
                 RoadSection currSection = currLane.get(j);
 
-                if(!currLane.getFirst().equals(currSection)){
+                if(!currLane.get(0).equals(currSection)){
                     currSection.previous = currLane.get(j-1);
                 }
 
-                if(!currLane.getLast().equals(currSection)){
+                if(!currLane.get(currLane.size()-1).equals(currSection)){
                     currSection.next = currLane.get(j+1);
                 }
 
                 if(subLanes.size() != 1){
-                    if(!subLanes.getFirst().equals(currLane)){
+                    if(!subLanes.get(0).equals(currLane)){
                         currSection.left = subLanes.get(i-1).get(j);
                     }
 
-                    if(!subLanes.getLast().equals(currLane)){
+                    if(!subLanes.get(subLanes.size()-1).equals(currLane)){
                         currSection.right = subLanes.get(i+1).get(j);
                     }
                 }
@@ -110,7 +110,7 @@ public class Lane {
     public RoadSection getDriveableRoadSection(){
         for(int i = 0; i < subLanes.size(); i++){
             if(!blockedSublanes.contains(i)){
-                return subLanes.get(i).getFirst();
+                return subLanes.get(i).get(0);
             }
         }
         return null;

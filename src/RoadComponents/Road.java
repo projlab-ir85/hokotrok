@@ -76,7 +76,7 @@ public class Road {
     public RoadSection getFirstRoadSection(Intersection destination){
         for (Lane lane : lanes) {
             if (lane.end.equals(destination)) {
-                return lane.subLanes.getFirst().getFirst();
+                return lane.subLanes.get(0).get(0);
             }
         }
         return null;
