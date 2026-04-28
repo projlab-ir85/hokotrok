@@ -115,4 +115,12 @@ public class Lane {
         }
         return null;
     }
+
+    public void tick(){
+        for(List<RoadSection> sublane : subLanes){
+            for(RoadSection rs : sublane){
+                rs.tick();
+            }
+        }
+    }
 }

@@ -121,4 +121,12 @@ public class RoadSection implements Updateable{
     public int getConsumableCount() { return consumables.size(); }
 
     public void setAccident(boolean happened){ accidentHappened = happened; }
+
+    public void tick(){
+        for(Vehicle v : vehicles){
+            v.step();
+        }
+
+        update();
+    }
 }

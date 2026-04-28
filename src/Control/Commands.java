@@ -1,6 +1,7 @@
 package Control;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 //tartalmazza az összes konzolrol hivhato parancsot
 public class Commands {
@@ -11,10 +12,11 @@ public class Commands {
     }
 
     public void dispatch(String input) throws Exception{
-        String commandName = input.split(" ")[0];
+        String[] inputs = input.split(" ");
+        String commandName = inputs[0];
         try {
             Method m = this.getClass().getMethod(commandName, String[].class);
-            String[] args = input.split(" ");
+            String[] args = Arrays.copyOfRange(inputs, 1, inputs.length);
             m.invoke(this, (Object) args);
         } catch(NoSuchMethodException e){
             System.out.println(Colors.RED+"Unknown command: " + commandName);
@@ -35,124 +37,138 @@ public class Commands {
 
     @CommandInfo(description = "Üres játékkörnyezetet hoz létre, törli az előző állapotot.")
     public void newgame(String[] args){
-
+        controller.clearGame();
     }
 
     @CommandInfo(description = "Betölti a megadott konfigurációs fájlban leírt kezdőállapotot.", args = "<fajlnev>")
     public void load(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = " Elmenti az aktuális állapotot a megadott fájlba.", args = "<fajlnev>")
     public void save(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Beállítja a futási módot. Deterministic módban a prototípus kiszámíthatóan, tesztelhetően működik. Random módban a véletlenelemek engedélyezettek.",
         args="<deterministic|random> ")
     public void mode(String[] args){
-
+        boolean mode = false;
+        if(args[0].equals("deterministic")){
+            mode = true;
+        }else if (args[0].equals("random")){
+            mode = false;
+        }else{
+            System.out.println("Argument must be 'deterministic' or 'random'");
+            return;
+        }
+        controller.setDeterministic(mode);
     }
 
     //directs the create function based on the second word (first in args)
-    public void create(String[] args){
-
+    public void create(String[] args) throws Exception{
+        dispatch(String.join(" ", args));
     }
 
     @CommandInfo(name = "create keresztezodes", description = "Új kereszteződést hoz létre.", args = "<id>")
     public void keresztezodes(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(name = "create ut", description = " Két kereszteződés között létrehoz egy utat.", args = "<id> <keresztezodes1> <keresztezodes2> <savok> <hossz> <true|false> <hoszint> <jegszint> <zuzalekszint> <alagut|fout|hid>")
     public void ut(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(name="create busz", description = "Új buszt hoz létre.", args="<id> <startKeresztezodes> <celKeresztezodes>")
     public void busz(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(name="create auto", description = "Új autót hoz létre.", args = " <id> <startKeresztezodes> <celKeresztezodes>")
     public void auto(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(name = "create hokotro", description = "Új hókotrót hoz létre.", args = " <id> <startKeresztezodes>")
     public void hokotro(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     //directs the attach function based on the second word (first in args)
-    public void attach(String[] args){
-
+    public void attach(String[] args) throws Exception{
+        dispatch(String.join(" ", args));
     }
 
     @CommandInfo(name = "attach holanc", description = "Hóláncot rendel a megadott buszhoz.", args = "<buszId> <elettartam>")
     public void holanc(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Megjavítja az adott buszon lévő hóláncot.", args="<buszId>")
     public void fixlanc(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(name = "attach fej", description = "Kotrófejet rendel a hókotróhoz.", args = "<hokotroId> <fejTipus>")
     public void fej(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     //directs the add function based on the second word (first in args)
-    public void add(String[] args){
-
+    public void add(String[] args) throws Exception{
+        dispatch(String.join(" ", args));
     }
 
     @CommandInfo(name = "add consumable", description = "Hozzáad fogyóeszközt a hókotróhoz", args = " <hokotroId> <mennyiseg>")
     public void consumable(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Kiválasztja a hókotró aktív kotrófejét.", args = "<hokotroId> <fejIndex>")
     public void setactivefej(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Beállítja az adott útszakaszon a hó mennyiségét.", args = "<utszakaszId> <mennyiseg>")
     public void setho(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Beállítja az adott útszakaszon a jég mennyiségét.", args = "<utszakaszId> <mennyiseg>")
     public void setjeg(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Beállítja, hogy az útszakaszon van-e baleset.", args = "<utszakaszId> <true|false>")
     public void setbaleset(String[] args){
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+    }
 
+    @CommandInfo(description = "Beállítja a megadott jármű útvonalát.", args = "<jarmuId> <keresztezodes1> <keresztezodes2> [<keresztezodes3> ...]")
+    public void setutvonal(String[] args){
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "A teljes szimulációt egy időegységgel előrelépteti. Minden aktív objektum végrehajtja a saját lépését.")
     public void step(String[] args){
-
+        controller.tick();
     }
 
     @CommandInfo(description = "Az egész rendszer összefoglaló állapotát írja ki. Ha megvan adva objektum ID akkor egy konkrét objektum részletes állapotát írja ki.",
             args = "[<objektumId>]")
     public void status(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Kilistázza a megadott típusú objektumokat.", args = "<tipus>")
     public void list(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Kiírja a jármű aktuálisan tárolt útvonalát vagy következő célpontját.", args = "<jarmuId>")
     public void route(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Több lépést futtat le egymás után.", args="<db>")
@@ -161,20 +177,18 @@ public class Commands {
         for (int i = 0; i < n; i++){
             controller.tick();
         }
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
+    //mit takar a kiindulo allapot?
     @CommandInfo(description = "Visszaállítja a rendszert az induló állapotra.")
     public void reset(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
     @CommandInfo(description = "Leállítja a programot.")
     public void exit(String[] args){
         controller.exit();
-    }
-
-    @CommandInfo(description = "Beállítja a megadott jármű útvonalát.", args = "<jarmuId> <keresztezodes1> <keresztezodes2> [<keresztezodes3> ...]")
-    public void setutvonal(String[] args){
-
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 }

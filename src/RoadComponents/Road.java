@@ -82,6 +82,12 @@ public class Road {
         return null;
     }
 
+    public void tick(){
+        for(Lane l : lanes){
+            l.tick();
+        }
+    }
+
     //demo
     public void setIceshield(){
         for(Lane lane : lanes){

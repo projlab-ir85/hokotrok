@@ -59,4 +59,14 @@ public class Intersection {
     public void addVehicle(Vehicle vehicle){
         vehicles.add(vehicle);
     }
+
+    public void tick(){
+        for(Vehicle v : vehicles){
+            v.step();
+        }
+
+        for(Road r : roads){
+            r.tick();
+        }
+    }
 }
