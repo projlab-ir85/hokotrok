@@ -1,5 +1,6 @@
 package Main;
 
+import Control.Controller;
 import Skeleton.*;
 
 public class Main {
@@ -7,10 +8,13 @@ public class Main {
      * Példányosítja a teszteket és a skeletont
      * Meghívja a skeleton menu függvényét
      */
-    public static void main(String[] args){
-        Tests tests = new Tests();
+    public static void main(String[] args) throws Exception{
+        /*Tests tests = new Tests();
         Skeleton sk = new Skeleton(tests);
 
-        sk.menu();
+        sk.menu();*/
+
+        Controller controller = new Controller();
+        controller.start();
     }
 }
