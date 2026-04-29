@@ -17,6 +17,14 @@ public class Road {
         TWOWAY
     }
 
+    public enum Type{
+        ALAGUT,
+        FOUT,
+        HID
+    }
+
+    protected String id;
+
     /**
      * Az út hossza (az útszakaszok számában kifejezve).
      */
@@ -43,16 +51,17 @@ public class Road {
      * @param lanes A sávon belüli párhuzamos alsávok száma.
      * @param length Az út hossza.
      */
-    public Road(Intersection start, Intersection end, Way way, int lanes, int length){
+    public Road(String id, Intersection start, Intersection end, Way way, int lanes, int length, int snowLevel, int iceLevel, int rockLevel, Type type){
+        this.id = id;
         this.length = length;
 
         if(way == Way.ONEWAY){
             this.lanes = new Lane[1];
-            this.lanes[0] = new Lane(lanes, length, start, end);
+            this.lanes[0] = new Lane(id,lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
         }else if(way == Way.TWOWAY){
             this.lanes = new Lane[2];
-            this.lanes[0] = new Lane(lanes, length, start, end);
-            this.lanes[1] = new Lane(lanes, length, end, start);
+            this.lanes[0] = new Lane(id,lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
+            this.lanes[1] = new Lane(id,lanes, length, end, start, snowLevel, iceLevel, rockLevel, type);
         }
 
         startPoint = start;
@@ -87,6 +96,18 @@ public class Road {
             l.tick();
         }
     }
+
+    public String getId(){return id;}
+    public String getStartIntersectionId(){return startPoint.id;}
+    public String getEndIntersectionId(){return endPoint.id;}
+    public int getLaneCount(){return lanes[0].subLanes.size();}
+    public int getLength(){return length;}
+    public boolean getWay(){return lanes.length == 1;}
+    public int getSnowLevel(){return lanes[0].getSnowLevel();}
+    public int getIceLevel(){return lanes[0].getIceLevel();}
+    public int getRockLevel(){return lanes[0].getRockLevel();}
+    public Type getType(){return lanes[0].getType();}
+    public Lane[] getLanes(){return lanes;}
 
     //demo
     public void setIceshield(){

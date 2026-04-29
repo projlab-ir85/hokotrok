@@ -4,9 +4,6 @@ import RoadComponents.Intersection;
 import RoadComponents.RoadSection;
 
 public class Car extends Vehicle{
-    protected Intersection start;
-    protected Intersection end;
-
     /**
      * Új Car példány létrehozása
      * @param start kezdőpont

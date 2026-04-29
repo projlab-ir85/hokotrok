@@ -9,8 +9,6 @@ public class Bus extends Vehicle{
     protected int lapsDone;
     protected int accidentTime;
     protected boolean finishedLap;
-    protected Intersection start;
-    protected Intersection end;
     protected Intersection next;
     protected boolean hasSnowchain;
 
@@ -67,6 +65,8 @@ public class Bus extends Vehicle{
     }
 
     public boolean getHasSnowchain() { return hasSnowchain; }
+
+    public int getSnowchainTTL(){return snowchain.getTimeToLive();}
 
     public Intersection getCurrIntersection() { return currIntersection; }
 

@@ -12,7 +12,7 @@ public class Intersection {
     /**
      * A kereszteződés egyedi azonosítója.
      */
-    protected int id;
+    protected String id;
     /**
      * A kereszteződéshez közvetlenül csatlakozó utak listája.
      */
@@ -26,7 +26,8 @@ public class Intersection {
      * Az Intersection osztály alapértelmezett konstruktora.
      * Létrehozáskor inicializálja az utak és a járművek üres listáit.
      */
-    public Intersection() {
+    public Intersection(String id) {
+        this.id = id;
         roads = new java.util.ArrayList<>();
         vehicles = new java.util.ArrayList<>();
     }
@@ -69,4 +70,10 @@ public class Intersection {
             r.tick();
         }
     }
+
+    public String getId(){return id;}
+
+    public List<Road> getRoads(){return roads;}
+
+    public List<Vehicle> getVehicles(){return vehicles;}
 }

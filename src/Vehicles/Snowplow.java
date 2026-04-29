@@ -11,7 +11,6 @@ import java.util.List;
 public class Snowplow extends Vehicle{
     protected List<PlowHead> plowHeads;
     protected PlowHead activePlowHead;
-    protected Intersection start;
 
     /**
      * Új hókotró példány létrehozása
@@ -74,6 +73,8 @@ public class Snowplow extends Vehicle{
     }
 
     public int getPlowHeadCount() { return plowHeads.size(); }
+
+    public List<PlowHead> getPlowHeads() {return plowHeads;}
 
     public PlowHead getActivePlowHead() { return activePlowHead; }
 

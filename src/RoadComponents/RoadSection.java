@@ -12,10 +12,14 @@ import java.util.List;
  * referenciákat tartalmaz a szomszédos útszakaszokra.
  */
 public class RoadSection implements Updateable{
+    protected String id;
     /** Az útszakaszon lévő hó mennyisége. */
     protected int snowLevel;
     /** Az útszakaszon lévő jég mennyisége. */
     protected int iceLevel;
+    protected int rockLevel;
+
+    protected Road.Type type;
 
     /** Jelzi, hogy történt-e baleset ezen az útszakaszon. */
     protected boolean accidentHappened;
@@ -47,9 +51,12 @@ public class RoadSection implements Updateable{
      * @param lane A sáv, amibe beletartozik.
      * @param sublaneIndex Az alsáv indexe, ahol elhelyezkedik.
      */
-    public RoadSection(Lane lane, int sublaneIndex){
-        snowLevel = 0;
-        iceLevel = 0;
+    public RoadSection(String id, Lane lane, int sublaneIndex, int snowLevel, int iceLevel, int rockLevel, Road.Type type){
+        this.id = id;
+        this.snowLevel = snowLevel;
+        this.iceLevel = iceLevel;
+        this.rockLevel = rockLevel;
+        this.type = type;
         accidentHappened = false;
         accidentTime = 0;
 
@@ -129,4 +136,8 @@ public class RoadSection implements Updateable{
 
         update();
     }
+
+    public String getId(){return id;}
+
+    public List<Vehicle> getVehicles(){return vehicles;}
 }

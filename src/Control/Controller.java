@@ -50,4 +50,12 @@ public class Controller {
     public void setDeterministic(boolean mode){
         deterministic = mode;
     }
+
+    public boolean getDeterministic(){
+        return deterministic;
+    }
+
+    public List<Intersection> getIntersections(){
+        return intersections;
+    }
 }

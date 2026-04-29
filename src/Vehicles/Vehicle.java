@@ -9,6 +9,15 @@ public abstract class Vehicle implements Movable{
     protected RoadSection currRoadSection;
     protected Intersection currIntersection;
     protected int stuckTime;
+    protected String id;
+    protected Intersection start;
+    protected Intersection end;
+
+    public String getId(){return id;}
+
+    public Intersection getStartIntersection(){return start;}
+
+    public Intersection getEndIntersection(){return end;}
 
     /**
      * Interakcióba lép az adott útszakasszal
@@ -27,6 +36,8 @@ public abstract class Vehicle implements Movable{
     }
 
     public RoadSection getCurrRoadSection() { return currRoadSection; }
+
+    public Intersection getCurrIntersection(){return currIntersection;}
 
     public boolean isStuck() { return stuck; }
 
