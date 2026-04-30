@@ -34,7 +34,8 @@ public class Intersection {
 
     public RoadSection roadSelection(Intersection destination){
         for(Road road : roads){
-            if(road.startPoint.equals(destination) || road.endPoint.equals(destination)){
+            if((road.startPoint.equals(this) && road.endPoint.equals(destination)) ||
+               (road.startPoint.equals(destination) && road.endPoint.equals(this))){
                 return road.getDriveableRoadSection(destination);
             }
         }
@@ -47,7 +48,7 @@ public class Intersection {
      * @param road A hozzáadni kívánt út objektuma.
      */
     public void addRoad(Road road){
-        if(road.endPoint.equals(this) || road.startPoint.equals(this)){
+        if(road.getStartIntersectionId().equals(this.id)){
             roads.add(road);
         }
     }
@@ -64,10 +65,6 @@ public class Intersection {
     public void tick(){
         for(Vehicle v : vehicles){
             v.step();
-        }
-
-        for(Road r : roads){
-            r.tick();
         }
     }
 

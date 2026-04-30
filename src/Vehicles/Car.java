@@ -11,7 +11,8 @@ public class Car extends Vehicle{
      * inicializálja az útvonalat, illetve beállítja az alapállapotot
      * alapállapotban nincsen elakadva
      */
-    public Car(Intersection start, Intersection end) {
+    public Car(String id, Intersection start, Intersection end) {
+        this.id = id;
         this.start = start;
         this.end = end;
         stuck = false;

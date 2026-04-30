@@ -71,4 +71,6 @@ public class Bus extends Vehicle{
     public Intersection getCurrIntersection() { return currIntersection; }
 
     public void setCurrIntersection(Intersection i) { currIntersection = i; }
+
+    public Intersection getNext(){return next;}
 }

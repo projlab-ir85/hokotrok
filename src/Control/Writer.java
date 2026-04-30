@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Objects;
 
 public class Writer {
     private final Controller controller;
@@ -21,29 +20,26 @@ public class Writer {
 
     public void write() throws IOException {
         writer.write("newgame\n");
-        writer.write(MessageFormat.format("mode {0}\n",controller.getDeterministic() ? "deterministic":"random"));
+        writer.write(MessageFormat.format("mode {0}\n",controller.deterministic ? "deterministic":"random"));
 
-        for(Intersection i : controller.getIntersections()){
+        for(Intersection i : controller.intersections){
             writer.write(MessageFormat.format("create keresztezodes {0}\n",i.getId()));
-
-            for(Road r : i.getRoads()){
-                if(Objects.equals(r.getStartIntersectionId(), i.getId())){
-                    writeRoad(r);
-                }
-
-                for(Lane l : r.getLanes()){
-                    for(RoadSection rs : l.getAllRoadsectionsWithAccidents()){
-                        writer.write(MessageFormat.format("setbaleset {0}\n",rs.getId()));
-                    }
-
-                    writeVehicles(l.getAllVehicles());
-                }
-            }
 
             writeVehicles(i.getVehicles());
         }
 
-        writer.write(MessageFormat.format("tick {0}\n", controller.getTickCount()));
+        for(Road r : controller.getRoads()){
+            writeRoad(r);
+            for(Lane l : r.getLanes()){
+                for(RoadSection rs : l.getAllRoadsectionsWithAccidents()){
+                    writer.write(MessageFormat.format("setbaleset {0}\n",rs.getId()));
+                }
+
+                writeVehicles(l.getAllVehicles());
+            }
+        }
+
+        writer.write(MessageFormat.format("tick {0}\n", controller.tickCount));
 
         writer.close();
     }

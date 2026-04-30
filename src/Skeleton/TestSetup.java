@@ -31,7 +31,7 @@ public class TestSetup {
     public static class BusMovement {
         public Intersection i1 = new Intersection("a");
         public Intersection i2 = new Intersection("b");
-        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 2, 2, 0, 0, 0, Road.Type.FOUT);
+        public Road road = new Road("ab",i1, i2, 2, 2, Road.Way.ONEWAY, 0, 0, 0, Road.Type.FOUT);
         public Bus bus = new Bus(i1, i2);
         public RoadSection busSection;
         public RoadSection nextSection;
@@ -83,7 +83,7 @@ public class TestSetup {
     public static class BusWithSnowchain {
         public Intersection i1 = new Intersection("a");
         public Intersection i2 = new Intersection("b");
-        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 1, 3,0,0,0, Road.Type.FOUT);
+        public Road road = new Road("ab",i1, i2, 1, 3, Road.Way.ONEWAY,0,0,0, Road.Type.FOUT);
         public Bus bus = new Bus(i1, i2);
         public Snowchain snowchain;
         public RoadSection busSection;
@@ -153,8 +153,8 @@ public class TestSetup {
     public static class CarMovement {
         public Intersection i1 = new Intersection("a");
         public Intersection i2 = new Intersection("b");
-        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 2, 2,0,0,0, Road.Type.FOUT);
-        public Car car = new Car(i1, i2);
+        public Road road = new Road("ab",i1, i2, 2, 2, Road.Way.ONEWAY, 0,0,0, Road.Type.FOUT);
+        public Car car = new Car("c",i1, i2);
         public RoadSection carSection;
         public RoadSection nextSection;
     }
@@ -203,7 +203,7 @@ public class TestSetup {
     public static class SnowplowMovement {
         public Intersection i1 = new Intersection("a");
         public Intersection i2 = new Intersection("b");
-        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 2, 2,0,0,0, Road.Type.FOUT);
+        public Road road = new Road("ab",i1, i2, 2, 2, Road.Way.ONEWAY,0,0,0, Road.Type.FOUT);
         public Snowplow snowplow = new Snowplow(null);
         public RoadSection snowplowSection;
         public RoadSection nextSection;
@@ -371,7 +371,7 @@ public class TestSetup {
     public static class AccidentSetup {
         public Intersection i1 = new Intersection("a");
         public Intersection i2 = new Intersection("b");
-        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 1, 3,0,0,0, Road.Type.FOUT);
+        public Road road = new Road("ab",i1, i2, 1, 3, Road.Way.ONEWAY, 0,0,0, Road.Type.FOUT);
         public Bus bus1 = new Bus(i1, i2);
         public Bus bus2 = new Bus(i1, i2);
         public RoadSection section;

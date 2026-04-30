@@ -47,4 +47,8 @@ public abstract class Vehicle implements Movable{
     }
 
     public List<Intersection> getJunctions(){return junctions;}
+
+    public void setRoute(List<Intersection> route){
+        junctions = route;
+    }
 }

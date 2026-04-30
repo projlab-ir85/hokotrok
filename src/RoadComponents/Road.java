@@ -1,6 +1,11 @@
 package RoadComponents;
 
+import Vehicles.Vehicle;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Két kereszteződést összekötő utat reprezentáló osztály.
@@ -51,7 +56,10 @@ public class Road {
      * @param lanes A sávon belüli párhuzamos alsávok száma.
      * @param length Az út hossza.
      */
-    public Road(String id, Intersection start, Intersection end, Way way, int lanes, int length, int snowLevel, int iceLevel, int rockLevel, Type type){
+    public Road(String id, Intersection start, Intersection end, int lanes, int length, Way way, int snowLevel, int iceLevel, int rockLevel, Type type){
+        if(id == null){
+            id = start.id+end.id;
+        }
         this.id = id;
         this.length = length;
 
@@ -85,7 +93,7 @@ public class Road {
     public RoadSection getFirstRoadSection(Intersection destination){
         for (Lane lane : lanes) {
             if (lane.end.equals(destination)) {
-                return lane.subLanes.get(0).get(0);
+                return lane.subLanes.getFirst().getFirst();
             }
         }
         return null;
@@ -107,7 +115,20 @@ public class Road {
     public int getIceLevel(){return lanes[0].getIceLevel();}
     public int getRockLevel(){return lanes[0].getRockLevel();}
     public Type getType(){return lanes[0].getType();}
-    public Lane[] getLanes(){return lanes;}
+    public List<Lane> getLanes(){return Collections.unmodifiableList(Arrays.asList(lanes));}
+
+    public List<Vehicle> getAllVehicles(){
+        return Arrays.stream(lanes)
+                .flatMap(lane -> lane.getAllVehicles().stream())
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public RoadSection findRoadSectionById(String id){
+            return Arrays.stream(lanes)
+                    .flatMap(lane -> lane.getAllRoadSections().stream())
+                    .filter(rs -> rs.getId().equals(id))
+                    .findFirst().orElse(null);
+    }
 
     //demo
     public void setIceshield(){

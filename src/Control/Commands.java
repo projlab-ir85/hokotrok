@@ -1,22 +1,18 @@
 package Control;
 
-import Attachments.PlowHead;
 import RoadComponents.Intersection;
-import RoadComponents.Lane;
 import RoadComponents.Road;
-import RoadComponents.RoadSection;
 import Vehicles.Bus;
 import Vehicles.Car;
-import Vehicles.Snowplow;
 import Vehicles.Vehicle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 //tartalmazza az összes konzolrol hivhato parancsot
 public class Commands {
@@ -34,7 +30,7 @@ public class Commands {
             String[] args = Arrays.copyOfRange(inputs, 1, inputs.length);
             m.invoke(this, (Object) args);
         } catch(NoSuchMethodException e){
-            System.out.println(Colors.RED+"Unknown command: " + commandName);
+            System.out.println(Colors.RED+"Unknown command: " + commandName + Colors.RESETCOLOR);
         }
     }
 
@@ -107,24 +103,72 @@ public class Commands {
     @CommandInfo(name = "create keresztezodes", description = "Új kereszteződést hoz létre.", args = "<id>")
     public void keresztezodes(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+        controller.intersections.add(new Intersection(args[0]));
     }
 
-    @CommandInfo(name = "create ut", description = " Két kereszteződés között létrehoz egy utat.", args = "<id> <keresztezodes1> <keresztezodes2> <savok> <hossz> <true|false> <hoszint> <jegszint> <zuzalekszint> <alagut|fout|hid>")
+    @CommandInfo(name = "create ut", description = " Két kereszteződés között létrehoz egy utat.", args = "[<id>] <keresztezodes1> <keresztezodes2> <savok> <hossz> <true|false> <hoszint> <jegszint> <zuzalekszint> <alagut|fout|hid>")
     public void ut(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+
+        Boolean hasId = args.length == 10;
+        String id = hasId ? args[0] : null;
+        int i = hasId ? 0 : 1;
+
+        Intersection start = controller.findIntersectionById(args[1-i]);
+        Intersection end = controller.findIntersectionById(args[2-i]);
+
+        Road.Way way = args[5-1].equals("true") ? Road.Way.ONEWAY : Road.Way.TWOWAY;
+
+        Road.Type type = switch(args[9-i]){
+            case "alagut" -> Road.Type.ALAGUT;
+            case "hid" -> Road.Type.HID;
+            default -> Road.Type.FOUT;
+        };
+
+        Road road = new Road(
+                id,
+                start,
+                end,
+                Integer.parseInt(args[3-i]),
+                Integer.parseInt(args[4-i]),
+                way,
+                Integer.parseInt(args[6-i]),
+                Integer.parseInt(args[7-i]),
+                Integer.parseInt(args[8-i]),
+                type
+        );
+
+        controller.roads.add(road);
+        start.addRoad(road);
     }
 
-    @CommandInfo(name="create busz", description = "Új buszt hoz létre.", args="<id> <startKeresztezodes> <celKeresztezodes>")
+    @CommandInfo(name="create busz", description = "Új buszt hoz létre.", args="<id> <startKeresztezodes> <celKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
     public void busz(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
 
-    @CommandInfo(name="create auto", description = "Új autót hoz létre.", args = " <id> <startKeresztezodes> <celKeresztezodes>")
+    @CommandInfo(name="create auto", description = "Új autót hoz létre.", args = " <id> <startKeresztezodes> <celKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
     public void auto(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName()); //konzolra loggol debug miatt
+
+        Intersection start = controller.findIntersectionById(args[1]);
+        Intersection end = controller.findIntersectionById(args[2]);
+        Car car = new Car(args[0],start, end);
+
+        if(args.length > 3){
+            if(args[3].equals("true")){
+                controller.findIntersectionById(args[4])
+                        .addVehicle(car);
+            }else if(args[3].equals("false")){
+                controller.findRoadSectionById(args[4]).addVehicle(car);
+            }
+        }else{
+            start.addVehicle(car);
+        }
+        controller.makeRoute(car);
     }
 
-    @CommandInfo(name = "create hokotro", description = "Új hókotrót hoz létre.", args = " <id> <startKeresztezodes>")
+    @CommandInfo(name = "create hokotro", description = "Új hókotrót hoz létre.", args = " <id> <startKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
     public void hokotro(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }
@@ -205,6 +249,17 @@ public class Commands {
     @CommandInfo(description = "Kiírja a jármű aktuálisan tárolt útvonalát vagy következő célpontját.", args = "<jarmuId>")
     public void route(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+
+        Vehicle v = controller.findVehiclebyId(args[0]);
+        if(v == null){System.out.println(Colors.RED+"Vehicle not found"+Colors.RESETCOLOR); return;}
+
+        if(v instanceof Bus bus){
+            System.out.println(bus.getNext().getId());
+        }else{
+            System.out.println(v.getJunctions().stream()
+                    .map(Intersection::getId)
+                    .collect(Collectors.joining(" -> ")));
+        }
     }
 
     @CommandInfo(description = "Több lépést futtat le egymás után.", args="<db>")

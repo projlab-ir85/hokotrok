@@ -124,6 +124,12 @@ public class Lane {
                 .collect(Collectors.toList());
     }
 
+    public List<RoadSection> getAllRoadSections(){
+        return subLanes.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
     public void tick(){
         for(List<RoadSection> sublane : subLanes){
             for(RoadSection rs : sublane){

@@ -130,14 +130,18 @@ public class RoadSection implements Updateable{
     public void setAccident(boolean happened){ accidentHappened = happened; }
 
     public void tick(){
+        update();
         for(Vehicle v : vehicles){
             v.step();
         }
-
-        update();
     }
 
     public String getId(){return id;}
 
     public List<Vehicle> getVehicles(){return vehicles;}
+
+    public void addVehicle(Vehicle v){
+        vehicles.add(v);
+        v.setCurrRoadSection(this);
+    }
 }
