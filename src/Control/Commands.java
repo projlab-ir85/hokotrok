@@ -1,5 +1,6 @@
 package Control;
 
+import Attachments.PlowHead;
 import RoadComponents.Intersection;
 import RoadComponents.Lane;
 import RoadComponents.Road;
@@ -14,10 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 //tartalmazza az összes konzolrol hivhato parancsot
@@ -79,104 +77,12 @@ public class Commands {
     public void save(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
         try{
-            writer(args[0]);
+            Writer writer = new Writer(controller, args[0]);
+            writer.write();
         } catch (IOException e){
             System.out.println("Can't write into file!");
-            return;
-        }
-        //write
-    }
-
-    private void writer(String filename) throws IOException{
-        FileWriter writer = new FileWriter(filename);
-
-        writer.write("newgame");
-        writer.write(MessageFormat.format("mode {0}",controller.getDeterministic() ? "deterministic":"random"));
-
-        for(Intersection i : controller.getIntersections()){
-            writer.write(MessageFormat.format("create keresztezodes {0}",i.getId()));
-
-            for(Road r : i.getRoads()){
-                if(Objects.equals(r.getStartIntersectionId(), i.getId())){
-                    writeRoad(writer, r);
-                }
-
-                for(Lane l : r.getLanes()){
-                    for(RoadSection rs : l.getAllRoadsectionsWithAccidents()){
-                        writer.write(MessageFormat.format("setbaleset {0}",rs.getId()));
-                    }
-
-                    writeVehicles(writer, l.getAllVehicles());
-                }
-            }
-
-            writeVehicles(writer, i.getVehicles());
-        }
-
-        writer.close();
-    }
-
-    private void writeRoad(FileWriter writer, Road r) throws IOException{
-        writer.write(MessageFormat.format(
-                "create ut {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}",
-                r.getId(),
-                r.getStartIntersectionId(),
-                r.getEndIntersectionId(),
-                r.getLaneCount(),
-                r.getLength(),
-                r.getWay(),
-                r.getSnowLevel(),
-                r.getIceLevel(),
-                r.getRockLevel(),
-                r.getType().name().toLowerCase())
-        );
-    }
-
-    private void writeVehicles(FileWriter writer, List<Vehicle> vehicles) throws IOException{
-        for(Vehicle v : vehicles){
-            Boolean atIntersection = v.getCurrIntersection() != null;
-            String type;
-            if(v instanceof Bus){
-                type = "busz";
-            }else if(v instanceof Car){
-                type = "auto";
-            }else if(v instanceof Snowplow){
-                type = "hokotro";
-            }else {
-                continue;
-            }
-
-            writer.write(MessageFormat.format(
-                    "create {0} {1} {2} {3}{4} {5}",
-                    type,
-                    v.getId(),
-                    v.getStartIntersection().getId(),
-                    v.getEndIntersection() != null ? v.getEndIntersection().getId()+" " : "",
-                    atIntersection,
-                    atIntersection ? v.getCurrIntersection().getId() : v.getCurrRoadSection().getId()
-            ));
-
-            if(type.equals("busz")){
-                writeHolanc(writer, (Bus)v);
-            }else if(type.equals("hokotro")){
-                writeHokotro(writer, (Snowplow)v);
-            }
         }
     }
-
-    private void writeHolanc(FileWriter writer, Bus bus) throws IOException{
-        writer.write(MessageFormat.format("attach holanc {0} {1}",
-                bus.getId(),
-                bus.getSnowchainTTL()));
-    }
-
-    private void writeHokotro(FileWriter writer, Snowplow snowplow) throws  IOException{
-        //attach fej
-        //add consumable
-        //setactivefej
-    }
-    //setroute
-    //tick
 
     @CommandInfo(description = "Beállítja a futási módot. Deterministic módban a prototípus kiszámíthatóan, tesztelhetően működik. Random módban a véletlenelemek engedélyezettek.",
         args="<deterministic|random> ")
@@ -248,12 +154,14 @@ public class Commands {
         dispatch(String.join(" ", args));
     }
 
-    @CommandInfo(name = "add consumable", description = "Hozzáad fogyóeszközt a hókotróhoz", args = " <hokotroId> <mennyiseg>")
+    @CommandInfo(name = "add consumable", description = "Hozzáad fogyóeszközt a hókotróhoz", args = " <hokotroId> <mennyiseg> [<fejtipus>]")
     public void consumable(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+        //ha van fejtipus akkor fillPlowHead
+        //ha nincs akkor fillActiveHead
     }
 
-    @CommandInfo(description = "Kiválasztja a hókotró aktív kotrófejét.", args = "<hokotroId> <fejIndex>")
+    @CommandInfo(description = "Kiválasztja a hókotró aktív kotrófejét.", args = "<hokotroId> <fejTipus>")
     public void setactivefej(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
     }

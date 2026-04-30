@@ -29,9 +29,9 @@ public class TestSetup {
      * valamint az aktuális és következő útszakasz referenciákat.
      */
     public static class BusMovement {
-        public Intersection i1 = new Intersection();
-        public Intersection i2 = new Intersection();
-        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 2, 2);
+        public Intersection i1 = new Intersection("a");
+        public Intersection i2 = new Intersection("b");
+        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 2, 2, 0, 0, 0, Road.Type.FOUT);
         public Bus bus = new Bus(i1, i2);
         public RoadSection busSection;
         public RoadSection nextSection;
@@ -81,9 +81,9 @@ public class TestSetup {
      * Tartalmaz egy buszt egy rá felszerelt hólánccal, valamint az aktuális útszakasz referenciát.
      */
     public static class BusWithSnowchain {
-        public Intersection i1 = new Intersection();
-        public Intersection i2 = new Intersection();
-        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 1, 3);
+        public Intersection i1 = new Intersection("a");
+        public Intersection i2 = new Intersection("b");
+        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 1, 3,0,0,0, Road.Type.FOUT);
         public Bus bus = new Bus(i1, i2);
         public Snowchain snowchain;
         public RoadSection busSection;
@@ -151,9 +151,9 @@ public class TestSetup {
      * valamint az aktuális és következő útszakasz referenciákat.
      */
     public static class CarMovement {
-        public Intersection i1 = new Intersection();
-        public Intersection i2 = new Intersection();
-        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 2, 2);
+        public Intersection i1 = new Intersection("a");
+        public Intersection i2 = new Intersection("b");
+        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 2, 2,0,0,0, Road.Type.FOUT);
         public Car car = new Car(i1, i2);
         public RoadSection carSection;
         public RoadSection nextSection;
@@ -201,9 +201,9 @@ public class TestSetup {
      * valamint az aktuális és következő útszakasz referenciákat.
      */
     public static class SnowplowMovement {
-        public Intersection i1 = new Intersection();
-        public Intersection i2 = new Intersection();
-        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 2, 2);
+        public Intersection i1 = new Intersection("a");
+        public Intersection i2 = new Intersection("b");
+        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 2, 2,0,0,0, Road.Type.FOUT);
         public Snowplow snowplow = new Snowplow(null);
         public RoadSection snowplowSection;
         public RoadSection nextSection;
@@ -249,8 +249,8 @@ public class TestSetup {
      * Tartalmaz egy útszakaszt, egy szomszédos (jobb) útszakaszt, és egy kotrófejet.
      */
     public static class PlowHeadUsage {
-        public RoadSection section = new RoadSection(null, 0);
-        public RoadSection rightSection = new RoadSection(null, 1);
+        public RoadSection section = new RoadSection("a",null, 0,0,0,0, Road.Type.FOUT);
+        public RoadSection rightSection = new RoadSection("b",null, 1,0,0,0, Road.Type.FOUT);
         public PlowHead head;
     }
 
@@ -321,7 +321,7 @@ public class TestSetup {
      * Tartalmaz egy útszakaszt és egy rajta lévő fogyóeszközt.
      */
     public static class RoadSectionUpdate {
-        public RoadSection section = new RoadSection(null, 0);
+        public RoadSection section = new RoadSection("a",null, 0,0,0,0, Road.Type.FOUT);
         public Consumable consumable;
     }
 
@@ -369,9 +369,9 @@ public class TestSetup {
      * Tartalmaz két buszt ugyanazon az úton, balesetes útszakasszal.
      */
     public static class AccidentSetup {
-        public Intersection i1 = new Intersection();
-        public Intersection i2 = new Intersection();
-        public Road road = new Road(i1, i2, Road.Way.ONEWAY, 1, 3);
+        public Intersection i1 = new Intersection("a");
+        public Intersection i2 = new Intersection("b");
+        public Road road = new Road("ab",i1, i2, Road.Way.ONEWAY, 1, 3,0,0,0, Road.Type.FOUT);
         public Bus bus1 = new Bus(i1, i2);
         public Bus bus2 = new Bus(i1, i2);
         public RoadSection section;

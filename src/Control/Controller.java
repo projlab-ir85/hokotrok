@@ -32,9 +32,9 @@ public class Controller {
 
     public void tick(){
         tickCount++;
-        for (Intersection i : intersections){
+        /*for (Intersection i : intersections){
             i.tick();
-        }
+        }*/
     }
 
     public void printOutput(String message){}
@@ -58,4 +58,6 @@ public class Controller {
     public List<Intersection> getIntersections(){
         return intersections;
     }
+
+    public int getTickCount(){return tickCount;}
 }

@@ -72,6 +72,14 @@ public class Snowplow extends Vehicle{
         if(activePlowHead != null) activePlowHead.fillConsumable(amount);
     }
 
+    public void fillPlowHead(int amount, Class<? extends PlowHead> plowHeadClass){
+        for(PlowHead ph : plowHeads){
+            if(ph.getClass() == plowHeadClass){
+                ph.fillConsumable(amount);
+            }
+        }
+    }
+
     public int getPlowHeadCount() { return plowHeads.size(); }
 
     public List<PlowHead> getPlowHeads() {return plowHeads;}

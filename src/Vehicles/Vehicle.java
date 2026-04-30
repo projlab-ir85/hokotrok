@@ -45,4 +45,6 @@ public abstract class Vehicle implements Movable{
         stuck = value;
         if(value) stuckTime = 3;
     }
+
+    public List<Intersection> getJunctions(){return junctions;}
 }
