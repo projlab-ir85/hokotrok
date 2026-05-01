@@ -61,9 +61,17 @@ public class Lane {
             subLanes.add(new ArrayList<>());
 
             for(int j = 0; j < length; j++){
-                subLanes.get(i).add(new RoadSection(id+"j",this, i, snowLevel, iceLevel, rockLevel, type));
+                String sectionId = createRoadSectionId(id, sublanes, length, i, j);
+                subLanes.get(i).add(new RoadSection(sectionId,this, i, snowLevel, iceLevel, rockLevel, type));
             }
         }
+    }
+
+    private String createRoadSectionId(String id, int sublanes, int length, int sublaneIndex, int sectionIndex){
+        if(indexInRoad == 0 && sublanes == 1 && length == 1){
+            return id;
+        }
+        return id + "_" + indexInRoad + "_" + sublaneIndex + "_" + sectionIndex;
     }
 
     /**

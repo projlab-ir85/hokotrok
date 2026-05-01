@@ -464,8 +464,6 @@ public class Commands {
     @CommandInfo(description = "Az egész rendszer összefoglaló állapotát írja ki. Ha megvan adva objektum ID akkor egy konkrét objektum részletes állapotát írja ki.",
             args = "[<objektumId>]")
     public void status(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         if (args.length == 0) {
             // Globális állapot
             System.out.println("STATE");
@@ -526,6 +524,22 @@ public class Commands {
                 return;
             }
 
+            Intersection intersection = controller.findIntersectionById(id);
+            if (intersection != null) {
+                System.out.println("OBJECT Keresztezodes " + id);
+                System.out.println("type=Keresztezodes");
+                System.out.println("roadCount=" + intersection.getRoads().size());
+                System.out.println("roads=" + intersection.getRoads().stream()
+                        .map(Road::getId)
+                        .collect(Collectors.joining(",")));
+                System.out.println("vehicleCount=" + intersection.getVehicles().size());
+                System.out.println("vehicles=" + intersection.getVehicles().stream()
+                        .map(Vehicle::getId)
+                        .collect(Collectors.joining(",")));
+                System.out.println("END");
+                return;
+            }
+
             RoadSection rs = controller.findRoadSectionById(id);
             if (rs != null) {
                 System.out.println("OBJECT Utszakasz " + id);
@@ -535,6 +549,9 @@ public class Commands {
                 System.out.println("ice=" + rs.getIce());
                 System.out.println("rock="+rs.getRock());
                 System.out.println("accident="+rs.getAccidentHappened());
+                System.out.println("occupiedBy=" + rs.getVehicles().stream()
+                        .map(Vehicle::getId)
+                        .collect(Collectors.joining(",")));
                 System.out.println("END");
                 return;
             }
@@ -545,8 +562,6 @@ public class Commands {
 
     @CommandInfo(description = "Kilistázza a megadott típusú objektumokat.", args = "<tipus>")
     public void list(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         String type = args[0].toLowerCase();
         System.out.println("LIST " + type);
         
@@ -569,8 +584,19 @@ public class Commands {
                     for (Vehicle v : r.getAllVehicles()) System.out.println(v.getId() + " " + v.getClass().getSimpleName());
                 }
             }
+            case "utszakaszok" -> {
+                for (Road r : controller.getRoads()) {
+                    for (Lane l : r.getLanes()) {
+                        for (RoadSection rs : l.getAllRoadSections()) {
+                            System.out.println(rs.getId() + " Utszakasz");
+                        }
+                    }
+                }
+            }
             default -> System.out.println(Colors.RED + "Ismeretlen tipus." + Colors.RESETCOLOR);
         }
+
+        System.out.println("END");
         
     }
 
