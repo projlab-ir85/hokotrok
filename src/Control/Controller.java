@@ -55,7 +55,7 @@ public class Controller {
     }
 
     public void printOutput(String message){
-        System.out.println(message);
+        System.out.println(Colors.GREEN + message + Colors.RESETCOLOR);
     }
 
     public void exit(){
@@ -85,7 +85,10 @@ public class Controller {
         makeBFS(v.getStartIntersection().getId());
 
         BFS currBFS = bfsList.stream().filter(item -> item.getJunctionId().equals(v.getStartIntersection().getId())).findFirst().orElse(null);
-        if(currBFS == null){System.out.println("The starting junction for the route doesn't exist!"); return;}
+        if(currBFS == null){
+            System.out.println(Colors.RED + "ERROR The starting junction for the route doesn't exist!" + Colors.RESETCOLOR);
+            return;
+        }
         List<String> routeString = currBFS.makePath(v.getEndIntersection().getId());
 
         v.setRoute(routeString.stream().map(id -> intersections.stream()

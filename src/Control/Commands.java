@@ -9,6 +9,7 @@ import Attachments.PlowHeads.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,18 @@ public class Commands {
         this.controller = controller;
     }
 
+    private void ok(String message){
+        System.out.println(Colors.GREEN + "OK " + message + Colors.RESETCOLOR);
+    }
+
+    private void error(String message){
+        System.out.println(Colors.RED + "ERROR " + message + Colors.RESETCOLOR);
+    }
+
+    private void successLine(String message){
+        System.out.println(Colors.GREEN + message + Colors.RESETCOLOR);
+    }
+
     public void dispatch(String input) throws Exception{
         input = input.trim();
         if(input.isEmpty() || input.startsWith("#")) return;
@@ -35,7 +48,12 @@ public class Commands {
             String[] args = Arrays.copyOfRange(inputs, 1, inputs.length);
             m.invoke(this, (Object) args);
         } catch(NoSuchMethodException e){
-            System.out.println(Colors.RED+"Unknown command: " + commandName + Colors.RESETCOLOR);
+            error("Unknown command: " + commandName);
+        } catch(InvocationTargetException e){
+            Throwable cause = e.getCause();
+            error(cause.getMessage() != null ? cause.getMessage() : cause.getClass().getSimpleName());
+        } catch(IllegalArgumentException e){
+            error(e.getMessage() != null ? e.getMessage() : "Hibas argumentum.");
         }
     }
 
@@ -54,16 +72,16 @@ public class Commands {
     @CommandInfo(description = "Üres játékkörnyezetet hoz létre, törli az előző állapotot.")
     public void newgame(String[] args){
         controller.clearGame();
+        ok("Uj jatek letrehozva.");
     }
 
     @CommandInfo(description = "Betölti a megadott konfigurációs fájlban leírt kezdőállapotot.", args = "<fajlnev>")
     public void load(String[] args) throws Exception{
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
         Scanner scanner;
         try{
             scanner = new Scanner(new File(args[0]));
         } catch (FileNotFoundException e){
-            System.out.println("File not found!");
+            error("File not found: " + args[0]);
             return;
         }
 
@@ -72,16 +90,17 @@ public class Commands {
         }
 
         scanner.close();
+        ok("Fajl betoltve: " + args[0]);
     }
 
     @CommandInfo(description = " Elmenti az aktuális állapotot a megadott fájlba.", args = "<fajlnev>")
     public void save(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
         try{
             Writer writer = new Writer(controller, args[0]);
             writer.write();
+            ok("Allapot elmentve: " + args[0]);
         } catch (IOException e){
-            System.out.println("Can't write into file!");
+            error("Can't write into file: " + args[0]);
         }
     }
 
@@ -94,10 +113,11 @@ public class Commands {
         }else if (args[0].equals("random")){
             mode = false;
         }else{
-            System.out.println("Argument must be 'deterministic' or 'random'");
+            error("Argument must be 'deterministic' or 'random'");
             return;
         }
         controller.setDeterministic(mode);
+        ok("Mod beallitva: " + args[0]);
     }
 
     //directs the create function based on the second word (first in args)
@@ -107,20 +127,23 @@ public class Commands {
 
     @CommandInfo(name = "create keresztezodes", description = "Új kereszteződést hoz létre.", args = "<id>")
     public void keresztezodes(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
         controller.intersections.add(new Intersection(args[0]));
+        ok("Keresztezodes letrehozva: " + args[0]);
     }
 
     @CommandInfo(name = "create ut", description = " Két kereszteződés között létrehoz egy utat.", args = "[<id>] <keresztezodes1> <keresztezodes2> <savok> <hossz> <true|false> <hoszint> <jegszint> <zuzalekszint> <alagut|fout|hid>")
     public void ut(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         boolean hasId = controller.findIntersectionById(args[0]) == null;
         String id = hasId ? args[0] : null;
         int offset = hasId ? 1 : 0;
 
         Intersection start = controller.findIntersectionById(args[offset]);
         Intersection end = controller.findIntersectionById(args[offset + 1]);
+
+        if(start == null || end == null){
+            error("Rossz kezdo vagy vegpont.");
+            return;
+        }
 
         Road.Way way = args[offset + 4].equals("true") ? Road.Way.ONEWAY : Road.Way.TWOWAY;
 
@@ -150,17 +173,16 @@ public class Commands {
         controller.roads.add(road);
         start.addRoad(road);
         end.addRoad(road);
+        ok("Ut letrehozva: " + road.getId());
     }
 
     @CommandInfo(name="create busz", description = "Új buszt hoz létre.", args="<id> <startKeresztezodes> <celKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
     public void busz(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Intersection start = controller.findIntersectionById(args[1]);
         Intersection end = controller.findIntersectionById(args[2]);
 
         if(start == null || end == null) {
-            System.out.println(Colors.RED + "Rossz kezdo vagy celpont" + Colors.RESETCOLOR);
+            error("Rossz kezdo vagy celpont.");
             return;
         }
 
@@ -183,14 +205,18 @@ public class Commands {
         }
 
         controller.makeRoute(bus);
+        ok("Busz letrehozva: " + args[0]);
     }
 
     @CommandInfo(name="create auto", description = "Új autót hoz létre.", args = " <id> <startKeresztezodes> <celKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
     public void auto(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName()); //konzolra loggol debug miatt
-
         Intersection start = controller.findIntersectionById(args[1]);
         Intersection end = controller.findIntersectionById(args[2]);
+        if(start == null || end == null) {
+            error("Rossz kezdo vagy celpont.");
+            return;
+        }
+
         Car car = new Car(args[0],start, end);
 
         if(args.length > 3){
@@ -204,16 +230,15 @@ public class Commands {
             start.addVehicle(car);
         }
         controller.makeRoute(car);
+        ok("Auto letrehozva: " + args[0]);
     }
 
     @CommandInfo(name = "create hokotro", description = "Új hókotrót hoz létre.", args = " <id> <startKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
     public void hokotro(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Intersection start = controller.findIntersectionById(args[1]);
 
         if(start == null) {
-            System.out.println(Colors.RED + "Rossz kezdopont" + Colors.RESETCOLOR);
+            error("Rossz kezdopont.");
             return;
         }
 
@@ -234,6 +259,7 @@ public class Commands {
         } else {
              start.addVehicle(snowplow);
         }
+        ok("Hokotro letrehozva: " + args[0]);
     }
 
     //directs the attach function based on the second word (first in args)
@@ -243,41 +269,35 @@ public class Commands {
 
     @CommandInfo(name = "attach holanc", description = "Hóláncot rendel a megadott buszhoz.", args = "<buszId> <elettartam>")
     public void holanc(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Vehicle v = controller.findVehiclebyId(args[0]);
         
         if(v instanceof Bus bus) {
             int durability = Integer.parseInt(args[1]);
             bus.addSnowchain(new Attachments.Snowchain(durability));
-            System.out.println("OK Holanc felszerelve a buszra: " + args[0]);
+            ok("Holanc felszerelve a buszra: " + args[0]);
         } else {
-            System.out.println(Colors.RED + "A jarmu nem talalhato, vagy nem busz." + Colors.RESETCOLOR);
+            error("A jarmu nem talalhato, vagy nem busz.");
         }
     }
 
     @CommandInfo(description = "Megjavítja az adott buszon lévő hóláncot.", args="<buszId>")
     public void fixlanc(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Vehicle v = controller.findVehiclebyId(args[0]);
         
         if(v instanceof Bus bus) {
             if(bus.getHasSnowchain()) {
                 bus.getSnowchain().fix();
-                System.out.println("Holanc megjavitva a buszon: " + args[0]);
+                ok("Holanc megjavitva a buszon: " + args[0]);
             } else {
-                System.out.println(Colors.RED + "A buszon nincs holanc." + Colors.RESETCOLOR);
+                error("A buszon nincs holanc.");
             }
         } else {
-            System.out.println(Colors.RED + "A jarmu nem talalhato, vagy nem busz." + Colors.RESETCOLOR);
+            error("A jarmu nem talalhato, vagy nem busz.");
         }
     }
 
     @CommandInfo(name = "attach fej", description = "Kotrófejet rendel a hókotróhoz.", args = "<hokotroId> <fejTipus>")
     public void fej(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Vehicle v = controller.findVehiclebyId(args[0]);
         
         if(v instanceof Snowplow snowplow) {
@@ -291,14 +311,14 @@ public class Commands {
                 case "ThrowHead": head = new ThrowHead(); break;
                 case "RockHead" : head = new RockHead(); break;
                 default: 
-                    System.out.println(Colors.RED + "Ismeretlen fej tipus." + Colors.RESETCOLOR);
+                    error("Ismeretlen fej tipus.");
                     return;
             }
             
             snowplow.addPlow(head);
-            System.out.println("A kotrofej felszerelve a hokotrora: " + args[1]);
+            ok("Kotrofej felszerelve a hokotrora: " + args[1]);
         } else {
-            System.out.println(Colors.RED + "A jarmu nem talalhato, vagy nem hokotro." + Colors.RESETCOLOR);
+            error("A jarmu nem talalhato, vagy nem hokotro.");
         }
     }
 
@@ -309,7 +329,6 @@ public class Commands {
 
     @CommandInfo(name = "add consumable", description = "Hozzáad fogyóeszközt a hókotróhoz", args = " <hokotroId> <mennyiseg> [<fejtipus>]")
     public void consumable(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
         //ha van fejtipus akkor fillPlowHead
         //ha nincs akkor fillActiveHead
 
@@ -329,24 +348,22 @@ public class Commands {
                 
                 if(headClass != null) {
                     snowplow.fillPlowHead(amount, headClass);
-                    System.out.println("Fogyoeszkoz hozzaadva a " + args[2] + " fejhez.");
+                    ok("Fogyoeszkoz hozzaadva a " + args[2] + " fejhez.");
                 } else {
-                    System.out.println(Colors.RED + "Ismeretlen vagy nem feltoltheto fejtipus." + Colors.RESETCOLOR);
+                    error("Ismeretlen vagy nem feltoltheto fejtipus.");
                 }
             } else {
                 // Aktív fej feltöltése
                 snowplow.fillActiveHead(amount);
-                System.out.println("ogyoeszkoz hozzaadva az aktiv fejhez.");
+                ok("Fogyoeszkoz hozzaadva az aktiv fejhez.");
             }
         } else {
-            System.out.println(Colors.RED + "A jarmu nem talalhato, vagy nem hokotro." + Colors.RESETCOLOR);
+            error("A jarmu nem talalhato, vagy nem hokotro.");
         }
     }
 
     @CommandInfo(description = "Kiválasztja a hókotró aktív kotrófejét.", args = "<hokotroId> <fejTipus>")
     public void setactivefej(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Vehicle v = controller.findVehiclebyId(args[0]);
         
         if(v instanceof Snowplow snowplow) {
@@ -354,7 +371,7 @@ public class Commands {
                 int index = Integer.parseInt(args[1]);
                 if(index >= 0 && index < snowplow.getPlowHeads().size()) {
                     snowplow.setActivePlowHead(snowplow.getPlowHeads().get(index));
-                    System.out.println("Aktiv fej beallitva: " + args[1]);
+                    ok("Aktiv fej beallitva: " + args[1]);
                     return;
                 }
             } catch (NumberFormatException ignored) {
@@ -363,85 +380,75 @@ public class Commands {
             for(PlowHead head : snowplow.getPlowHeads()) {
                 if(head.getClass().getSimpleName().equals(args[1])) {
                     snowplow.setActivePlowHead(head);
-                    System.out.println("Aktiv fej beallitva: " + args[1]);
+                    ok("Aktiv fej beallitva: " + args[1]);
                     return;
                 }
             }
-            System.out.println(Colors.RED + "Ez a hokotro nem rendelkezik ilyen kotrofejjel." + Colors.RESETCOLOR);
+            error("Ez a hokotro nem rendelkezik ilyen kotrofejjel.");
         } else {
-            System.out.println(Colors.RED + "A jarmu nem talalhato, vagy nem hokotro." + Colors.RESETCOLOR);
+            error("A jarmu nem talalhato, vagy nem hokotro.");
         }
     }
 
     @CommandInfo(description = "Beállítja az adott útszakaszon a hó mennyiségét.", args = "<utszakaszId> <mennyiseg>")
     public void setho(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         RoadSection rs = controller.findRoadSectionById(args[0]);
         if(rs != null) {
             int target = Integer.parseInt(args[1]);
             int current = rs.getSnow();
             if(target > current) rs.snowIncrease(target - current);
             else rs.snowReduce(current - target);
-            System.out.println("Ho beallitva: " + target);
+            ok("Ho beallitva: " + target);
         } else {
-            System.out.println(Colors.RED + "Utszakasz nem talalhato." + Colors.RESETCOLOR);
+            error("Utszakasz nem talalhato.");
         }
     }
 
     @CommandInfo(description = "Beállítja az adott útszakaszon a jég mennyiségét.", args = "<utszakaszId> <mennyiseg>")
     public void setjeg(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         RoadSection rs = controller.findRoadSectionById(args[0]);
         if(rs != null) {
             int target = Integer.parseInt(args[1]);
             int current = rs.getIce();
             if(target > current) rs.iceIncrease(target - current);
             else rs.iceReduce(current - target);
-            System.out.println("Jeg beallitva: " + target);
+            ok("Jeg beallitva: " + target);
         } else {
-            System.out.println(Colors.RED + "Utszakasz nem talalhato." + Colors.RESETCOLOR);
+            error("Utszakasz nem talalhato.");
         }
     }
 
     @CommandInfo(description = "Beállítja az adott útszakaszon a zuzalék mennyiségét.", args = "<utszakaszId> <mennyiseg>")
     public void setzuzalek(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         RoadSection rs = controller.findRoadSectionById(args[0]);
         if(rs != null) {
             int target = Integer.parseInt(args[1]);
             int current = rs.getRock();
             if(target > current) rs.rockIncrease(target - current);
             else rs.rockReduce(current - target);
-            System.out.println("Zuzalek beallitva: " + target);
+            ok("Zuzalek beallitva: " + target);
         } else {
-            System.out.println(Colors.RED + "Utszakasz nem talalhato." + Colors.RESETCOLOR);
+            error("Utszakasz nem talalhato.");
         }
     }
 
     @CommandInfo(description = "Beállítja, hogy az útszakaszon van-e baleset.", args = "<utszakaszId> <true|false>")
     public void setbaleset(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         RoadSection rs = controller.findRoadSectionById(args[0]);
         if(rs != null) {
             boolean happened = Boolean.parseBoolean(args[1]);
             rs.setAccident(happened);
-            System.out.println("Baleset allapota beallitva: " + happened);
+            ok("Baleset allapota beallitva: " + happened);
         } else {
-            System.out.println(Colors.RED + "Utszakasz nem talalhato." + Colors.RESETCOLOR);
+            error("Utszakasz nem talalhato.");
         }
     }
 
     @CommandInfo(description = "Beállítja a megadott jármű útvonalát.", args = "<jarmuId> <keresztezodes1> <keresztezodes2> [<keresztezodes3> ...]")
     public void setutvonal(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Vehicle v = controller.findVehiclebyId(args[0]);
         if (v == null) {
-            System.out.println(Colors.RED + "A jarmu nem talalhato." + Colors.RESETCOLOR);
+            error("A jarmu nem talalhato.");
             return;
         }
 
@@ -453,12 +460,13 @@ public class Commands {
             }
         }
         v.setRoute(route);
-        System.out.println("Utvonal beallitva a jarmuvon: " + args[0]);
+        ok("Utvonal beallitva a jarmuvon: " + args[0]);
     }
 
     @CommandInfo(description = "A teljes szimulációt egy időegységgel előrelépteti. Minden aktív objektum végrehajtja a saját lépését.")
     public void step(String[] args){
         controller.tick();
+        ok("Szimulacio leptetve.");
     }
 
     @CommandInfo(description = "Az egész rendszer összefoglaló állapotát írja ki. Ha megvan adva objektum ID akkor egy konkrét objektum részletes állapotát írja ki.",
@@ -466,7 +474,7 @@ public class Commands {
     public void status(String[] args){
         if (args.length == 0) {
             // Globális állapot
-            System.out.println("STATE");
+            successLine("STATE");
 
             int allVehicles = controller.intersections.stream()
                     .mapToInt(i -> i.getVehicles().size())
@@ -474,23 +482,23 @@ public class Commands {
                             + controller.roads.stream()
                             .mapToInt(r -> r.getAllVehicles().size())
                             .sum();
-            System.out.println("vehicles="+allVehicles);
+            successLine("vehicles="+allVehicles);
 
-            System.out.println("roads=" + controller.getRoads().size());
+            successLine("roads=" + controller.getRoads().size());
 
             int allSegments = controller.roads.stream()
                             .flatMap(r -> r.getLanes().stream())
                             .mapToInt(l -> l.getAllRoadSections().size())
                             .sum();
-            System.out.println("segments="+allSegments);
+            successLine("segments="+allSegments);
 
-            System.out.println("intersections=" + controller.intersections.size());
+            successLine("intersections=" + controller.intersections.size());
 
-            System.out.println("time="+controller.tickCount);
+            successLine("time="+controller.tickCount);
 
-            System.out.println("mode=" + (controller.deterministic ? "deterministic" : "random"));
+            successLine("mode=" + (controller.deterministic ? "deterministic" : "random"));
 
-            System.out.println("END");
+            successLine("END");
         } else {
             // Objektum szintű állapot
             String id = args[0];
@@ -498,121 +506,125 @@ public class Commands {
             
             if (v != null) {
                 String typeName = v.getClass().getSimpleName();
-                System.out.println("OBJECT " + typeName + " " + id);
-                System.out.println("type=" + typeName);
+                successLine("OBJECT " + typeName + " " + id);
+                successLine("type=" + typeName);
                 if (v.getCurrRoadSection() != null) {
-                    System.out.println("currentSegment=" + v.getCurrRoadSection().getId());
-                    System.out.println("currentRoad=" + v.getCurrRoadSection().getLane().getRoadId());
-                    System.out.println("currentLane=" + v.getCurrRoadSection().getLane().getIndexInRoad());
+                    successLine("currentSegment=" + v.getCurrRoadSection().getId());
+                    successLine("currentRoad=" + v.getCurrRoadSection().getLane().getRoadId());
+                    successLine("currentLane=" + v.getCurrRoadSection().getLane().getIndexInRoad());
                 }else{
-                    System.out.println("currentIntersection=" + v.getCurrIntersection().getId());
+                    successLine("currentIntersection=" + v.getCurrIntersection().getId());
                 }
-                System.out.println("stuck=" + v.isStuck());
-                System.out.println("target="+v.getEndIntersection().getId());
+                successLine("stuck=" + v.isStuck());
+                successLine("target="+v.getEndIntersection().getId());
 
                 if(v instanceof Bus bus){
-                    System.out.println("hasSnowChain="+bus.getHasSnowchain());
-                    System.out.println("snowChainDurability="+bus.getSnowchainTTL());
+                    successLine("hasSnowChain="+bus.getHasSnowchain());
+                    successLine("snowChainDurability="+bus.getSnowchainTTL());
                 }else if(v instanceof Car car){
-                    System.out.println("next="+car.getNextIntersection().getId());
+                    successLine("next="+car.getNextIntersection().getId());
                 }else if(v instanceof Snowplow snowplow){
-                    System.out.println("activeHead="+snowplow.getActivePlowHead().getClass().getSimpleName());
-                    System.out.println("consumableLeft="+snowplow.getActivePlowHead().getConsumableAmountLeft());
-                    System.out.println("headCount="+snowplow.getPlowHeads().size());
+                    successLine("activeHead="+snowplow.getActivePlowHead().getClass().getSimpleName());
+                    successLine("consumableLeft="+snowplow.getActivePlowHead().getConsumableAmountLeft());
+                    successLine("headCount="+snowplow.getPlowHeads().size());
                 }
-                System.out.println("END");
+                successLine("END");
                 return;
             }
 
             Intersection intersection = controller.findIntersectionById(id);
             if (intersection != null) {
-                System.out.println("OBJECT Keresztezodes " + id);
-                System.out.println("type=Keresztezodes");
-                System.out.println("roadCount=" + intersection.getRoads().size());
-                System.out.println("roads=" + intersection.getRoads().stream()
+                successLine("OBJECT Keresztezodes " + id);
+                successLine("type=Keresztezodes");
+                successLine("roadCount=" + intersection.getRoads().size());
+                successLine("roads=" + intersection.getRoads().stream()
                         .map(Road::getId)
                         .collect(Collectors.joining(",")));
-                System.out.println("vehicleCount=" + intersection.getVehicles().size());
-                System.out.println("vehicles=" + intersection.getVehicles().stream()
+                successLine("vehicleCount=" + intersection.getVehicles().size());
+                successLine("vehicles=" + intersection.getVehicles().stream()
                         .map(Vehicle::getId)
                         .collect(Collectors.joining(",")));
-                System.out.println("END");
+                successLine("END");
                 return;
             }
 
             RoadSection rs = controller.findRoadSectionById(id);
             if (rs != null) {
-                System.out.println("OBJECT Utszakasz " + id);
-                System.out.println("road="+rs.getLane().getRoadId());
-                System.out.println("lane="+rs.getLane().getIndexInRoad());
-                System.out.println("snow=" + rs.getSnow());
-                System.out.println("ice=" + rs.getIce());
-                System.out.println("rock="+rs.getRock());
-                System.out.println("accident="+rs.getAccidentHappened());
-                System.out.println("occupiedBy=" + rs.getVehicles().stream()
+                successLine("OBJECT Utszakasz " + id);
+                successLine("road="+rs.getLane().getRoadId());
+                successLine("lane="+rs.getLane().getIndexInRoad());
+                successLine("snow=" + rs.getSnow());
+                successLine("ice=" + rs.getIce());
+                successLine("rock="+rs.getRock());
+                successLine("accident="+rs.getAccidentHappened());
+                successLine("occupiedBy=" + rs.getVehicles().stream()
                         .map(Vehicle::getId)
                         .collect(Collectors.joining(",")));
-                System.out.println("END");
+                successLine("END");
                 return;
             }
             
-            System.out.println(Colors.RED + "Az objektum nem talalhato: " + id + Colors.RESETCOLOR);
+            error("Az objektum nem talalhato: " + id);
         }
     }
 
     @CommandInfo(description = "Kilistázza a megadott típusú objektumokat.", args = "<tipus>")
     public void list(String[] args){
         String type = args[0].toLowerCase();
-        System.out.println("LIST " + type);
+        successLine("LIST " + type);
         
         switch(type) {
             case "keresztezodesek" -> {
                 for (Intersection i : controller.intersections) {
-                    System.out.println(i.getId() + " Keresztezodes");
+                    successLine(i.getId() + " Keresztezodes");
                 }
             }
             case "utak" -> {
                 for (Road r : controller.getRoads()) {
-                    System.out.println(r.getId() + " Ut");
+                    successLine(r.getId() + " Ut");
                 }
             }
             case "jarmuvek" -> {
                 for (Intersection i : controller.intersections) {
-                    for (Vehicle v : i.getVehicles()) System.out.println(v.getId() + " " + v.getClass().getSimpleName());
+                    for (Vehicle v : i.getVehicles()) successLine(v.getId() + " " + v.getClass().getSimpleName());
                 }
                 for (Road r : controller.getRoads()) {
-                    for (Vehicle v : r.getAllVehicles()) System.out.println(v.getId() + " " + v.getClass().getSimpleName());
+                    for (Vehicle v : r.getAllVehicles()) successLine(v.getId() + " " + v.getClass().getSimpleName());
                 }
             }
             case "utszakaszok" -> {
                 for (Road r : controller.getRoads()) {
                     for (Lane l : r.getLanes()) {
                         for (RoadSection rs : l.getAllRoadSections()) {
-                            System.out.println(rs.getId() + " Utszakasz");
+                            successLine(rs.getId() + " Utszakasz");
                         }
                     }
                 }
             }
-            default -> System.out.println(Colors.RED + "Ismeretlen tipus." + Colors.RESETCOLOR);
+            default -> {
+                error("Ismeretlen tipus: " + type);
+                return;
+            }
         }
 
-        System.out.println("END");
+        successLine("END");
         
     }
 
     @CommandInfo(description = "Kiírja a jármű aktuálisan tárolt útvonalát vagy következő célpontját.", args = "<jarmuId>")
     public void route(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         Vehicle v = controller.findVehiclebyId(args[0]);
-        if(v == null){System.out.println(Colors.RED+"Vehicle not found"+Colors.RESETCOLOR); return;}
-
-        if(v.getJunctions() == null || v.getJunctions().isEmpty()){
-            System.out.println("");
+        if(v == null){
+            error("Vehicle not found: " + args[0]);
             return;
         }
 
-        System.out.println(v.getJunctions().stream()
+        if(v.getJunctions() == null || v.getJunctions().isEmpty()){
+            successLine("");
+            return;
+        }
+
+        successLine(v.getJunctions().stream()
                 .map(Intersection::getId)
                 .collect(Collectors.joining(" -> ")));
     }
@@ -623,20 +635,19 @@ public class Commands {
         for (int i = 0; i < n; i++){
             controller.tick();
         }
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+        ok(n + " tick lefutott.");
     }
 
     //mit takar a kiindulo allapot?
     @CommandInfo(description = "Visszaállítja a rendszert az induló állapotra.")
     public void reset(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
-
         controller.clearGame();
+        ok("Rendszer visszaallitva.");
     }
 
     @CommandInfo(description = "Leállítja a programot.")
     public void exit(String[] args){
         controller.exit();
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+        ok("Program leallitva.");
     }
 }
