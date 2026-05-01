@@ -27,7 +27,10 @@ public class Consumable {
             roadsection.snowReduce(strength);
             roadsection.iceReduce(strength);
             return true;
-        }
+        } else if(timeToLive == -1 && roadsection.getSnow() < 50) {
+            roadsection.iceReduce(1);
+            return true;
+        }  
         return false;
     }
     /** Visszaadja mennyi élettartama van még a fogyóeszköznek

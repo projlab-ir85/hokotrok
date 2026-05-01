@@ -11,12 +11,14 @@ public class BroomHead extends PlowHead {
     * @param roadsection az adott útszakasz ahol a havat takarítjuk
     */
     public void use(RoadSection roadsection){
-        /**csökkentjük a hó mennyiségét*/
+        /**csökkentjük a hó mennyiségét és zúzottkő*/
         int snow = roadsection.getSnow();
         roadsection.snowReduce(snow);
-        /**ha van tőle jobbra sáv akkor áttúrja oda a havat*/
+        roadsection.rockReduce(roadsection.getRock());
+        /**ha van tőle jobbra sáv akkor áttúrja oda a havat és a zúzottkövet*/
         if(roadsection.right != null){
             roadsection.right.snowIncrease(snow);
+            roadsection.rockReduce(roadsection.getRock());
         }
     }
 }
