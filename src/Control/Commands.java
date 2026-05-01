@@ -25,7 +25,10 @@ public class Commands {
     }
 
     public void dispatch(String input) throws Exception{
-        String[] inputs = input.split(" ");
+        input = input.trim();
+        if(input.isEmpty() || input.startsWith("#")) return;
+
+        String[] inputs = input.split("\\s+");
         String commandName = inputs[0];
         try {
             Method m = this.getClass().getMethod(commandName, String[].class);
@@ -112,36 +115,41 @@ public class Commands {
     public void ut(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
 
-        Boolean hasId = args.length == 10;
+        boolean hasId = controller.findIntersectionById(args[0]) == null;
         String id = hasId ? args[0] : null;
-        int i = hasId ? 0 : 1;
+        int offset = hasId ? 1 : 0;
 
-        Intersection start = controller.findIntersectionById(args[1-i]);
-        Intersection end = controller.findIntersectionById(args[2-i]);
+        Intersection start = controller.findIntersectionById(args[offset]);
+        Intersection end = controller.findIntersectionById(args[offset + 1]);
 
-        Road.Way way = args[5-1].equals("true") ? Road.Way.ONEWAY : Road.Way.TWOWAY;
+        Road.Way way = args[offset + 4].equals("true") ? Road.Way.ONEWAY : Road.Way.TWOWAY;
 
-        Road.Type type = switch(args[9-i]){
+        int snowLevel = args.length > offset + 5 ? Integer.parseInt(args[offset + 5]) : 0;
+        int iceLevel = args.length > offset + 6 ? Integer.parseInt(args[offset + 6]) : 0;
+        int rockLevel = args.length > offset + 7 ? Integer.parseInt(args[offset + 7]) : 0;
+
+        Road.Type type = args.length > offset + 8 ? switch(args[offset + 8]){
             case "alagut" -> Road.Type.ALAGUT;
             case "hid" -> Road.Type.HID;
             default -> Road.Type.FOUT;
-        };
+        } : Road.Type.FOUT;
 
         Road road = new Road(
                 id,
                 start,
                 end,
-                Integer.parseInt(args[3-i]),
-                Integer.parseInt(args[4-i]),
+                Integer.parseInt(args[offset + 2]),
+                Integer.parseInt(args[offset + 3]),
                 way,
-                Integer.parseInt(args[6-i]),
-                Integer.parseInt(args[7-i]),
-                Integer.parseInt(args[8-i]),
+                snowLevel,
+                iceLevel,
+                rockLevel,
                 type
         );
 
         controller.roads.add(road);
         start.addRoad(road);
+        end.addRoad(road);
     }
 
     @CommandInfo(name="create busz", description = "Új buszt hoz létre.", args="<id> <startKeresztezodes> <celKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
@@ -156,7 +164,7 @@ public class Commands {
             return;
         }
 
-        Bus bus = new Bus(start, end);
+        Bus bus = new Bus(args[0], start, end);
 
         if(args.length > 3){
             if(args[3].equals("true")){
@@ -173,6 +181,8 @@ public class Commands {
         }else{
             start.addVehicle(bus);
         }
+
+        controller.makeRoute(bus);
     }
 
     @CommandInfo(name="create auto", description = "Új autót hoz létre.", args = " <id> <startKeresztezodes> <celKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
@@ -207,7 +217,7 @@ public class Commands {
             return;
         }
 
-        Snowplow snowplow = new Snowplow(start);
+        Snowplow snowplow = new Snowplow(args[0], start);
         
         if(args.length > 2){
              if(args[2].equals("true")){
@@ -340,6 +350,16 @@ public class Commands {
         Vehicle v = controller.findVehiclebyId(args[0]);
         
         if(v instanceof Snowplow snowplow) {
+            try {
+                int index = Integer.parseInt(args[1]);
+                if(index >= 0 && index < snowplow.getPlowHeads().size()) {
+                    snowplow.setActivePlowHead(snowplow.getPlowHeads().get(index));
+                    System.out.println("Aktiv fej beallitva: " + args[1]);
+                    return;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+
             for(PlowHead head : snowplow.getPlowHeads()) {
                 if(head.getClass().getSimpleName().equals(args[1])) {
                     snowplow.setActivePlowHead(head);
@@ -561,13 +581,14 @@ public class Commands {
         Vehicle v = controller.findVehiclebyId(args[0]);
         if(v == null){System.out.println(Colors.RED+"Vehicle not found"+Colors.RESETCOLOR); return;}
 
-        if(v instanceof Bus bus){
-            System.out.println(bus.getNext().getId());
-        }else{
-            System.out.println(v.getJunctions().stream()
-                    .map(Intersection::getId)
-                    .collect(Collectors.joining(" -> ")));
+        if(v.getJunctions() == null || v.getJunctions().isEmpty()){
+            System.out.println("");
+            return;
         }
+
+        System.out.println(v.getJunctions().stream()
+                .map(Intersection::getId)
+                .collect(Collectors.joining(" -> ")));
     }
 
     @CommandInfo(description = "Több lépést futtat le egymás után.", args="<db>")

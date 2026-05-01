@@ -119,6 +119,7 @@ public class RoadSection implements Updateable{
         }
         vehicles.add(v);
         v.setCurrRoadSection(this);
+        v.setCurrIntersection(null);
         v.interact(this);
         return true;
     }
@@ -149,9 +150,14 @@ public class RoadSection implements Updateable{
     public void addVehicle(Vehicle v){
         vehicles.add(v);
         v.setCurrRoadSection(this);
+        v.setCurrIntersection(null);
     }
 
     public Lane getLane(){return lane;}
 
     public boolean getAccidentHappened(){return accidentHappened;}
+
+    public void removeVehicle(Vehicle v){
+        vehicles.remove(v);
+    }
 }

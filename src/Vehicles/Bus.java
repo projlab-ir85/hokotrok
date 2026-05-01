@@ -12,7 +12,8 @@ public class Bus extends Vehicle{
     protected Intersection next;
     protected boolean hasSnowchain;
 
-    public Bus(Intersection start, Intersection end) {
+    public Bus(String id, Intersection start, Intersection end) {
+        this.id = id;
         this.start = start;
         this.end = end;
         currIntersection = start;
@@ -23,6 +24,10 @@ public class Bus extends Vehicle{
         finishedLap = false;
         hasSnowchain = false;
         nextIntersectionIndex = 0;
+    }
+
+    public Bus(Intersection start, Intersection end) {
+        this(null, start, end);
     }
 
     public Bus(){}

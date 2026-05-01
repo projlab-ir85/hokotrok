@@ -17,7 +17,8 @@ public class Snowplow extends Vehicle{
      * @param start kezdőkereszteződés, ahonnét indul
      * inicializálja az alapállapotot a hokotrónak
      */
-    public Snowplow(Intersection start) {
+    public Snowplow(String id, Intersection start) {
+        this.id = id;
         this.start = start;
         currIntersection = start;
         plowHeads = new ArrayList<>();
@@ -27,6 +28,11 @@ public class Snowplow extends Vehicle{
         /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
+        nextIntersectionIndex = 0;
+    }
+
+    public Snowplow(Intersection start) {
+        this(null, start);
     }
 
     /**

@@ -12,7 +12,8 @@ public class ThrowHead extends PlowHead {
     * @param roadsection az adott útszakasz ahol a havat takarítjuk
     */
     public void use(RoadSection roadsection){
-        /** Csökkentjük a hó mennyiségét */
+        /** Csökkentjük a hó mennyiségét és zúzottkő*/
         roadsection.snowReduce(roadsection.getSnow());
+        roadsection.rockReduce(roadsection.getRock());
     }
 }

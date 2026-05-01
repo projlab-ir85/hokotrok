@@ -157,4 +157,5 @@ public class Lane {
 
     public String getRoadId(){return roadId;}
     public int getIndexInRoad(){return indexInRoad;}
+    public Intersection getEnd(){return end;}
 }
