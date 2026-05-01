@@ -26,15 +26,18 @@ public class Commands {
     }
 
     private void ok(String message){
-        System.out.println(Colors.GREEN + "OK " + message + Colors.RESETCOLOR);
+        System.out.println(Colors.GREEN + "OK! " + Colors.RESETCOLOR + Colors.BLUE + message + Colors.RESETCOLOR);
     }
 
     private void error(String message){
-        System.out.println(Colors.RED + "ERROR " + message + Colors.RESETCOLOR);
+        System.out.println(Colors.RED + "ERROR! " + message + Colors.RESETCOLOR);
     }
 
     private void successLine(String message){
-        System.out.println(Colors.GREEN + message + Colors.RESETCOLOR);
+        System.out.println(Colors.BLUE + message + Colors.RESETCOLOR);
+    }
+    private void successLine2(String message){
+        System.out.println(Colors.ORANGE + message + Colors.RESETCOLOR);
     }
 
     public void dispatch(String input) throws Exception{
@@ -474,7 +477,8 @@ public class Commands {
     public void status(String[] args){
         if (args.length == 0) {
             // Globális állapot
-            successLine("STATE");
+
+            successLine2("STATE");
 
             int allVehicles = controller.intersections.stream()
                     .mapToInt(i -> i.getVehicles().size())
@@ -498,7 +502,7 @@ public class Commands {
 
             successLine("mode=" + (controller.deterministic ? "deterministic" : "random"));
 
-            successLine("END");
+            successLine2("END");
         } else {
             // Objektum szintű állapot
             String id = args[0];
@@ -516,19 +520,21 @@ public class Commands {
                     successLine("currentIntersection=" + v.getCurrIntersection().getId());
                 }
                 successLine("stuck=" + v.isStuck());
-                successLine("target="+v.getEndIntersection().getId());
+                
 
                 if(v instanceof Bus bus){
+                    successLine("target="+v.getEndIntersection().getId());
                     successLine("hasSnowChain="+bus.getHasSnowchain());
                     successLine("snowChainDurability="+bus.getSnowchainTTL());
                 }else if(v instanceof Car car){
+                    successLine("target="+v.getEndIntersection().getId());
                     successLine("next="+car.getNextIntersection().getId());
                 }else if(v instanceof Snowplow snowplow){
                     successLine("activeHead="+snowplow.getActivePlowHead().getClass().getSimpleName());
                     successLine("consumableLeft="+snowplow.getActivePlowHead().getConsumableAmountLeft());
                     successLine("headCount="+snowplow.getPlowHeads().size());
                 }
-                successLine("END");
+                successLine2("END");
                 return;
             }
 
@@ -544,7 +550,7 @@ public class Commands {
                 successLine("vehicles=" + intersection.getVehicles().stream()
                         .map(Vehicle::getId)
                         .collect(Collectors.joining(",")));
-                successLine("END");
+                successLine2("END");
                 return;
             }
 
@@ -560,7 +566,7 @@ public class Commands {
                 successLine("occupiedBy=" + rs.getVehicles().stream()
                         .map(Vehicle::getId)
                         .collect(Collectors.joining(",")));
-                successLine("END");
+                successLine2("END");
                 return;
             }
             
@@ -571,7 +577,7 @@ public class Commands {
     @CommandInfo(description = "Kilistázza a megadott típusú objektumokat.", args = "<tipus>")
     public void list(String[] args){
         String type = args[0].toLowerCase();
-        successLine("LIST " + type);
+        successLine2("LIST " + type);
         
         switch(type) {
             case "keresztezodesek" -> {
@@ -607,7 +613,7 @@ public class Commands {
             }
         }
 
-        successLine("END");
+        successLine2("END");
         
     }
 
