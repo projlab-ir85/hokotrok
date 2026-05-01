@@ -12,6 +12,7 @@ public abstract class Vehicle implements Movable{
     protected String id;
     protected Intersection start;
     protected Intersection end;
+    protected int nextIntersectionIndex;
 
     public String getId(){return id;}
 
@@ -39,6 +40,10 @@ public abstract class Vehicle implements Movable{
 
     public Intersection getCurrIntersection(){return currIntersection;}
 
+    public void setCurrIntersection(Intersection intersection){
+        currIntersection = intersection;
+    }
+
     public boolean isStuck() { return stuck; }
 
     public void setStuck(boolean value) {
@@ -51,4 +56,7 @@ public abstract class Vehicle implements Movable{
     public void setRoute(List<Intersection> route){
         junctions = route;
     }
+
+    //MEG KELL IRNI MEG HOGY TENYLEGESEN KOVESSE IS AZ UTVONALAT ES ALLITSA A NEXT ERTEKET
+    public Intersection getNextIntersection(){return junctions.get(nextIntersectionIndex);}
 }

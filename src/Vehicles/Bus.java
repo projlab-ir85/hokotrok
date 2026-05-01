@@ -22,6 +22,7 @@ public class Bus extends Vehicle{
         accidentTime = 0;
         finishedLap = false;
         hasSnowchain = false;
+        nextIntersectionIndex = 0;
     }
 
     public Bus(){}

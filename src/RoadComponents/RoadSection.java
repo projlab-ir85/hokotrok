@@ -98,6 +98,10 @@ public class RoadSection implements Updateable{
      */
     public void iceIncrease(int amount){ iceLevel += amount; }
 
+    public void rockIncrease(int amount){rockLevel += amount;}
+
+    public void rockReduce(int amount){rockLevel -= amount;}
+
     public void update(){
         java.util.Iterator<Consumable> it = consumables.iterator();
         while(it.hasNext()){
@@ -125,6 +129,8 @@ public class RoadSection implements Updateable{
 
     public int getIce() { return iceLevel; }
 
+    public int getRock(){return rockLevel;}
+
     public int getConsumableCount() { return consumables.size(); }
 
     public void setAccident(boolean happened){ accidentHappened = happened; }
@@ -144,4 +150,8 @@ public class RoadSection implements Updateable{
         vehicles.add(v);
         v.setCurrRoadSection(this);
     }
+
+    public Lane getLane(){return lane;}
+
+    public boolean getAccidentHappened(){return accidentHappened;}
 }

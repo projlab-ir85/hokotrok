@@ -41,6 +41,7 @@ public class Snowplow extends Vehicle{
         /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
+        nextIntersectionIndex = 0;
     }
 
     /**

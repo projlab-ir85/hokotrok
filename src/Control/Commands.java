@@ -1,18 +1,17 @@
 package Control;
 
-import RoadComponents.Intersection;
-import RoadComponents.Road;
-import RoadComponents.RoadSection;
-import Vehicles.Bus;
-import Vehicles.Car;
-import Vehicles.Snowplow;
-import Vehicles.Vehicle;
+import Attachments.PlowHead;
+import RoadComponents.*;
+import Vehicles.*;
+import Attachments.PlowHeads.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -237,9 +236,9 @@ public class Commands {
 
         Vehicle v = controller.findVehiclebyId(args[0]);
         
-        if(v instanceof Bus) {
+        if(v instanceof Bus bus) {
             int durability = Integer.parseInt(args[1]);
-            ((Bus) v).addSnowchain(new Attachments.Snowchain(durability));
+            bus.addSnowchain(new Attachments.Snowchain(durability));
             System.out.println("OK Holanc felszerelve a buszra: " + args[0]);
         } else {
             System.out.println(Colors.RED + "A jarmu nem talalhato, vagy nem busz." + Colors.RESETCOLOR);
@@ -270,16 +269,16 @@ public class Commands {
 
         Vehicle v = controller.findVehiclebyId(args[0]);
         
-        if(v instanceof Vehicles.Snowplow) {
-            Vehicles.Snowplow snowplow = (Vehicles.Snowplow) v;
+        if(v instanceof Snowplow snowplow) {
             Attachments.PlowHead head = null;
             
             switch(args[1]) {
-                case "BroomHead": head = new Attachments.PlowHeads.BroomHead(); break;
-                case "DragonHead": head = new Attachments.PlowHeads.DragonHead(); break;
-                case "IceBreakerHead": head = new Attachments.PlowHeads.IceBreakerHead(); break;
-                case "SaltShakerHead": head = new Attachments.PlowHeads.SaltShakerHead(); break;
-                case "ThrowHead": head = new Attachments.PlowHeads.ThrowHead(); break;
+                case "BroomHead": head = new BroomHead(); break;
+                case "DragonHead": head = new DragonHead(); break;
+                case "IceBreakerHead": head = new IceBreakerHead(); break;
+                case "SaltShakerHead": head = new SaltShakerHead(); break;
+                case "ThrowHead": head = new ThrowHead(); break;
+                //KELL MEG ROCKHEAD!!!
                 default: 
                     System.out.println(Colors.RED + "Ismeretlen fej tipus." + Colors.RESETCOLOR);
                     return;
@@ -313,6 +312,7 @@ public class Commands {
                 Class<? extends Attachments.PlowHead> headClass = switch(args[2]) {
                     case "DragonHead" -> Attachments.PlowHeads.DragonHead.class;
                     case "SaltShakerHead" -> Attachments.PlowHeads.SaltShakerHead.class;
+                    //KELL MEG ROCKHEAD!!!
                     default -> null;
                 };
                 
@@ -338,10 +338,8 @@ public class Commands {
 
         Vehicle v = controller.findVehiclebyId(args[0]);
         
-        if(v instanceof Vehicles.Snowplow) {
-            Vehicles.Snowplow snowplow = (Vehicles.Snowplow) v;
-            
-            for(Attachments.PlowHead head : snowplow.getPlowHeads()) {
+        if(v instanceof Snowplow snowplow) {
+            for(PlowHead head : snowplow.getPlowHeads()) {
                 if(head.getClass().getSimpleName().equals(args[1])) {
                     snowplow.setActivePlowHead(head);
                     System.out.println("Aktiv fej beallitva: " + args[1]);
@@ -386,6 +384,22 @@ public class Commands {
         }
     }
 
+    @CommandInfo(description = "Beállítja az adott útszakaszon a zuzalék mennyiségét.", args = "<utszakaszId> <mennyiseg>")
+    public void setzuzalek(String[] args){
+        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
+
+        RoadSection rs = controller.findRoadSectionById(args[0]);
+        if(rs != null) {
+            int target = Integer.parseInt(args[1]);
+            int current = rs.getRock();
+            if(target > current) rs.rockIncrease(target - current);
+            else rs.rockReduce(current - target);
+            System.out.println("Zuzalek beallitva: " + target);
+        } else {
+            System.out.println(Colors.RED + "Utszakasz nem talalhato." + Colors.RESETCOLOR);
+        }
+    }
+
     @CommandInfo(description = "Beállítja, hogy az útszakaszon van-e baleset.", args = "<utszakaszId> <true|false>")
     public void setbaleset(String[] args){
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
@@ -410,7 +424,7 @@ public class Commands {
             return;
         }
 
-        java.util.List<Intersection> route = new java.util.ArrayList<>();
+        List<Intersection> route = new ArrayList<>();
         for (int i = 1; i < args.length; i++) {
             Intersection inter = controller.findIntersectionById(args[i]);
             if (inter != null) {
@@ -433,9 +447,31 @@ public class Commands {
 
         if (args.length == 0) {
             // Globális állapot
-            System.out.println("State");
-            System.out.println("intersections=" + controller.intersections.size());
+            System.out.println("STATE");
+
+            int allVehicles = controller.intersections.stream()
+                    .mapToInt(i -> i.getVehicles().size())
+                            .sum()
+                            + controller.roads.stream()
+                            .mapToInt(r -> r.getAllVehicles().size())
+                            .sum();
+            System.out.println("vehicles="+allVehicles);
+
             System.out.println("roads=" + controller.getRoads().size());
+
+            int allSegments = controller.roads.stream()
+                            .flatMap(r -> r.getLanes().stream())
+                            .mapToInt(l -> l.getAllRoadSections().size())
+                            .sum();
+            System.out.println("segments="+allSegments);
+
+            System.out.println("intersections=" + controller.intersections.size());
+
+            System.out.println("time="+controller.tickCount);
+
+            System.out.println("mode=" + (controller.deterministic ? "deterministic" : "random"));
+
+            System.out.println("END");
         } else {
             // Objektum szintű állapot
             String id = args[0];
@@ -443,19 +479,42 @@ public class Commands {
             
             if (v != null) {
                 String typeName = v.getClass().getSimpleName();
-                System.out.println("Object " + typeName + " " + id);
+                System.out.println("OBJECT " + typeName + " " + id);
                 System.out.println("type=" + typeName);
+                if (v.getCurrRoadSection() != null) {
+                    System.out.println("currentSegment=" + v.getCurrRoadSection().getId());
+                    System.out.println("currentRoad=" + v.getCurrRoadSection().getLane().getRoadId());
+                    System.out.println("currentLane=" + v.getCurrRoadSection().getLane().getIndexInRoad());
+                }else{
+                    System.out.println("currentIntersection=" + v.getCurrIntersection().getId());
+                }
                 System.out.println("stuck=" + v.isStuck());
-                if (v.getCurrRoadSection() != null) System.out.println("currentSegment=" + v.getCurrRoadSection().getId());
-                if (v.getCurrIntersection() != null) System.out.println("currentIntersection=" + v.getCurrIntersection().getId());
+                System.out.println("target="+v.getEndIntersection().getId());
+
+                if(v instanceof Bus bus){
+                    System.out.println("hasSnowChain="+bus.getHasSnowchain());
+                    System.out.println("snowChainDurability="+bus.getSnowchainTTL());
+                }else if(v instanceof Car car){
+                    System.out.println("next="+car.getNextIntersection().getId());
+                }else if(v instanceof Snowplow snowplow){
+                    System.out.println("activeHead="+snowplow.getActivePlowHead().getClass().getSimpleName());
+                    System.out.println("consumableLeft="+snowplow.getActivePlowHead().getConsumableAmountLeft());
+                    System.out.println("headCount="+snowplow.getPlowHeads().size());
+                }
+                System.out.println("END");
                 return;
             }
 
             RoadSection rs = controller.findRoadSectionById(id);
             if (rs != null) {
-                System.out.println("Object Utszakasz " + id);
+                System.out.println("OBJECT Utszakasz " + id);
+                System.out.println("road="+rs.getLane().getRoadId());
+                System.out.println("lane="+rs.getLane().getIndexInRoad());
                 System.out.println("snow=" + rs.getSnow());
                 System.out.println("ice=" + rs.getIce());
+                System.out.println("rock="+rs.getRock());
+                System.out.println("accident="+rs.getAccidentHappened());
+                System.out.println("END");
                 return;
             }
             
@@ -468,7 +527,7 @@ public class Commands {
         System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
 
         String type = args[0].toLowerCase();
-        System.out.println("List " + type);
+        System.out.println("LIST " + type);
         
         switch(type) {
             case "keresztezodesek" -> {

@@ -60,6 +60,7 @@ public class Intersection {
      */
     public void addVehicle(Vehicle vehicle){
         vehicles.add(vehicle);
+        vehicle.setCurrIntersection(this);
     }
 
     public void tick(){

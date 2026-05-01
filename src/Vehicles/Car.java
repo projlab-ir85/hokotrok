@@ -17,6 +17,7 @@ public class Car extends Vehicle{
         this.end = end;
         stuck = false;
         stuckTime = 0;
+        nextIntersectionIndex = 0;
     }
 
     /**

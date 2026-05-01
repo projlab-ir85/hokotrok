@@ -65,11 +65,11 @@ public class Road {
 
         if(way == Way.ONEWAY){
             this.lanes = new Lane[1];
-            this.lanes[0] = new Lane(id,lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
+            this.lanes[0] = new Lane(this.id,0, lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
         }else if(way == Way.TWOWAY){
             this.lanes = new Lane[2];
-            this.lanes[0] = new Lane(id,lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
-            this.lanes[1] = new Lane(id,lanes, length, end, start, snowLevel, iceLevel, rockLevel, type);
+            this.lanes[0] = new Lane(this.id, 0, lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
+            this.lanes[1] = new Lane(this.id, 1, lanes, length, end, start, snowLevel, iceLevel, rockLevel, type);
         }
 
         startPoint = start;

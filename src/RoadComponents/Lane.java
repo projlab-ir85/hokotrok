@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Lane {
+
+    String roadId;
+    int indexInRoad;
     /**
      * Az alsávokat és a belőlük felépülő útszakaszokat tartalmazó kétdimenziós lista.
      * Az első dimenzió az alsáv indexe, a második pedig az adott alsávhoz tartozó útszakaszok sorrendje.
@@ -33,7 +36,9 @@ public class Lane {
      * @param start A sáv kiindulási kereszteződése.
      * @param end A sáv végkereszteződése.
      */
-    public Lane(String id, int sublanes, int length, Intersection start, Intersection end, int snowLevel, int iceLevel, int rockLevel, Road.Type type){
+    public Lane(String id, int index, int sublanes, int length, Intersection start, Intersection end, int snowLevel, int iceLevel, int rockLevel, Road.Type type){
+        this.roadId = id;
+        this.indexInRoad = index;
         this.start = start;
         this.end = end;
         subLanes = new ArrayList<>();
@@ -149,4 +154,7 @@ public class Lane {
                 .flatMap(roadSection -> roadSection.getVehicles().stream())
                 .collect(Collectors.toList());
     }
+
+    public String getRoadId(){return roadId;}
+    public int getIndexInRoad(){return indexInRoad;}
 }
