@@ -1,5 +1,6 @@
 package Control;
 
+import Attachments.Attachment;
 import Attachments.PlowHead;
 import RoadComponents.*;
 import Vehicles.*;
@@ -278,7 +279,7 @@ public class Commands {
                 case "IceBreakerHead": head = new IceBreakerHead(); break;
                 case "SaltShakerHead": head = new SaltShakerHead(); break;
                 case "ThrowHead": head = new ThrowHead(); break;
-                //TODO:KELL MEG ROCKHEAD!!!
+                case "RockHead" : head = new RockHead(); break;
                 default: 
                     System.out.println(Colors.RED + "Ismeretlen fej tipus." + Colors.RESETCOLOR);
                     return;
@@ -312,7 +313,7 @@ public class Commands {
                 Class<? extends Attachments.PlowHead> headClass = switch(args[2]) {
                     case "DragonHead" -> Attachments.PlowHeads.DragonHead.class;
                     case "SaltShakerHead" -> Attachments.PlowHeads.SaltShakerHead.class;
-                    //TODO:KELL MEG ROCKHEAD!!!
+                    case "RockHead" -> Attachments.PlowHeads.RockHead.class;
                     default -> null;
                 };
                 
