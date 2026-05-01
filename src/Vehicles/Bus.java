@@ -64,6 +64,8 @@ public class Bus extends Vehicle{
         roadsection.iceIncrease(1);
     }
 
+    public Attachments.Snowchain getSnowchain() { return snowchain; }
+
     public boolean getHasSnowchain() { return hasSnowchain; }
 
     public int getSnowchainTTL(){return snowchain.getTimeToLive();}
