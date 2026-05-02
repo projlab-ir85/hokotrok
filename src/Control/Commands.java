@@ -170,11 +170,11 @@ public class Commands {
         Intersection end = controller.findIntersectionById(args[2]);
 
         if(start == null || end == null) {
-            System.out.println(Colors.RED + "Rossz kezdo vagy celpont" + Colors.RESETCOLOR);
+           errorMessage("Rossz kezdő vagy célpont!");
             return;
         }
 
-        Bus bus = new Bus(start, end);
+        Bus bus = new Bus(args[0], start, end);
 
         if(args.length > 3){
             if(args[3].equals("true")){
@@ -199,8 +199,12 @@ public class Commands {
 
         Intersection start = controller.findIntersectionById(args[1]);
         Intersection end = controller.findIntersectionById(args[2]);
+        if(start == null || end == null) {
+            errorMessage("Rossz kezdő vagy célpont!");
+            return;
+        }
         Car car = new Car(args[0],start, end);
-
+        
         if(args.length > 3){
             if(args[3].equals("true")){
                 controller.findIntersectionById(args[4])
@@ -220,7 +224,6 @@ public class Commands {
 
 
         Intersection start = controller.findIntersectionById(args[1]);
-
         if(start == null) {
             errorMessage("Rossz kezdőpont!");
             return;
@@ -253,7 +256,6 @@ public class Commands {
 
     @CommandInfo(name = "attach holanc", description = "Hóláncot rendel a megadott buszhoz.", args = "<buszId> <elettartam>")
     public void holanc(String[] args){
-        System.out.println(new Object(){}.getClass().getEnclosingMethod().getName());
 
         Vehicle v = controller.findVehiclebyId(args[0]);
         
@@ -338,7 +340,7 @@ public class Commands {
                     snowplow.fillPlowHead(amount, headClass);
                     okMessage("Fogyoeszkoz hozzaadva a " + args[2] + " fejhez!");
                 } else {
-                    okMessage("Ismeretlen vagy nem feltoltheto fejtipus!");
+                    errorMessage("Ismeretlen vagy nem feltoltheto fejtipus!");
                 }
             } else {
                 // Aktív fej feltöltése
@@ -505,7 +507,7 @@ public class Commands {
                 if(v instanceof Bus bus){
                     message("target="+v.getEndIntersection().getId());
                     message("hasSnowChain="+bus.getHasSnowchain());
-                    message("snowChainDurability="+bus.getSnowchainTTL());
+                    if(bus.getHasSnowchain()) message("snowChainDurability="+bus.getSnowchainTTL());
                 }else if(v instanceof Car car){
                     message("target="+v.getEndIntersection().getId());
                     message("next="+car.getNextIntersection().getId());
@@ -528,6 +530,18 @@ public class Commands {
                 message("rock="+rs.getRock());
                 message("accident="+rs.getAccidentHappened());
                 statusMessage("END");
+                return;
+            }
+            Intersection i = controller.findIntersectionById(id); 
+            if(i != null) {
+                statusMessage("Roads:");
+                for(Road r : i.getRoads()) {
+                    message("\t" + r.getId());
+                }
+                statusMessage("Vehicles:");
+                for(Vehicle vehicle : i.getVehicles()) {
+                    message("\t" + vehicle.getId());
+                }
                 return;
             }
             
@@ -572,8 +586,10 @@ public class Commands {
         if(v == null){errorMessage("Nincs ilyen jármű!");; return;}
 
         if(v instanceof Bus bus){
-            message(bus.getNext().getId());
-        }else{
+            errorMessage("A buszt játékos irányítja!");
+        }else if(v instanceof Snowplow plow) {
+            errorMessage("A hókotróknak nincs útvonala!");
+        } else {
             message(v.getJunctions().stream()
                     .map(Intersection::getId)
                     .collect(Collectors.joining(" -> ")));
