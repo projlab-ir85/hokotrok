@@ -510,7 +510,7 @@ public class Commands {
                     if(bus.getHasSnowchain()) message("snowChainDurability="+bus.getSnowchainTTL());
                 }else if(v instanceof Car car){
                     message("target="+v.getEndIntersection().getId());
-                    message("next="+car.getNextIntersection().getId());
+                    if(car.getNextIntersection() != null) message("next="+car.getNextIntersection().getId());
                 }else if(v instanceof Snowplow snowplow){
                     message("activeHead="+snowplow.getActivePlowHead().getClass().getSimpleName());
                     message("consumableLeft="+snowplow.getActivePlowHead().getConsumableAmountLeft());
