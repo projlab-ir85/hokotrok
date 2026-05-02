@@ -66,20 +66,28 @@ public class Snowplow extends Vehicle{
         if(currRoadSection == null && currIntersection != null) {
             Intersection next = getNextIntersection();
             if(next == null) return;
-            RoadSection rs = currIntersection.roadSelection(end);
+            Intersection oldIntersection = currIntersection;
+            RoadSection rs = currIntersection.roadSelection(next);
             if(rs != null && rs.accept(this)) {
-                currIntersection.getVehicles().remove(this);
-                currIntersection = null;
+                oldIntersection.getVehicles().remove(this);
             }
+            return;
         }
 
         if(currRoadSection == null) return;
         
         /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
         if(currRoadSection.next != null) {
-            currRoadSection.next.accept(this);
+            RoadSection oldRoadSection = currRoadSection;
+            if(oldRoadSection.next.accept(this)) {
+                oldRoadSection.removeVehicle(this);
+            }
         } else {
+            RoadSection oldRoadSection = currRoadSection;
+            Intersection arrived = oldRoadSection.getLane().getEnd();
             currRoadSection.getLane().getEnd().addVehicle(this);
+            oldRoadSection.removeVehicle(this);
+            advanceRouteIfAt(arrived);
         }
     }
 
