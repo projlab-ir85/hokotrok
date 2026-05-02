@@ -153,7 +153,7 @@ public class RoadSection implements Updateable{
         v.setCurrIntersection(null);
     }
 
-    public Lane getLane(){return lane;}
+    public Lane getLane(){ return lane;}
 
     public boolean getAccidentHappened(){return accidentHappened;}
 

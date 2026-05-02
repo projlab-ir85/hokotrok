@@ -29,8 +29,25 @@ public class Car extends Vehicle{
             stuckTime--;
             return;
         }
+
+        if(currRoadSection == null && currIntersection != null) {
+            Intersection next = getNextIntersection();
+            if(next == null) return;
+            RoadSection rs = currIntersection.roadSelection(end);
+            if(rs != null && rs.accept(this)) {
+                currIntersection.getVehicles().remove(this);
+                currIntersection = null;
+            }
+        }
+
+        if(currRoadSection == null) return;
+        
         /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
-        currRoadSection.next.accept(this);
+        if(currRoadSection.next != null) {
+            currRoadSection.next.accept(this);
+        } else {
+            currRoadSection.getLane().getEnd().addVehicle(this);
+        }
     }
 
     /**

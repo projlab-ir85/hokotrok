@@ -40,11 +40,29 @@ public class Controller {
         }
     }
 
+    private List<Vehicle> getAllVehicles() {
+        List<Vehicle> result = new ArrayList<>();
+
+        for(Intersection i : intersections){
+            result.addAll(i.getVehicles());
+        }
+
+        for(Road r : roads){
+            result.addAll(r.getAllVehicles());
+        }
+
+        return result;
+    }
+
     public void tick(){
         tickCount++;
-        /*for (Intersection i : intersections){
-            i.tick();
-        }*/
+        for(Road road : roads) {
+            road.updateRoadSections();
+        }
+        List<Vehicle> vehicles = getAllVehicles();
+        for(Vehicle vehicle : vehicles) {
+            vehicle.step();
+        }
     }
 
     public void printOutput(String message){}
