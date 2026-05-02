@@ -65,8 +65,6 @@ public class Controller {
         }
     }
 
-    public void printOutput(String message){}
-
     public void exit(){
         isRunning = false;
     }
@@ -75,6 +73,7 @@ public class Controller {
         intersections.clear();
         roads.clear();
         bfsList.clear();
+        tickCount = 0;
     }
 
     public void setDeterministic(boolean mode){
