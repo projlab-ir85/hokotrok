@@ -35,7 +35,7 @@ public class Controller {
     public void start() throws Exception{
         isRunning = true;
 
-        while(isRunning){
+        while(isRunning && scanner.hasNextLine()){
             commands.dispatch(scanner.nextLine());
         }
     }
@@ -111,4 +111,3 @@ public class Controller {
                 .findFirst().orElse(null);
     }
 }
-
