@@ -17,7 +17,8 @@ public class Snowplow extends Vehicle{
      * @param start kezdőkereszteződés, ahonnét indul
      * inicializálja az alapállapotot a hokotrónak
      */
-    public Snowplow(Intersection start) {
+    public Snowplow(String id, Intersection start) {
+        this.id = id;
         this.start = start;
         currIntersection = start;
         plowHeads = new ArrayList<>();
@@ -27,6 +28,11 @@ public class Snowplow extends Vehicle{
         /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
+        nextIntersectionIndex = 0;
+    }
+
+    public Snowplow(Intersection start) {
+        this(null, start);
     }
 
     /**
@@ -57,7 +63,32 @@ public class Snowplow extends Vehicle{
      */
     public void step(){
         /* átlép a következő útszakaszra */
-        currRoadSection.next.accept(this);
+        if(currRoadSection == null && currIntersection != null) {
+            Intersection next = getNextIntersection();
+            if(next == null) return;
+            Intersection oldIntersection = currIntersection;
+            RoadSection rs = currIntersection.roadSelection(next);
+            if(rs != null && rs.accept(this)) {
+                oldIntersection.getVehicles().remove(this);
+            }
+            return;
+        }
+
+        if(currRoadSection == null) return;
+        
+        /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
+        if(currRoadSection.next != null) {
+            RoadSection oldRoadSection = currRoadSection;
+            if(oldRoadSection.next.accept(this)) {
+                oldRoadSection.removeVehicle(this);
+            }
+        } else {
+            RoadSection oldRoadSection = currRoadSection;
+            Intersection arrived = oldRoadSection.getLane().getEnd();
+            currRoadSection.getLane().getEnd().addVehicle(this);
+            oldRoadSection.removeVehicle(this);
+            advanceRouteIfAt(arrived);
+        }
     }
 
     /**

@@ -48,7 +48,7 @@ public class Intersection {
      * @param road A hozzáadni kívánt út objektuma.
      */
     public void addRoad(Road road){
-        if(road.getStartIntersectionId().equals(this.id)){
+        if(road.getStartIntersectionId().equals(this.id) || road.getEndIntersectionId().equals(this.id)){
             roads.add(road);
         }
     }
@@ -61,6 +61,11 @@ public class Intersection {
     public void addVehicle(Vehicle vehicle){
         vehicles.add(vehicle);
         vehicle.setCurrIntersection(this);
+        vehicle.setCurrRoadSection(null);
+    }
+
+    public void removeVehicle(Vehicle vehicle){
+        vehicles.remove(vehicle);
     }
 
     public void tick(){

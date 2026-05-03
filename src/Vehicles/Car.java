@@ -1,6 +1,7 @@
 package Vehicles;
 
 import RoadComponents.Intersection;
+import RoadComponents.Road;
 import RoadComponents.RoadSection;
 
 public class Car extends Vehicle{
@@ -29,8 +30,33 @@ public class Car extends Vehicle{
             stuckTime--;
             return;
         }
+
+        if(currRoadSection == null && currIntersection != null) {
+            Intersection next = getNextIntersection();
+            if(next == null) return;
+            Intersection oldIntersection = currIntersection;
+            RoadSection rs = currIntersection.roadSelection(next);
+            if(rs != null && rs.accept(this)) {
+                oldIntersection.getVehicles().remove(this);
+            }
+            return;
+        }
+
+        if(currRoadSection == null) return;
+        
         /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
-        currRoadSection.next.accept(this);
+        if(currRoadSection.next != null) {
+            RoadSection oldRoadSection = currRoadSection;
+            if(oldRoadSection.next.accept(this)) {
+                oldRoadSection.removeVehicle(this);
+            }
+        } else {
+            RoadSection oldRoadSection = currRoadSection;
+            Intersection arrived = oldRoadSection.getLane().getEnd();
+            currRoadSection.getLane().getEnd().addVehicle(this);
+            oldRoadSection.removeVehicle(this);
+            advanceRouteIfAt(arrived);
+        }
     }
 
     /**

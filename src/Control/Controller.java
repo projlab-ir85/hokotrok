@@ -35,19 +35,35 @@ public class Controller {
     public void start() throws Exception{
         isRunning = true;
 
-        while(isRunning){
+        while(isRunning && scanner.hasNextLine()){
             commands.dispatch(scanner.nextLine());
         }
     }
 
-    public void tick(){
-        tickCount++;
-        /*for (Intersection i : intersections){
-            i.tick();
-        }*/
+    private List<Vehicle> getAllVehicles() {
+        List<Vehicle> result = new ArrayList<>();
+
+        for(Intersection i : intersections){
+            result.addAll(i.getVehicles());
+        }
+
+        for(Road r : roads){
+            result.addAll(r.getAllVehicles());
+        }
+
+        return result;
     }
 
-    public void printOutput(String message){}
+    public void tick(){
+        tickCount++;
+        for(Road road : roads) {
+            road.updateRoadSections();
+        }
+        List<Vehicle> vehicles = getAllVehicles();
+        for(Vehicle vehicle : vehicles) {
+            vehicle.step();
+        }
+    }
 
     public void exit(){
         isRunning = false;
@@ -57,6 +73,7 @@ public class Controller {
         intersections.clear();
         roads.clear();
         bfsList.clear();
+        tickCount = 0;
     }
 
     public void setDeterministic(boolean mode){

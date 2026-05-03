@@ -12,7 +12,8 @@ public class Bus extends Vehicle{
     protected Intersection next;
     protected boolean hasSnowchain;
 
-    public Bus(Intersection start, Intersection end) {
+    public Bus(String id, Intersection start, Intersection end) {
+        this.id = id;
         this.start = start;
         this.end = end;
         currIntersection = start;
@@ -23,6 +24,10 @@ public class Bus extends Vehicle{
         finishedLap = false;
         hasSnowchain = false;
         nextIntersectionIndex = 0;
+    }
+
+    public Bus(Intersection start, Intersection end) {
+        this(null, start, end);
     }
 
     public Bus(){}
@@ -47,8 +52,32 @@ public class Bus extends Vehicle{
             stuckTime--;
             return;
         }
+        if(currRoadSection == null && currIntersection != null) {
+            Intersection next = getNextIntersection();
+            if(next == null) return;
+            Intersection oldIntersection = currIntersection;
+            RoadSection rs = currIntersection.roadSelection(next);
+            if(rs != null && rs.accept(this)) {
+                oldIntersection.getVehicles().remove(this);
+            }
+            return;
+        }
+
+        if(currRoadSection == null) return;
+        
         /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
-        currRoadSection.next.accept(this);
+        if(currRoadSection.next != null) {
+            RoadSection oldRoadSection = currRoadSection;
+            if(oldRoadSection.next.accept(this)) {
+                oldRoadSection.removeVehicle(this);
+            }
+        } else {
+            RoadSection oldRoadSection = currRoadSection;
+            Intersection arrived = oldRoadSection.getLane().getEnd();
+            currRoadSection.getLane().getEnd().addVehicle(this);
+            oldRoadSection.removeVehicle(this);
+            advanceRouteIfAt(arrived);
+        }
         /* ha van rajta hólánc, akkor azt használja az adott útszakaszon */
         if(hasSnowchain) {
             snowchain.use();

@@ -105,6 +105,14 @@ public class Road {
         }
     }
 
+    public void updateRoadSections(){
+        for(Lane lane : lanes){
+            for(RoadSection roadSection : lane.getAllRoadSections()){
+                roadSection.update();
+            }
+        }
+    }
+
     public String getId(){return id;}
     public String getStartIntersectionId(){return startPoint.id;}
     public String getEndIntersectionId(){return endPoint.id;}

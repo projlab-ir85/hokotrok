@@ -51,12 +51,41 @@ public abstract class Vehicle implements Movable{
         if(value) stuckTime = 3;
     }
 
+    public void tickStuck() {
+        if(!stuck) return;
+
+        stuckTime--;
+        if(stuckTime <= 0) {
+            stuck = false;
+            stuckTime = 0;
+        }
+    }
+
     public List<Intersection> getJunctions(){return junctions;}
 
     public void setRoute(List<Intersection> route){
         junctions = route;
+        nextIntersectionIndex = 0;
+        if(currIntersection != null) {
+            advanceRouteIfAt(currIntersection);
+        }
     }
 
-    //MEG KELL IRNI MEG HOGY TENYLEGESEN KOVESSE IS AZ UTVONALAT ES ALLITSA A NEXT ERTEKET
-    public Intersection getNextIntersection(){return junctions.get(nextIntersectionIndex);}
+    public Intersection getNextIntersection(){
+        if(junctions == null || junctions.isEmpty()) {
+            return end;
+        }
+        if(nextIntersectionIndex >= junctions.size()) {
+            return null;
+        }
+        return junctions.get(nextIntersectionIndex);
+    }
+
+    public void advanceRouteIfAt(Intersection intersection){
+        if(junctions == null || intersection == null) return;
+
+        while(nextIntersectionIndex < junctions.size() && junctions.get(nextIntersectionIndex).equals(intersection)) {
+            nextIntersectionIndex++;
+        }
+    }
 }
