@@ -4,6 +4,7 @@ import RoadComponents.Intersection;
 import RoadComponents.Road;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BFS {
@@ -47,7 +48,7 @@ public class BFS {
         toBeVisited.add(junction);
 
         while(!toBeVisited.isEmpty()){
-            active = toBeVisited.removeFirst();
+            active = toBeVisited.remove(0);
             String activeId = active.getId();
             BfsData activeTableData = table.stream().filter(data -> data.junctionId.equals(activeId)).findFirst().orElse(null);
             for(Road r : allRoads){
@@ -76,7 +77,8 @@ public class BFS {
         }
 
         stops.add(active.junctionId);
-        return stops.reversed();
+        Collections.reverse(stops);
+        return stops;
     }
 
 }
