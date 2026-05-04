@@ -6,16 +6,19 @@ import RoadComponents.RoadSection;
 import Vehicles.GPS.BFS;
 import Vehicles.Vehicle;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Controller {
     private boolean isRunning;
     protected int tickCount;
-    private Scanner scanner;
+    private final BufferedReader reader;
+    private final boolean interactive;
     private Commands commands;
     protected List<Intersection> intersections;
     protected List<Road> roads;
@@ -25,7 +28,9 @@ public class Controller {
     public Controller(){
         isRunning = false;
         tickCount = 0;
-        scanner = new Scanner(System.in);
+        reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+       
+        interactive = System.console() != null;
         commands = new Commands(this);
         intersections = new ArrayList<>();
         roads = new ArrayList<>();
@@ -35,9 +40,34 @@ public class Controller {
     public void start() throws Exception{
         isRunning = true;
 
-        while(isRunning && scanner.hasNextLine()){
-            commands.dispatch(scanner.nextLine());
+        java.io.Console console = interactive ? System.console() : null;
+
+        if(interactive){
+            printWelcome();
         }
+
+        String line;
+        while(isRunning){
+            if(console != null){
+                line = console.readLine("hokotrok> ");
+            } else {
+                line = reader.readLine();
+            }
+            if(line == null) break;
+            if(!line.isEmpty() && line.charAt(0) == '\uFEFF'){
+                line = line.substring(1);
+            }
+            commands.dispatch(line);
+        }
+    }
+
+    private void printWelcome(){
+        System.out.println("===============================================");
+        System.out.println("   Hókotrók - prototípus");
+        System.out.println("   A parancsok listájához: help");
+        System.out.println("   Új játék:            newgame");
+        System.out.println("   Kilépés:             exit");
+        System.out.println("===============================================");
     }
 
     private List<Vehicle> getAllVehicles() {
