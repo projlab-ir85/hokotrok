@@ -1,0 +1,19 @@
+newgame
+mode deterministic
+createplayer P1 takarito
+createplayer P2 buszvezeto 5000
+players
+cash P1
+cash P2
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 1 false 0 0 0 fout
+buy snowplow P1 K1 SP1
+buy fej P1 SP1 DragonHead
+buy consumable P1 SP1
+cash P1
+buy busz P2 K1 K2 BX
+buy holanc P2 BX
+cash P2
+players
+exit
