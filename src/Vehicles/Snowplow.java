@@ -75,12 +75,19 @@ public class Snowplow extends Vehicle{
         }
 
         if(currRoadSection == null) return;
-        
+
+        /* Mielőtt ellépünk a szakaszról, megjegyezzük, volt-e rajta hó
+         * vagy jég — ha igen és a takarító játékosé ez a hókotró, akkor
+         * a dokumentáció szerint 25 jmf jár érte. */
+        boolean hadSnowOrIce = currRoadSection.getSnow() > 0 || currRoadSection.getIce() > 0;
+
         /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
+        boolean sectionAdvanced = false;
         if(currRoadSection.next != null) {
             RoadSection oldRoadSection = currRoadSection;
             if(oldRoadSection.next.accept(this)) {
                 oldRoadSection.removeVehicle(this);
+                sectionAdvanced = true;
             }
         } else {
             RoadSection oldRoadSection = currRoadSection;
@@ -88,6 +95,12 @@ public class Snowplow extends Vehicle{
             currRoadSection.getLane().getEnd().addVehicle(this);
             oldRoadSection.removeVehicle(this);
             advanceRouteIfAt(arrived);
+            sectionAdvanced = true;
+        }
+
+        if(sectionAdvanced){
+            if(owner != null) owner.incrementSectionsDone();
+            if(hadSnowOrIce) creditOwner(25);
         }
     }
 

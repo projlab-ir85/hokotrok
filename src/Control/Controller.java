@@ -24,6 +24,7 @@ public class Controller {
     protected List<Road> roads;
     protected boolean deterministic;
     protected List<BFS> bfsList;
+    protected List<Player> players;
 
     public Controller(){
         isRunning = false;
@@ -35,7 +36,14 @@ public class Controller {
         intersections = new ArrayList<>();
         roads = new ArrayList<>();
         bfsList = new ArrayList<>();
+        players = new ArrayList<>();
     }
+
+    public Player findPlayerById(String id){
+        return players.stream().filter(p -> p.getId() != null && p.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public List<Player> getPlayers(){ return players; }
 
     public void start() throws Exception{
         isRunning = true;
@@ -103,6 +111,7 @@ public class Controller {
         intersections.clear();
         roads.clear();
         bfsList.clear();
+        if(players != null) players.clear();
         tickCount = 0;
     }
 

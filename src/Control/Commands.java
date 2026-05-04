@@ -644,5 +644,164 @@ public class Commands {
         controller.exit();
         okMessage("Játék leállítása!");
     }
+
+    /* ===================== JÁTÉKOS / BOLT ===================== */
+
+    @CommandInfo(description = "Új játékos létrehozása adott szerepkörrel (buszvezeto vagy takarito) és opcionális kezdőpénzzel (alapértelmezett 2000 jmf).",
+            args = "<id> <buszvezeto|takarito> [<kezdopenz>]")
+    public void createplayer(String[] args){
+        if(args.length < 2){
+            errorMessage("Hiányzó paraméterek!");
+            return;
+        }
+        if(controller.findPlayerById(args[0]) != null){
+            errorMessage("Már létezik játékos ezzel az azonosítóval: " + args[0]);
+            return;
+        }
+        Player.Role role = Player.Role.parse(args[1]);
+        if(role == null){
+            errorMessage("Ismeretlen szerepkör: " + args[1] + " (buszvezeto|takarito)");
+            return;
+        }
+        int startingCash = 2000;
+        if(args.length >= 3){
+            try { startingCash = Integer.parseInt(args[2]); }
+            catch (NumberFormatException e){ errorMessage("Hibás kezdőpénz!"); return; }
+        }
+        controller.getPlayers().add(new Player(args[0], role, startingCash));
+        okMessage("Játékos létrejött: " + args[0] + " (" + role + ", " + startingCash + " jmf)");
+    }
+
+    @CommandInfo(description = "Kilistázza az összes játékost a szerepkörükkel, pénzükkel és mozgási statisztikáikkal.")
+    public void players(String[] args){
+        statusMessage("PLAYERS");
+        for(Player p : controller.getPlayers()){
+            message(p.getId() + " role=" + p.getRole() + " cash=" + p.getCash()
+                    + " sections=" + p.getSectionsDone() + " laps=" + p.getLapsDone()
+                    + " vehicles=" + p.getVehicleCount());
+        }
+        statusMessage("END");
+    }
+
+    @CommandInfo(description = "Kiírja a megadott játékos pénzmennyiségét.", args = "<jatekosId>")
+    public void cash(String[] args){
+        if(args.length < 1){ errorMessage("Hiányzó azonosító!"); return; }
+        Player p = controller.findPlayerById(args[0]);
+        if(p == null){ errorMessage("Nincs ilyen játékos: " + args[0]); return; }
+        message(p.getId() + " cash=" + p.getCash());
+    }
+
+    /** A buy parancs elosztója. Közvetlenül hív, hogy elkerüljük a
+     * `create busz` / `attach holanc` metódusokkal való ütközést. */
+    public void buy(String[] args) throws Exception{
+        if(args.length == 0){ errorMessage("Hiányzó buy alparancs!"); return; }
+        String sub = args[0];
+        String[] rest = Arrays.copyOfRange(args, 1, args.length);
+        switch(sub){
+            case "snowplow", "hokotro" -> buysnowplow(rest);
+            case "busz", "bus"         -> buybusz(rest);
+            case "holanc", "snowchain" -> buyholanc(rest);
+            case "fej", "plowhead"     -> buyfej(rest);
+            case "consumable", "fogyo" -> buyconsumable(rest);
+            default -> errorMessage("Ismeretlen buy alparancs: " + sub);
+        }
+    }
+
+    @CommandInfo(name = "buy snowplow", description = "A takarító játékos új hókotrót vásárol 2000 jmf-ért. Az új hókotró a megadott kereszteződésen jelenik meg.",
+            args = "<jatekosId> <startKeresztezodes> [<ujId>]")
+    public void buysnowplow(String[] args){
+        if(args.length < 2){ errorMessage("Hiányzó paraméterek!"); return; }
+        Player p = controller.findPlayerById(args[0]);
+        if(p == null){ errorMessage("Nincs ilyen játékos: " + args[0]); return; }
+        Intersection start = controller.findIntersectionById(args[1]);
+        if(start == null){ errorMessage("Rossz kezdőpont!"); return; }
+        if(!p.spend(2000)){ errorMessage("Nincs elég pénz! (2000 jmf kell)"); return; }
+        String newId = args.length >= 3 ? args[2] : "SP_" + args[0] + "_" + (p.getVehicleCount() + 1);
+        Snowplow sp = new Snowplow(newId, start);
+        sp.setOwner(p);
+        p.addVehicle(sp);
+        start.addVehicle(sp);
+        okMessage("Hókotró vásárolva: " + newId + " (maradék: " + p.getCash() + " jmf)");
+    }
+
+    @CommandInfo(name = "buy busz", description = "A buszvezető játékos új buszt vásárol 2000 jmf-ért.",
+            args = "<jatekosId> <startKeresztezodes> <celKeresztezodes> [<ujId>]")
+    public void buybusz(String[] args){
+        if(args.length < 3){ errorMessage("Hiányzó paraméterek!"); return; }
+        Player p = controller.findPlayerById(args[0]);
+        if(p == null){ errorMessage("Nincs ilyen játékos: " + args[0]); return; }
+        Intersection start = controller.findIntersectionById(args[1]);
+        Intersection end = controller.findIntersectionById(args[2]);
+        if(start == null || end == null){ errorMessage("Rossz kezdő vagy célpont!"); return; }
+        if(!p.spend(2000)){ errorMessage("Nincs elég pénz! (2000 jmf kell)"); return; }
+        String newId = args.length >= 4 ? args[3] : "B_" + args[0] + "_" + (p.getVehicleCount() + 1);
+        Bus bus = new Bus(newId, start, end);
+        bus.setOwner(p);
+        p.addVehicle(bus);
+        start.addVehicle(bus);
+        okMessage("Busz vásárolva: " + newId + " (maradék: " + p.getCash() + " jmf)");
+    }
+
+    @CommandInfo(name = "buy holanc", description = "Hóláncot vásárol egy buszra 1000 jmf-ért, 30 útszakasz élettartammal.",
+            args = "<jatekosId> <buszId>")
+    public void buyholanc(String[] args){
+        if(args.length < 2){ errorMessage("Hiányzó paraméterek!"); return; }
+        Player p = controller.findPlayerById(args[0]);
+        if(p == null){ errorMessage("Nincs ilyen játékos: " + args[0]); return; }
+        Vehicle v = controller.findVehiclebyId(args[1]);
+        if(!(v instanceof Bus bus)){ errorMessage("A jármű nem található vagy nem busz!"); return; }
+        if(!p.spend(1000)){ errorMessage("Nincs elég pénz! (1000 jmf kell)"); return; }
+        bus.addSnowchain(new Attachments.Snowchain(30));
+        okMessage("Hólánc vásárolva a buszra: " + args[1] + " (maradék: " + p.getCash() + " jmf)");
+    }
+
+    @CommandInfo(name = "buy fej", description = "Kotrófejet vásárol egy hókotróra 500 jmf-ért.",
+            args = "<jatekosId> <hokotroId> <fejTipus>")
+    public void buyfej(String[] args){
+        if(args.length < 3){ errorMessage("Hiányzó paraméterek!"); return; }
+        Player p = controller.findPlayerById(args[0]);
+        if(p == null){ errorMessage("Nincs ilyen játékos: " + args[0]); return; }
+        Vehicle v = controller.findVehiclebyId(args[1]);
+        if(!(v instanceof Snowplow sp)){ errorMessage("A jármű nem található vagy nem hókotró!"); return; }
+        Attachments.PlowHead head = switch(args[2]){
+            case "BroomHead" -> new BroomHead();
+            case "DragonHead" -> new DragonHead();
+            case "IceBreakerHead" -> new IceBreakerHead();
+            case "SaltShakerHead" -> new SaltShakerHead();
+            case "ThrowHead" -> new ThrowHead();
+            case "RockHead" -> new RockHead();
+            default -> null;
+        };
+        if(head == null){ errorMessage("Ismeretlen fej típus!"); return; }
+        if(!p.spend(500)){ errorMessage("Nincs elég pénz! (500 jmf kell)"); return; }
+        sp.addPlow(head);
+        okMessage("Kotrófej vásárolva: " + args[2] + " (maradék: " + p.getCash() + " jmf)");
+    }
+
+    @CommandInfo(name = "buy consumable", description = "Fogyóeszközt vásárol az aktív kotrófejhez 100 jmf-ért (+10 egység).",
+            args = "<jatekosId> <hokotroId>")
+    public void buyconsumable(String[] args){
+        if(args.length < 2){ errorMessage("Hiányzó paraméterek!"); return; }
+        Player p = controller.findPlayerById(args[0]);
+        if(p == null){ errorMessage("Nincs ilyen játékos: " + args[0]); return; }
+        Vehicle v = controller.findVehiclebyId(args[1]);
+        if(!(v instanceof Snowplow sp)){ errorMessage("A jármű nem található vagy nem hókotró!"); return; }
+        if(!p.spend(100)){ errorMessage("Nincs elég pénz! (100 jmf kell)"); return; }
+        sp.fillActiveHead(10);
+        okMessage("Fogyóeszköz vásárolva az aktív fejhez (maradék: " + p.getCash() + " jmf)");
+    }
+
+    @CommandInfo(description = "Egy meglévő játárművet hozzárendel egy játékoshoz (tulajdonosként). Ettől kezdve a mozgásért járó jmf a játékoshoz kerül.",
+            args = "<jatekosId> <jarmuId>")
+    public void assign(String[] args){
+        if(args.length < 2){ errorMessage("Hiányzó paraméterek!"); return; }
+        Player p = controller.findPlayerById(args[0]);
+        if(p == null){ errorMessage("Nincs ilyen játékos: " + args[0]); return; }
+        Vehicle v = controller.findVehiclebyId(args[1]);
+        if(v == null){ errorMessage("Nincs ilyen jármű: " + args[1]); return; }
+        v.setOwner(p);
+        p.addVehicle(v);
+        okMessage("Jármű hozzárendelve: " + args[1] + " -> " + args[0]);
+    }
 }
 

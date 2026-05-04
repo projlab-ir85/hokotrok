@@ -1,5 +1,6 @@
 package Vehicles;
 
+import Control.Player;
 import RoadComponents.*;
 import java.util.List;
 
@@ -13,6 +14,18 @@ public abstract class Vehicle implements Movable{
     protected Intersection start;
     protected Intersection end;
     protected int nextIntersectionIndex;
+    /** A jármű tulajdonos játékosa (ha van). A mozgások utáni jmf
+     * jóváírás a tulajdonos pénztárcájába történik. */
+    protected Player owner;
+
+    public Player getOwner(){ return owner; }
+
+    public void setOwner(Player owner){ this.owner = owner; }
+
+    /** Segédmetódus: ha van tulajdonos, jmf-et ír jóvá neki. */
+    protected void creditOwner(int amount){
+        if(owner != null) owner.earn(amount);
+    }
 
     public String getId(){return id;}
 

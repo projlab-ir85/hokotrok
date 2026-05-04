@@ -1,0 +1,25 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Játékos létrejött: P1 (TAKARITO, 2000 jmf)
+OK! Játékos létrejött: P2 (BUSZVEZETO, 5000 jmf)
+PLAYERS
+P1 role=TAKARITO cash=2000 sections=0 laps=0 vehicles=0
+P2 role=BUSZVEZETO cash=5000 sections=0 laps=0 vehicles=0
+END
+P1 cash=2000
+P2 cash=5000
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Hókotró vásárolva: SP1 (maradék: 0 jmf)
+ERROR! Nincs elég pénz! (500 jmf kell)
+ERROR! Nincs elég pénz! (100 jmf kell)
+P1 cash=0
+OK! Busz vásárolva: BX (maradék: 3000 jmf)
+OK! Hólánc vásárolva a buszra: BX (maradék: 2000 jmf)
+P2 cash=2000
+PLAYERS
+P1 role=TAKARITO cash=0 sections=0 laps=0 vehicles=1
+P2 role=BUSZVEZETO cash=2000 sections=0 laps=0 vehicles=1
+END
+OK! Játék leállítása!

@@ -116,10 +116,12 @@ public class Bus extends Vehicle{
         if(currRoadSection == null) return;
 
         /* 2. Útszakaszon halad a busz. */
+        boolean sectionAdvanced = false;
         if(currRoadSection.next != null) {
             RoadSection oldRoadSection = currRoadSection;
             if(oldRoadSection.next.accept(this)) {
                 oldRoadSection.removeVehicle(this);
+                sectionAdvanced = true;
             }
         } else {
             /* 3. Elérte az útszakaszok sorának végét: betér a
@@ -130,6 +132,7 @@ public class Bus extends Vehicle{
             arrived.addVehicle(this);
             oldRoadSection.removeVehicle(this);
             advanceRouteIfAt(arrived);
+            sectionAdvanced = true;
 
             if(arrived.equals(next)) {
                 next = null;
@@ -137,12 +140,21 @@ public class Bus extends Vehicle{
             if(arrived.equals(end)) {
                 lapsDone++;
                 finishedLap = true;
+                /* Teljesített körért járó jmf a buszvezetőnek. */
+                creditOwner(200);
+                if(owner != null) owner.incrementLapsDone();
             }
         }
 
         /* Hólánc fogyasztása minden megtett útszakasz után. */
         if(hasSnowchain) {
             snowchain.use();
+        }
+
+        /* Megtett útszakaszért járó 10 jmf a buszvezető játékosnak. */
+        if(sectionAdvanced){
+            creditOwner(10);
+            if(owner != null) owner.incrementSectionsDone();
         }
     }
 
