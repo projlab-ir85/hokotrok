@@ -1,0 +1,13 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+ERROR! Unknown command: parancs_amit_nem_ismerunk
+ERROR! Unknown command: foobar
+STATE
+vehicles=0
+roads=0
+segments=0
+intersections=0
+time=0
+mode=deterministic
+END
+OK! Játék leállítása!

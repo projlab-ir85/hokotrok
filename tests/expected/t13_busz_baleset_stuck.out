@@ -1,0 +1,28 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Busz létrejött: B1
+OK! Útvonal sikeresen beállítva a járművön: B1
+OK! Baleset állapota beállítva: true
+OK! A játék sikeresen lépett egyet!
+OBJECT Bus B1
+type=Bus
+currentIntersection=K1
+stuck=true
+target=K2
+next=K2
+lapsDone=0
+finishedLap=false
+hasSnowChain=false
+END
+OBJECT Utszakasz U1_0_0_0
+road=U1
+lane=0
+snow=1
+ice=0
+rock=0
+accident=true
+END
+OK! Játék leállítása!

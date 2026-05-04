@@ -1,0 +1,22 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Autó létrejött: A1
+OK! 5 lépés sikeresen lefutattva!
+OBJECT Car A1
+type=Car
+currentIntersection=K2
+stuck=false
+target=K2
+END
+STATE
+vehicles=1
+roads=1
+segments=6
+intersections=2
+time=5
+mode=deterministic
+END
+OK! Játék leállítása!

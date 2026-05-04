@@ -1,0 +1,38 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Hókotró létrejött: H1
+OK! Kotrófej sikeresen felszerelve a hókotróra: H1
+OK! Fogyoeszkoz hozzaadva a SaltShakerHead fejhez!
+OK! Aktiv fej beallitva: SaltShakerHead
+OK! Útvonal sikeresen beállítva a járművön: H1
+OBJECT Snowplow H1
+type=Snowplow
+currentIntersection=K1
+stuck=false
+activeHead=SaltShakerHead
+consumableLeft=3
+headCount=3
+END
+OK! A játék sikeresen lépett egyet!
+OBJECT Utszakasz U1
+road=U1
+lane=0
+snow=6
+ice=5
+rock=0
+accident=false
+END
+OBJECT Snowplow H1
+type=Snowplow
+currentSegment=U1
+currentRoad=U1
+currentLane=0
+stuck=false
+activeHead=SaltShakerHead
+consumableLeft=2
+headCount=3
+END
+OK! Játék leállítása!

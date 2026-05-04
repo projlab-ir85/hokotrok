@@ -1,0 +1,17 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create keresztezodes K3
+create keresztezodes K4
+create ut U1 K1 K2 1 1 false 0 0 0 fout
+create ut U2 K2 K3 1 1 false 0 0 0 fout
+create ut U3 K3 K4 1 1 false 0 0 0 fout
+create auto A1 K1 K4
+route A1
+create busz B1 K1 K4
+route B1
+create hokotro H1 K1
+route H1
+route NEMLETEZO
+exit

@@ -43,7 +43,10 @@ public class Commands {
     }
 
     public void dispatch(String input) throws Exception{
-        String[] inputs = input.split(" ");
+        if(input == null) return;
+        input = input.replace("\r", "").trim();
+        if(input.isEmpty()) return;
+        String[] inputs = input.split("\\s+");
         String commandName = inputs[0];
         try {
             Method m = this.getClass().getMethod(commandName, String[].class);
@@ -137,7 +140,7 @@ public class Commands {
         Intersection start = controller.findIntersectionById(args[1-i]);
         Intersection end = controller.findIntersectionById(args[2-i]);
 
-        Road.Way way = args[5-1].equals("true") ? Road.Way.ONEWAY : Road.Way.TWOWAY;
+        Road.Way way = args[5-i].equals("true") ? Road.Way.ONEWAY : Road.Way.TWOWAY;
 
         Road.Type type = switch(args[9-i]){
             case "alagut" -> Road.Type.ALAGUT;
@@ -160,7 +163,8 @@ public class Commands {
 
         controller.roads.add(road);
         start.addRoad(road);
-        okMessage("Út létrejött: " + args[0]);
+        end.addRoad(road);
+        okMessage("Út létrejött: " + road.getId());
     }
 
     @CommandInfo(name="create busz", description = "Új buszt hoz létre.", args="<id> <startKeresztezodes> <celKeresztezodes> [<true|false> <keresztezodesId|utszakaszId]")
@@ -429,6 +433,26 @@ public class Commands {
         }
     }
 
+    @CommandInfo(description = "A buszvezető játékos által kijelölt következő kereszteződés beállítása a buszon.", args = "<buszId> <keresztezodesId>")
+    public void setkovetkezo(String[] args){
+        if(args.length < 2){
+            errorMessage("Hiányzó paraméterek!");
+            return;
+        }
+        Vehicle v = controller.findVehiclebyId(args[0]);
+        if(!(v instanceof Bus bus)){
+            errorMessage("A jármű nem található vagy nem busz!");
+            return;
+        }
+        Intersection inter = controller.findIntersectionById(args[1]);
+        if(inter == null){
+            errorMessage("Kereszteződés nem található!");
+            return;
+        }
+        bus.setNext(inter);
+        okMessage("Busz következő kereszteződése beállítva: " + args[0] + " -> " + args[1]);
+    }
+
     @CommandInfo(description = "Beállítja a megadott jármű útvonalát.", args = "<jarmuId> <keresztezodes1> <keresztezodes2> [<keresztezodes3> ...]")
     public void setutvonal(String[] args){
 
@@ -506,6 +530,9 @@ public class Commands {
 
                 if(v instanceof Bus bus){
                     message("target="+v.getEndIntersection().getId());
+                    if(bus.getPlayerNext() != null) message("next="+bus.getPlayerNext().getId());
+                    message("lapsDone="+bus.getLapsDone());
+                    message("finishedLap="+bus.isFinishedLap());
                     message("hasSnowChain="+bus.getHasSnowchain());
                     if(bus.getHasSnowchain()) message("snowChainDurability="+bus.getSnowchainTTL());
                 }else if(v instanceof Car car){

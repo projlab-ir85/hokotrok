@@ -1,0 +1,18 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 1 false 0 0 0 fout
+create busz B1 K1 K2
+status B1
+setkovetkezo B1 K2
+step
+status B1
+step
+status B1
+setkovetkezo B1 K1
+step
+status B1
+step
+status B1
+exit

@@ -1,0 +1,54 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OBJECT Utszakasz U1_0_0_0
+road=U1
+lane=0
+snow=0
+ice=0
+rock=0
+accident=false
+END
+OBJECT Utszakasz U1_0_0_1
+road=U1
+lane=0
+snow=0
+ice=0
+rock=0
+accident=false
+END
+OBJECT Utszakasz U1_0_0_2
+road=U1
+lane=0
+snow=0
+ice=0
+rock=0
+accident=false
+END
+OBJECT Utszakasz U1_0_1_0
+road=U1
+lane=0
+snow=0
+ice=0
+rock=0
+accident=false
+END
+OBJECT Utszakasz U1_1_0_0
+road=U1
+lane=1
+snow=0
+ice=0
+rock=0
+accident=false
+END
+OBJECT Utszakasz U1_1_1_2
+road=U1
+lane=1
+snow=0
+ice=0
+rock=0
+accident=false
+END
+OK! Játék leállítása!

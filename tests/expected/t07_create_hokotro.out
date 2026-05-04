@@ -1,0 +1,15 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Hókotró létrejött: H1
+OBJECT Snowplow H1
+type=Snowplow
+currentIntersection=K1
+stuck=false
+activeHead=BroomHead
+consumableLeft=0
+headCount=2
+END
+OK! Játék leállítása!

@@ -1,0 +1,27 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Hókotró létrejött: H1
+OK! Kotrófej sikeresen felszerelve a hókotróra: H1
+OK! Aktiv fej beallitva: ThrowHead
+OK! Útvonal sikeresen beállítva a járművön: H1
+OBJECT Utszakasz U1
+road=U1
+lane=0
+snow=12
+ice=0
+rock=4
+accident=false
+END
+OK! A játék sikeresen lépett egyet!
+OBJECT Utszakasz U1
+road=U1
+lane=0
+snow=0
+ice=0
+rock=0
+accident=false
+END
+OK! Játék leállítása!

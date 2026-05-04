@@ -1,0 +1,15 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 1 false 5 5 0 fout
+create hokotro H1 K1
+attach fej H1 SaltShakerHead
+add consumable H1 3 SaltShakerHead
+setactivefej H1 SaltShakerHead
+setutvonal H1 K2
+status H1
+step
+status U1
+status H1
+exit
