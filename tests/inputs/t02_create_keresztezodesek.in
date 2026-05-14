@@ -1,7 +1,0 @@
-newgame
-mode deterministic
-create keresztezodes K1
-create keresztezodes K2
-create keresztezodes K3
-status
-exit
