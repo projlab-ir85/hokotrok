@@ -4,6 +4,7 @@ import Attachments.PlowHead;
 import Attachments.PlowHeads.*;
 import RoadComponents.Intersection;
 import RoadComponents.RoadSection;
+import Util.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,4 +137,8 @@ public class Snowplow extends Vehicle{
     public Intersection getCurrIntersection() { return currIntersection; }
 
     public void setCurrIntersection(Intersection i) { currIntersection = i; }
+
+    public void addObserver(Observer o){}
+    public void removeObserver(Observer o){}
+    public void notifyObservers(){}
 }

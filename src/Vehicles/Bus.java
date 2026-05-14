@@ -3,6 +3,7 @@ package Vehicles;
 import Attachments.Snowchain;
 import RoadComponents.Intersection;
 import RoadComponents.RoadSection;
+import Util.Observer;
 
 public class Bus extends Vehicle{
     protected Snowchain snowchain;
@@ -178,4 +179,8 @@ public class Bus extends Vehicle{
     public void setCurrIntersection(Intersection i) { currIntersection = i; }
 
     public Intersection getNext(){return next;}
+
+    public void addObserver(Observer o){}
+    public void removeObserver(Observer o){}
+    public void notifyObservers(){}
 }

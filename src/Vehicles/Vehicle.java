@@ -2,9 +2,12 @@ package Vehicles;
 
 import Control.Player;
 import RoadComponents.*;
+import Util.Observer;
+import Util.Subject;
+
 import java.util.List;
 
-public abstract class Vehicle implements Movable{
+public abstract class Vehicle implements Movable, Subject {
     protected boolean stuck;
     protected List<Intersection> junctions;
     protected RoadSection currRoadSection;
@@ -17,6 +20,7 @@ public abstract class Vehicle implements Movable{
     /** A jármű tulajdonos játékosa (ha van). A mozgások utáni jmf
      * jóváírás a tulajdonos pénztárcájába történik. */
     protected Player owner;
+    private List<Observer> observers;
 
     public Player getOwner(){ return owner; }
 

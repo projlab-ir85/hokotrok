@@ -1,6 +1,8 @@
 package RoadComponents;
 
 import Consumable.Consumable;
+import Util.Observer;
+import Util.Subject;
 import Vehicles.Vehicle;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
  * Ez az osztály felel az időjárási elemek (hó, jég) és a balesetek nyilvántartásáért, a rajta tartózkodó járművek és fogyóeszközök kezeléséért, valamint 
  * referenciákat tartalmaz a szomszédos útszakaszokra.
  */
-public class RoadSection implements Updateable{
+public class RoadSection implements Updateable, Subject {
     protected String id;
     /** Az útszakaszon lévő hó mennyisége. */
     protected int snowLevel;
@@ -44,6 +46,8 @@ public class RoadSection implements Updateable{
     protected Lane lane;
     /** Az alsáv indexe, amelyben ez az útszakasz elhelyezkedik. */
     protected int sublaneIndex;
+
+    private List<Observer> observers;
 
     /**
      * Útszakasz konstruktora.
@@ -160,4 +164,8 @@ public class RoadSection implements Updateable{
     public void removeVehicle(Vehicle v){
         vehicles.remove(v);
     }
+
+    public void addObserver(Observer o){}
+    public void removeObserver(Observer o){}
+    public void notifyObservers(){}
 }

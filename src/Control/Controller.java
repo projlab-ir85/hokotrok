@@ -5,6 +5,7 @@ import RoadComponents.Road;
 import RoadComponents.RoadSection;
 import Vehicles.GPS.BFS;
 import Vehicles.Vehicle;
+import View.Swing.GameView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,6 +26,8 @@ public class Controller {
     protected boolean deterministic;
     protected List<BFS> bfsList;
     protected List<Player> players;
+    private GameView gameView;
+    private int viewTicksPerGameTick;
 
     public Controller(){
         isRunning = false;
@@ -165,5 +168,9 @@ public class Controller {
                 .map(r -> r.findRoadSectionById(id))
                 .filter(Objects::nonNull)
                 .findFirst().orElse(null);
+    }
+
+    public void startGraphics(){
+        gameView = new GameView(this);
     }
 }

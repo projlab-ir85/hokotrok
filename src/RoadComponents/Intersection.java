@@ -1,5 +1,7 @@
 package RoadComponents;
 
+import Util.Observer;
+import Util.Subject;
 import Vehicles.Vehicle;
 
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.List;
  * Egy kereszteződést reprezentáló osztály a közúti hálózatban.
  * Ez az osztály köti össze a különböző utakat, és nyilvántartja a kereszteződésen áthaladó vagy ott tartózkodó járműveket.
  */
-public class Intersection {
+public class Intersection implements Subject {
     /**
      * A kereszteződés egyedi azonosítója.
      */
@@ -21,6 +23,8 @@ public class Intersection {
      * Egy lista a kereszteződésben jelenleg tartózkodó járművekről.
      */
     protected List<Vehicle> vehicles;
+
+    private List<Observer> observers;
 
     /**
      * Az Intersection osztály alapértelmezett konstruktora.
@@ -79,4 +83,8 @@ public class Intersection {
     public List<Road> getRoads(){return roads;}
 
     public List<Vehicle> getVehicles(){return vehicles;}
+
+    public void addObserver(Observer o){}
+    public void removeObserver(Observer o){}
+    public void notifyObservers(){}
 }

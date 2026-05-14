@@ -1,0 +1,24 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Kereszteződés létrejött: K3
+OK! Út létrejött: U1
+OK! Út létrejött: U2
+OK! Busz létrejött: B1
+OK! Autó létrejött: A1
+OK! Hókotró létrejött: H1
+LIST keresztezodesek
+K1 Keresztezodes
+K2 Keresztezodes
+K3 Keresztezodes
+LIST utak
+U1 Ut
+U2 Ut
+LIST jarmuvek
+B1 Bus
+A1 Car
+H1 Snowplow
+LIST ismeretlen
+ERROR! Ismeretlen típus!
+OK! Játék leállítása!

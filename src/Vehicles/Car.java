@@ -3,6 +3,7 @@ package Vehicles;
 import RoadComponents.Intersection;
 import RoadComponents.Road;
 import RoadComponents.RoadSection;
+import Util.Observer;
 
 public class Car extends Vehicle{
     /**
@@ -67,4 +68,8 @@ public class Car extends Vehicle{
     public void interact(RoadSection rs){
         rs.iceIncrease(1);
     }
+
+    public void addObserver(Observer o){}
+    public void removeObserver(Observer o){}
+    public void notifyObservers(){}
 }

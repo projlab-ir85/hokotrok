@@ -1,0 +1,14 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Kereszteződés létrejött: K3
+STATE
+vehicles=0
+roads=0
+segments=0
+intersections=3
+time=0
+mode=deterministic
+END
+OK! Játék leállítása!

@@ -1,0 +1,18 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Játékos létrejött: P1 (BUSZVEZETO, 0 jmf)
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Busz létrejött: B1
+OK! Jármű hozzárendelve: B1 -> P1
+P1 cash=0
+OK! Busz következő kereszteződése beállítva: B1 -> K2
+OK! A játék sikeresen lépett egyet!
+P1 cash=0
+OK! A játék sikeresen lépett egyet!
+P1 cash=210
+PLAYERS
+P1 role=BUSZVEZETO cash=210 sections=1 laps=1 vehicles=1
+END
+OK! Játék leállítása!

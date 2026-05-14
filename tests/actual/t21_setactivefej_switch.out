@@ -1,0 +1,44 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Hókotró létrejött: H1
+OK! Kotrófej sikeresen felszerelve a hókotróra: H1
+OK! Kotrófej sikeresen felszerelve a hókotróra: H1
+OBJECT Snowplow H1
+type=Snowplow
+currentIntersection=K1
+stuck=false
+activeHead=BroomHead
+consumableLeft=0
+headCount=4
+END
+OK! Aktiv fej beallitva: IceBreakerHead
+OBJECT Snowplow H1
+type=Snowplow
+currentIntersection=K1
+stuck=false
+activeHead=IceBreakerHead
+consumableLeft=0
+headCount=4
+END
+OK! Aktiv fej beallitva: ThrowHead
+OBJECT Snowplow H1
+type=Snowplow
+currentIntersection=K1
+stuck=false
+activeHead=ThrowHead
+consumableLeft=0
+headCount=4
+END
+OK! Aktiv fej beallitva: RockHead
+OBJECT Snowplow H1
+type=Snowplow
+currentIntersection=K1
+stuck=false
+activeHead=RockHead
+consumableLeft=0
+headCount=4
+END
+OK! Játék leállítása!
