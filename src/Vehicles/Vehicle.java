@@ -1,5 +1,6 @@
 package Vehicles;
 
+import Control.Player;
 import RoadComponents.*;
 import java.util.List;
 
@@ -9,6 +10,28 @@ public abstract class Vehicle implements Movable{
     protected RoadSection currRoadSection;
     protected Intersection currIntersection;
     protected int stuckTime;
+    protected String id;
+    protected Intersection start;
+    protected Intersection end;
+    protected int nextIntersectionIndex;
+    /** A jármű tulajdonos játékosa (ha van). A mozgások utáni jmf
+     * jóváírás a tulajdonos pénztárcájába történik. */
+    protected Player owner;
+
+    public Player getOwner(){ return owner; }
+
+    public void setOwner(Player owner){ this.owner = owner; }
+
+    /** Segédmetódus: ha van tulajdonos, jmf-et ír jóvá neki. */
+    protected void creditOwner(int amount){
+        if(owner != null) owner.earn(amount);
+    }
+
+    public String getId(){return id;}
+
+    public Intersection getStartIntersection(){return start;}
+
+    public Intersection getEndIntersection(){return end;}
 
     /**
      * Interakcióba lép az adott útszakasszal
@@ -28,10 +51,54 @@ public abstract class Vehicle implements Movable{
 
     public RoadSection getCurrRoadSection() { return currRoadSection; }
 
+    public Intersection getCurrIntersection(){return currIntersection;}
+
+    public void setCurrIntersection(Intersection intersection){
+        currIntersection = intersection;
+    }
+
     public boolean isStuck() { return stuck; }
 
     public void setStuck(boolean value) {
         stuck = value;
         if(value) stuckTime = 3;
+    }
+
+    public void tickStuck() {
+        if(!stuck) return;
+
+        stuckTime--;
+        if(stuckTime <= 0) {
+            stuck = false;
+            stuckTime = 0;
+        }
+    }
+
+    public List<Intersection> getJunctions(){return junctions;}
+
+    public void setRoute(List<Intersection> route){
+        junctions = route;
+        nextIntersectionIndex = 0;
+        if(currIntersection != null) {
+            advanceRouteIfAt(currIntersection);
+        }
+    }
+
+    public Intersection getNextIntersection(){
+        if(junctions == null || junctions.isEmpty()) {
+            return end;
+        }
+        if(nextIntersectionIndex >= junctions.size()) {
+            return null;
+        }
+        return junctions.get(nextIntersectionIndex);
+    }
+
+    public void advanceRouteIfAt(Intersection intersection){
+        if(junctions == null || intersection == null) return;
+
+        while(nextIntersectionIndex < junctions.size() && junctions.get(nextIntersectionIndex).equals(intersection)) {
+            nextIntersectionIndex++;
+        }
     }
 }

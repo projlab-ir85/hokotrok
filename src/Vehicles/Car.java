@@ -1,12 +1,10 @@
 package Vehicles;
 
 import RoadComponents.Intersection;
+import RoadComponents.Road;
 import RoadComponents.RoadSection;
 
 public class Car extends Vehicle{
-    protected Intersection start;
-    protected Intersection end;
-
     /**
      * Új Car példány létrehozása
      * @param start kezdőpont
@@ -14,11 +12,13 @@ public class Car extends Vehicle{
      * inicializálja az útvonalat, illetve beállítja az alapállapotot
      * alapállapotban nincsen elakadva
      */
-    public Car(Intersection start, Intersection end) {
+    public Car(String id, Intersection start, Intersection end) {
+        this.id = id;
         this.start = start;
         this.end = end;
         stuck = false;
         stuckTime = 0;
+        nextIntersectionIndex = 0;
     }
 
     /**
@@ -30,8 +30,33 @@ public class Car extends Vehicle{
             stuckTime--;
             return;
         }
+
+        if(currRoadSection == null && currIntersection != null) {
+            Intersection next = getNextIntersection();
+            if(next == null) return;
+            Intersection oldIntersection = currIntersection;
+            RoadSection rs = currIntersection.roadSelection(next);
+            if(rs != null && rs.accept(this)) {
+                oldIntersection.getVehicles().remove(this);
+            }
+            return;
+        }
+
+        if(currRoadSection == null) return;
+        
         /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
-        currRoadSection.next.accept(this);
+        if(currRoadSection.next != null) {
+            RoadSection oldRoadSection = currRoadSection;
+            if(oldRoadSection.next.accept(this)) {
+                oldRoadSection.removeVehicle(this);
+            }
+        } else {
+            RoadSection oldRoadSection = currRoadSection;
+            Intersection arrived = oldRoadSection.getLane().getEnd();
+            currRoadSection.getLane().getEnd().addVehicle(this);
+            oldRoadSection.removeVehicle(this);
+            advanceRouteIfAt(arrived);
+        }
     }
 
     /**

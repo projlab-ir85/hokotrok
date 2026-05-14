@@ -1,0 +1,20 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create keresztezodes K3
+create keresztezodes K4
+create keresztezodes K5
+create ut U1 K1 K2 1 1 false 0 0 0 fout
+create ut U2 K2 K3 1 1 false 0 0 0 fout
+create ut U3 K2 K4 1 1 false 0 0 0 alagut
+create ut U4 K3 K5 1 1 false 0 0 0 fout
+create ut U5 K4 K5 1 1 false 0 0 0 hid
+create auto A1 K1 K5
+create auto A2 K2 K5
+create auto A3 K1 K4
+route A1
+route A2
+route A3
+status
+exit

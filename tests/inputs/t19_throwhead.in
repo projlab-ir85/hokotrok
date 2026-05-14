@@ -1,0 +1,13 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 1 false 12 0 4 fout
+create hokotro H1 K1
+attach fej H1 ThrowHead
+setactivefej H1 ThrowHead
+setutvonal H1 K2
+status U1
+step
+status U1
+exit

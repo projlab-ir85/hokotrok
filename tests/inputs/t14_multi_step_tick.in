@@ -1,0 +1,10 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 3 false 0 0 0 fout
+create auto A1 K1 K2
+tick 5
+status A1
+status
+exit

@@ -12,7 +12,7 @@ public class Intersection {
     /**
      * A kereszteződés egyedi azonosítója.
      */
-    protected int id;
+    protected String id;
     /**
      * A kereszteződéshez közvetlenül csatlakozó utak listája.
      */
@@ -26,14 +26,16 @@ public class Intersection {
      * Az Intersection osztály alapértelmezett konstruktora.
      * Létrehozáskor inicializálja az utak és a járművek üres listáit.
      */
-    public Intersection() {
+    public Intersection(String id) {
+        this.id = id;
         roads = new java.util.ArrayList<>();
         vehicles = new java.util.ArrayList<>();
     }
 
     public RoadSection roadSelection(Intersection destination){
         for(Road road : roads){
-            if(road.startPoint.equals(destination) || road.endPoint.equals(destination)){
+            if((road.startPoint.equals(this) && road.endPoint.equals(destination)) ||
+               (road.startPoint.equals(destination) && road.endPoint.equals(this))){
                 return road.getDriveableRoadSection(destination);
             }
         }
@@ -46,7 +48,7 @@ public class Intersection {
      * @param road A hozzáadni kívánt út objektuma.
      */
     public void addRoad(Road road){
-        if(road.endPoint.equals(this) || road.startPoint.equals(this)){
+        if(road.getStartIntersectionId().equals(this.id) || road.getEndIntersectionId().equals(this.id)){
             roads.add(road);
         }
     }
@@ -58,5 +60,23 @@ public class Intersection {
      */
     public void addVehicle(Vehicle vehicle){
         vehicles.add(vehicle);
+        vehicle.setCurrIntersection(this);
+        vehicle.setCurrRoadSection(null);
     }
+
+    public void removeVehicle(Vehicle vehicle){
+        vehicles.remove(vehicle);
+    }
+
+    public void tick(){
+        for(Vehicle v : vehicles){
+            v.step();
+        }
+    }
+
+    public String getId(){return id;}
+
+    public List<Road> getRoads(){return roads;}
+
+    public List<Vehicle> getVehicles(){return vehicles;}
 }

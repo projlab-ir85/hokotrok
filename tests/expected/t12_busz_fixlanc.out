@@ -1,0 +1,38 @@
+OK! Új játék létrehozva
+OK! Deterministic mód beállítva!
+OK! Kereszteződés létrejött: K1
+OK! Kereszteződés létrejött: K2
+OK! Út létrejött: U1
+OK! Busz létrejött: B1
+OK! Hólánc sikeresen felszerelve: B1
+OK! Útvonal sikeresen beállítva a járművön: B1
+OK! A játék sikeresen lépett egyet!
+OK! A játék sikeresen lépett egyet!
+OBJECT Bus B1
+type=Bus
+currentSegment=U1_0_0_1
+currentRoad=U1
+currentLane=0
+stuck=false
+target=K2
+next=K2
+lapsDone=0
+finishedLap=false
+hasSnowChain=true
+snowChainDurability=3
+END
+OK! Hólánc megjavítva a buszon: B1
+OBJECT Bus B1
+type=Bus
+currentSegment=U1_0_0_1
+currentRoad=U1
+currentLane=0
+stuck=false
+target=K2
+next=K2
+lapsDone=0
+finishedLap=false
+hasSnowChain=true
+snowChainDurability=4
+END
+OK! Játék leállítása!

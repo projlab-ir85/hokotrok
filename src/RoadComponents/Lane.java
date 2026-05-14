@@ -1,11 +1,14 @@
 package RoadComponents;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import Vehicles.Vehicle;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Lane {
+
+    String roadId;
+    int indexInRoad;
     /**
      * Az alsávokat és a belőlük felépülő útszakaszokat tartalmazó kétdimenziós lista.
      * Az első dimenzió az alsáv indexe, a második pedig az adott alsávhoz tartozó útszakaszok sorrendje.
@@ -15,6 +18,8 @@ public class Lane {
      * A nem használható alsávok indexeit tároló halmaz.
      */
     protected Set<Integer> blockedSublanes;
+
+    protected Map<Integer, Integer> roadSectionsWithAccidents;
     /**
      * A sáv kezdőpontját jelentő kereszteződés.
      */
@@ -31,14 +36,16 @@ public class Lane {
      * @param start A sáv kiindulási kereszteződése.
      * @param end A sáv végkereszteződése.
      */
-    public Lane(int sublanes, int length, Intersection start, Intersection end){
+    public Lane(String id, int index, int sublanes, int length, Intersection start, Intersection end, int snowLevel, int iceLevel, int rockLevel, Road.Type type){
+        this.roadId = id;
+        this.indexInRoad = index;
         this.start = start;
         this.end = end;
         subLanes = new ArrayList<>();
         blockedSublanes = new HashSet<>();
 
         //creating lanes and filling them
-        createLanes(sublanes, length);
+        createLanes(id, sublanes, length, snowLevel, iceLevel, rockLevel, type);
 
         //setting neighbouring road sections
         setNeighbours(sublanes);
@@ -49,14 +56,22 @@ public class Lane {
      * @param sublanes A létrehozandó alsávok száma.
      * @param length A létrehozandó alsávok hossza (útszakaszokban mérve).
      */
-    private void createLanes(int sublanes, int length){
+    private void createLanes(String id, int sublanes, int length, int snowLevel, int iceLevel, int rockLevel, Road.Type type){
         for(int i = 0; i < sublanes; i++){
             subLanes.add(new ArrayList<>());
 
             for(int j = 0; j < length; j++){
-                subLanes.get(i).add(new RoadSection(this, i));
+                String sectionId = createRoadSectionId(id, sublanes, length, i, j);
+                subLanes.get(i).add(new RoadSection(sectionId,this, i, snowLevel, iceLevel, rockLevel, type));
             }
         }
+    }
+
+    private String createRoadSectionId(String id, int sublanes, int length, int sublaneIndex, int sectionIndex){
+        if(indexInRoad == 0 && sublanes == 1 && length == 1){
+            return id;
+        }
+        return id + "_" + indexInRoad + "_" + sublaneIndex + "_" + sectionIndex;
     }
 
     /**
@@ -74,7 +89,7 @@ public class Lane {
                     currSection.previous = currLane.get(j-1);
                 }
 
-                if(!currLane.get(currLane.size()-1).equals(currSection)){
+                if(!currLane.get(currLane.size() - 1).equals(currSection)){
                     currSection.next = currLane.get(j+1);
                 }
 
@@ -83,7 +98,7 @@ public class Lane {
                         currSection.left = subLanes.get(i-1).get(j);
                     }
 
-                    if(!subLanes.get(subLanes.size()-1).equals(currLane)){
+                    if(!subLanes.get(subLanes.size() - 1).equals(currLane)){
                         currSection.right = subLanes.get(i+1).get(j);
                     }
                 }
@@ -115,4 +130,40 @@ public class Lane {
         }
         return null;
     }
+
+    public List<RoadSection> getAllRoadsectionsWithAccidents(){
+        return roadSectionsWithAccidents.entrySet().stream()
+                .map(entry -> subLanes.get(entry.getKey()).get(entry.getValue()))
+                .collect(Collectors.toList());
+    }
+
+    public List<RoadSection> getAllRoadSections(){
+        return subLanes.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public void tick(){
+        for(List<RoadSection> sublane : subLanes){
+            for(RoadSection rs : sublane){
+                rs.tick();
+            }
+        }
+    }
+
+    public int getSnowLevel(){List<RoadSection> lastSubLane = subLanes.get(subLanes.size() - 1); return lastSubLane.get(lastSubLane.size() - 1).snowLevel;}
+    public int getIceLevel(){List<RoadSection> lastSubLane = subLanes.get(subLanes.size() - 1); return lastSubLane.get(lastSubLane.size() - 1).iceLevel;}
+    public int getRockLevel(){List<RoadSection> lastSubLane = subLanes.get(subLanes.size() - 1); return lastSubLane.get(lastSubLane.size() - 1).rockLevel;}
+    public Road.Type getType(){List<RoadSection> lastSubLane = subLanes.get(subLanes.size() - 1); return lastSubLane.get(lastSubLane.size() - 1).type;}
+
+    public List<Vehicle> getAllVehicles(){
+        return subLanes.stream()
+                .flatMap(List::stream)
+                .flatMap(roadSection -> roadSection.getVehicles().stream())
+                .collect(Collectors.toList());
+    }
+
+    public String getRoadId(){return roadId;}
+    public int getIndexInRoad(){return indexInRoad;}
+    public Intersection getEnd(){return end;}
 }

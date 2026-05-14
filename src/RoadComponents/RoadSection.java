@@ -12,10 +12,14 @@ import java.util.List;
  * referenciákat tartalmaz a szomszédos útszakaszokra.
  */
 public class RoadSection implements Updateable{
+    protected String id;
     /** Az útszakaszon lévő hó mennyisége. */
     protected int snowLevel;
     /** Az útszakaszon lévő jég mennyisége. */
     protected int iceLevel;
+    protected int rockLevel;
+
+    protected Road.Type type;
 
     /** Jelzi, hogy történt-e baleset ezen az útszakaszon. */
     protected boolean accidentHappened;
@@ -47,9 +51,12 @@ public class RoadSection implements Updateable{
      * @param lane A sáv, amibe beletartozik.
      * @param sublaneIndex Az alsáv indexe, ahol elhelyezkedik.
      */
-    public RoadSection(Lane lane, int sublaneIndex){
-        snowLevel = 0;
-        iceLevel = 0;
+    public RoadSection(String id, Lane lane, int sublaneIndex, int snowLevel, int iceLevel, int rockLevel, Road.Type type){
+        this.id = id;
+        this.snowLevel = snowLevel;
+        this.iceLevel = iceLevel;
+        this.rockLevel = rockLevel;
+        this.type = type;
         accidentHappened = false;
         accidentTime = 0;
 
@@ -91,6 +98,10 @@ public class RoadSection implements Updateable{
      */
     public void iceIncrease(int amount){ iceLevel += amount; }
 
+    public void rockIncrease(int amount){rockLevel += amount;}
+
+    public void rockReduce(int amount){rockLevel -= amount;}
+
     public void update(){
         java.util.Iterator<Consumable> it = consumables.iterator();
         while(it.hasNext()){
@@ -108,6 +119,7 @@ public class RoadSection implements Updateable{
         }
         vehicles.add(v);
         v.setCurrRoadSection(this);
+        v.setCurrIntersection(null);
         v.interact(this);
         return true;
     }
@@ -118,7 +130,34 @@ public class RoadSection implements Updateable{
 
     public int getIce() { return iceLevel; }
 
+    public int getRock(){return rockLevel;}
+
     public int getConsumableCount() { return consumables.size(); }
 
     public void setAccident(boolean happened){ accidentHappened = happened; }
+
+    public void tick(){
+        update();
+        for(Vehicle v : vehicles){
+            v.step();
+        }
+    }
+
+    public String getId(){return id;}
+
+    public List<Vehicle> getVehicles(){return vehicles;}
+
+    public void addVehicle(Vehicle v){
+        vehicles.add(v);
+        v.setCurrRoadSection(this);
+        v.setCurrIntersection(null);
+    }
+
+    public Lane getLane(){ return lane;}
+
+    public boolean getAccidentHappened(){return accidentHappened;}
+
+    public void removeVehicle(Vehicle v){
+        vehicles.remove(v);
+    }
 }

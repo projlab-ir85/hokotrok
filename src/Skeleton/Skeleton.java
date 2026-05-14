@@ -1,5 +1,8 @@
 package Skeleton;
 
+import Control.Colors;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,15 +16,7 @@ public class Skeleton {
     private List<Runnable> tests = new ArrayList<>();
     private static final Scanner scanner = new Scanner(System.in);
     private static int indent = 0;
-    /** Színek definiálása
-     */
-    private static final String RESETCOLOR = "\u001B[0m";
-    private static final String BLUE = "\u001B[34m";
-    private static final String PURPLE = "\u001B[35m";
-    private static final String YELLOW = "\u001B[38;5;226m";
-    private static final String RED = "\u001B[31m";
-    private static final String GREEN = "\u001B[92m";
-    private static final String ORANGE = "\u001B[38;5;214m";
+
     /** Konstruktor
      * minden tesztesetet hozzáadunk a tests listánkhoz
      * @param t egy teszt példány amit
@@ -73,11 +68,11 @@ public class Skeleton {
      */
     public static void call(String caller, String callee, String method, boolean increase){
         System.out.println("\t".repeat(indent)
-                + ORANGE + caller + RESETCOLOR
+                + Colors.ORANGE + caller + Colors.RESETCOLOR
                 + " --> "
-                + ORANGE + callee + RESETCOLOR
+                + Colors.ORANGE + callee + Colors.RESETCOLOR
                 + "."
-                + BLUE + method + RESETCOLOR
+                + Colors.BLUE + method + Colors.RESETCOLOR
         );
 
         if(increase) increaseIndent();
@@ -93,13 +88,13 @@ public class Skeleton {
     public static void returnCall(String caller, String callee, String method, String result){
         decreaseIndent();
         System.out.println("\t".repeat(indent)
-                + ORANGE + callee + RESETCOLOR
+                + Colors.ORANGE + callee + Colors.RESETCOLOR
                 + " <-- "
-                + ORANGE + caller + RESETCOLOR
+                + Colors.ORANGE + caller + Colors.RESETCOLOR
                 + "."
-                + BLUE + method + RESETCOLOR
+                + Colors.BLUE + method + Colors.RESETCOLOR
                 + ": "
-                + PURPLE + result + RESETCOLOR
+                + Colors.PURPLE + result + Colors.RESETCOLOR
         );
     }
     /** A program főmenüje
@@ -108,10 +103,10 @@ public class Skeleton {
      * Ha a tesztelő rossz számot adott akkor jelzi a hibát
      */
     public void menu(){
-        System.out.println(GREEN + "[MENU]");
+        System.out.println(Colors.GREEN + "[MENU]");
 
         for(int i = 0; i < tests.size(); i++){
-            System.out.println(BLUE + (i+1) + RESETCOLOR + " - test" + (i+1));
+            System.out.println(Colors.BLUE + (i+1) + Colors.RESETCOLOR + " - test" + (i+1));
         }
 
         System.out.print(">");
@@ -119,7 +114,7 @@ public class Skeleton {
         int index = scanner.nextInt();
 
         if(index < 1 || index > tests.size()){
-            System.out.println(RED + "Invalid index." + RESETCOLOR);
+            System.out.println(Colors.RED + "Invalid index." + Colors.RESETCOLOR);
             return;
         }
 
@@ -131,7 +126,7 @@ public class Skeleton {
      * @param message az üzenet amit kiír
      */
     private static void info(String message){
-        System.out.println(YELLOW + "[INFO] " + RESETCOLOR + message + "\n" + RESETCOLOR);
+        System.out.println(Colors.YELLOW + "[INFO] " + Colors.RESETCOLOR + message + "\n" + Colors.RESETCOLOR);
     }
     /** Kérdés függvény
      * Kiírja a szabványos kimenetre a kérdés, majd várja a választ a tesztelőtől
@@ -141,20 +136,20 @@ public class Skeleton {
      * @return true vagy false a tesztelő válasza alapján
      */
     protected static boolean question(String message){
-        System.out.println(GREEN + "[Question] " + RESETCOLOR + message);
+        System.out.println(Colors.GREEN + "[Question] " + Colors.RESETCOLOR + message);
         System.out.print(">");
 
         while(true){
             String ans = scanner.next().toLowerCase();
 
             if(ans.equals("y")){
-                System.out.println(YELLOW + "[DECISION] "+ RESETCOLOR + message + GREEN +": yes\n" + RESETCOLOR);
+                System.out.println(Colors.YELLOW + "[DECISION] "+ Colors.RESETCOLOR + message + Colors.GREEN +": yes\n" + Colors.RESETCOLOR);
                 return true;
             }else if(ans.equals("n")){
-                System.out.println(YELLOW + "[DECISION] " + RESETCOLOR + message + RED + ": no\n" + RESETCOLOR);
+                System.out.println(Colors.YELLOW + "[DECISION] " + Colors.RESETCOLOR + message + Colors.RED + ": no\n" + Colors.RESETCOLOR);
                 return false;
             }else{
-                System.out.println(RED + "Please answer with 'y' or 'n'" + RESETCOLOR);
+                System.out.println(Colors.RED + "Please answer with 'y' or 'n'" + Colors.RESETCOLOR);
                 System.out.print(">");
             }
         }
@@ -163,14 +158,14 @@ public class Skeleton {
      * @param message az üzenet ami kiír
      */
     protected static void error(String message){
-        System.out.println(RED + "[ERROR] " + RESETCOLOR + message+"\n");
+        System.out.println(Colors.RED + "[ERROR] " + Colors.RESETCOLOR + message+"\n");
     }
     /** Kiírja az adott teszt eredményét a standard kimenetre
      * @param result az eredmény amit kiír
      */
     protected static void result(boolean result){
-        System.out.println(YELLOW + "[RESULT] " + RESETCOLOR
-                + (result ? GREEN + "Test successful" : RED + "Test unsuccessful")
-                + "\n" + RESETCOLOR);
+        System.out.println(Colors.YELLOW + "[RESULT] " + Colors.RESETCOLOR
+                + (result ? Colors.GREEN + "Test successful" : Colors.RED + "Test unsuccessful")
+                + "\n" + Colors.RESETCOLOR);
     }
 }

@@ -1,6 +1,11 @@
 package RoadComponents;
 
+import Vehicles.Vehicle;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Két kereszteződést összekötő utat reprezentáló osztály.
@@ -16,6 +21,14 @@ public class Road {
         /** Kétirányú út. */
         TWOWAY
     }
+
+    public enum Type{
+        ALAGUT,
+        FOUT,
+        HID
+    }
+
+    protected String id;
 
     /**
      * Az út hossza (az útszakaszok számában kifejezve).
@@ -43,16 +56,20 @@ public class Road {
      * @param lanes A sávon belüli párhuzamos alsávok száma.
      * @param length Az út hossza.
      */
-    public Road(Intersection start, Intersection end, Way way, int lanes, int length){
+    public Road(String id, Intersection start, Intersection end, int lanes, int length, Way way, int snowLevel, int iceLevel, int rockLevel, Type type){
+        if(id == null){
+            id = start.id+end.id;
+        }
+        this.id = id;
         this.length = length;
 
         if(way == Way.ONEWAY){
             this.lanes = new Lane[1];
-            this.lanes[0] = new Lane(lanes, length, start, end);
+            this.lanes[0] = new Lane(this.id,0, lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
         }else if(way == Way.TWOWAY){
             this.lanes = new Lane[2];
-            this.lanes[0] = new Lane(lanes, length, start, end);
-            this.lanes[1] = new Lane(lanes, length, end, start);
+            this.lanes[0] = new Lane(this.id, 0, lanes, length, start, end, snowLevel, iceLevel, rockLevel, type);
+            this.lanes[1] = new Lane(this.id, 1, lanes, length, end, start, snowLevel, iceLevel, rockLevel, type);
         }
 
         startPoint = start;
@@ -80,6 +97,45 @@ public class Road {
             }
         }
         return null;
+    }
+
+    public void tick(){
+        for(Lane l : lanes){
+            l.tick();
+        }
+    }
+
+    public void updateRoadSections(){
+        for(Lane lane : lanes){
+            for(RoadSection roadSection : lane.getAllRoadSections()){
+                roadSection.update();
+            }
+        }
+    }
+
+    public String getId(){return id;}
+    public String getStartIntersectionId(){return startPoint.id;}
+    public String getEndIntersectionId(){return endPoint.id;}
+    public int getLaneCount(){return lanes[0].subLanes.size();}
+    public int getLength(){return length;}
+    public boolean getWay(){return lanes.length == 1;}
+    public int getSnowLevel(){return lanes[0].getSnowLevel();}
+    public int getIceLevel(){return lanes[0].getIceLevel();}
+    public int getRockLevel(){return lanes[0].getRockLevel();}
+    public Type getType(){return lanes[0].getType();}
+    public List<Lane> getLanes(){return Collections.unmodifiableList(Arrays.asList(lanes));}
+
+    public List<Vehicle> getAllVehicles(){
+        return Arrays.stream(lanes)
+                .flatMap(lane -> lane.getAllVehicles().stream())
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public RoadSection findRoadSectionById(String id){
+            return Arrays.stream(lanes)
+                    .flatMap(lane -> lane.getAllRoadSections().stream())
+                    .filter(rs -> rs.getId().equals(id))
+                    .findFirst().orElse(null);
     }
 
     //demo

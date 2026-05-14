@@ -1,0 +1,16 @@
+newgame
+mode deterministic
+createplayer P1 buszvezeto 0
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 1 false 0 0 0 fout
+create busz B1 K1 K2
+assign P1 B1
+cash P1
+setkovetkezo B1 K2
+step
+cash P1
+step
+cash P1
+players
+exit

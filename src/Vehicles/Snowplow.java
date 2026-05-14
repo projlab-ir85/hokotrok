@@ -11,14 +11,14 @@ import java.util.List;
 public class Snowplow extends Vehicle{
     protected List<PlowHead> plowHeads;
     protected PlowHead activePlowHead;
-    protected Intersection start;
 
     /**
      * Új hókotró példány létrehozása
      * @param start kezdőkereszteződés, ahonnét indul
      * inicializálja az alapállapotot a hokotrónak
      */
-    public Snowplow(Intersection start) {
+    public Snowplow(String id, Intersection start) {
+        this.id = id;
         this.start = start;
         currIntersection = start;
         plowHeads = new ArrayList<>();
@@ -28,6 +28,11 @@ public class Snowplow extends Vehicle{
         /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
+        nextIntersectionIndex = 0;
+    }
+
+    public Snowplow(Intersection start) {
+        this(null, start);
     }
 
     /**
@@ -42,6 +47,7 @@ public class Snowplow extends Vehicle{
         /* nincsen elakadva induláskor */
         stuck = false;
         stuckTime = 0;
+        nextIntersectionIndex = 0;
     }
 
     /**
@@ -57,7 +63,45 @@ public class Snowplow extends Vehicle{
      */
     public void step(){
         /* átlép a következő útszakaszra */
-        currRoadSection.next.accept(this);
+        if(currRoadSection == null && currIntersection != null) {
+            Intersection next = getNextIntersection();
+            if(next == null) return;
+            Intersection oldIntersection = currIntersection;
+            RoadSection rs = currIntersection.roadSelection(next);
+            if(rs != null && rs.accept(this)) {
+                oldIntersection.getVehicles().remove(this);
+            }
+            return;
+        }
+
+        if(currRoadSection == null) return;
+
+        /* Mielőtt ellépünk a szakaszról, megjegyezzük, volt-e rajta hó
+         * vagy jég — ha igen és a takarító játékosé ez a hókotró, akkor
+         * a dokumentáció szerint 25 jmf jár érte. */
+        boolean hadSnowOrIce = currRoadSection.getSnow() > 0 || currRoadSection.getIce() > 0;
+
+        /* amennyiben nincsen elakadva akkor átlép a köbetkező útszakaszra */
+        boolean sectionAdvanced = false;
+        if(currRoadSection.next != null) {
+            RoadSection oldRoadSection = currRoadSection;
+            if(oldRoadSection.next.accept(this)) {
+                oldRoadSection.removeVehicle(this);
+                sectionAdvanced = true;
+            }
+        } else {
+            RoadSection oldRoadSection = currRoadSection;
+            Intersection arrived = oldRoadSection.getLane().getEnd();
+            currRoadSection.getLane().getEnd().addVehicle(this);
+            oldRoadSection.removeVehicle(this);
+            advanceRouteIfAt(arrived);
+            sectionAdvanced = true;
+        }
+
+        if(sectionAdvanced){
+            if(owner != null) owner.incrementSectionsDone();
+            if(hadSnowOrIce) creditOwner(25);
+        }
     }
 
     /**
@@ -73,7 +117,17 @@ public class Snowplow extends Vehicle{
         if(activePlowHead != null) activePlowHead.fillConsumable(amount);
     }
 
+    public void fillPlowHead(int amount, Class<? extends PlowHead> plowHeadClass){
+        for(PlowHead ph : plowHeads){
+            if(ph.getClass() == plowHeadClass){
+                ph.fillConsumable(amount);
+            }
+        }
+    }
+
     public int getPlowHeadCount() { return plowHeads.size(); }
+
+    public List<PlowHead> getPlowHeads() {return plowHeads;}
 
     public PlowHead getActivePlowHead() { return activePlowHead; }
 

@@ -1,0 +1,14 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 2 false 0 0 0 fout
+create busz B1 K1 K2
+attach holanc B1 4
+setutvonal B1 K2
+step
+step
+status B1
+fixlanc B1
+status B1
+exit

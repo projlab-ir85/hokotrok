@@ -1,0 +1,15 @@
+newgame
+mode deterministic
+create keresztezodes K1
+create keresztezodes K2
+create ut U1 K1 K2 1 1 false 80 80 0 fout
+create hokotro H1 K1
+attach fej H1 DragonHead
+add consumable H1 2 DragonHead
+setactivefej H1 DragonHead
+setutvonal H1 K2
+status U1
+step
+status U1
+status H1
+exit
