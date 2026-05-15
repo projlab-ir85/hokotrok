@@ -1,4 +1,4 @@
-package View.Scenes;
+package View.UI;
 
 import Control.Controller;
 

@@ -7,6 +7,7 @@ import Vehicles.GPS.BFS;
 import Vehicles.Vehicle;
 import View.GameView;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +21,7 @@ public class Controller {
     protected int tickCount;
     private final BufferedReader reader;
     private final boolean interactive;
+    private final boolean graphical;
     private Commands commands;
     protected List<Intersection> intersections;
     protected List<Road> roads;
@@ -29,12 +31,13 @@ public class Controller {
     private GameView gameView;
     private int viewTicksPerGameTick;
 
-    public Controller(){
+    public Controller(boolean graphical){
         isRunning = false;
         tickCount = 0;
         reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
        
         interactive = System.console() != null;
+        this.graphical = graphical;
         commands = new Commands(this);
         intersections = new ArrayList<>();
         roads = new ArrayList<>();
@@ -49,6 +52,14 @@ public class Controller {
     public List<Player> getPlayers(){ return players; }
 
     public void start() throws Exception{
+        if(graphical){
+            startGraphics();
+        }else{
+            runConsoleLoop();
+        }
+    }
+
+    private void runConsoleLoop() throws Exception{
         isRunning = true;
 
         java.io.Console console = interactive ? System.console() : null;
@@ -171,6 +182,6 @@ public class Controller {
     }
 
     public void startGraphics(){
-        gameView = new GameView(this);
+        SwingUtilities.invokeLater(()-> gameView = new GameView(this));
     }
 }

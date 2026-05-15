@@ -2,11 +2,16 @@ package View;
 
 import Control.Controller;
 import RoadComponents.RoadSection;
-import View.Scenes.ControlPanel;
+import View.Scenes.MainMenu;
+import View.UI.BasePanel;
+import View.UI.ControlPanel;
 import View.MapElements.IntersectionView;
 import View.MapElements.RoadSectionView;
 import View.MapElements.VehicleView;
 
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.*;
@@ -22,6 +27,24 @@ public class GameView extends JFrame{
 
     public GameView(Controller controller){
         this.controller = controller;
+
+        setTitle("Hokotrok");
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        //custom action on close
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent we){
+                exitOperation();
+            }
+        });
+
+        getContentPane().setPreferredSize(new Dimension(1024, 600));
+        setResizable(false);
+        pack();
+
+        showMainMenu();
+
+        setVisible(true);
     }
 
     public void start(){
@@ -34,5 +57,26 @@ public class GameView extends JFrame{
 
     public void loadMap(String graphicsConfigPath){
 
+    }
+
+    public void showMainMenu(){
+        setContentPane(new BasePanel(new MainMenu(), ae -> exitOperation()));
+        revalidate();
+        repaint();
+    }
+
+    public void exitOperation(){
+        int result = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit?",
+                "Confirm exit",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        if(result == JOptionPane.OK_OPTION){
+            controller.exit();
+            System.exit(0);
+        }
     }
 }
