@@ -2,12 +2,9 @@ package View;
 
 import Control.Controller;
 import RoadComponents.RoadSection;
-import View.Scenes.MainMenu;
-import View.UI.BasePanel;
-import View.UI.ControlPanel;
-import View.MapElements.IntersectionView;
-import View.MapElements.RoadSectionView;
-import View.MapElements.VehicleView;
+import View.Scenes.*;
+import View.UI.*;
+import View.MapElements.*;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -60,9 +57,18 @@ public class GameView extends JFrame{
     }
 
     public void showMainMenu(){
-        setContentPane(new BasePanel(new MainMenu(), ae -> exitOperation()));
+        setContentPane(new BasePanel(new MainMenu(this), ae -> exitOperation()));
         revalidate();
-        repaint();
+    }
+
+    public void showNewGameMenu(){
+        setContentPane(new BasePanel(new NewGameMenu(this), ae -> showMainMenu()));
+        revalidate();
+    }
+
+    public void showLoadGameMenu(){
+        setContentPane(new BasePanel(new LoadGameMenu(this), ae -> showMainMenu()));
+        revalidate();
     }
 
     public void exitOperation(){
