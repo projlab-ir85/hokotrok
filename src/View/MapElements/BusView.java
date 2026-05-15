@@ -1,4 +1,4 @@
-package View.Swing;
+package View.MapElements;
 
 import Vehicles.Bus;
 

@@ -1,4 +1,4 @@
-package View.Swing;
+package View.MapElements;
 import Vehicles.Vehicle;
 import View.Interfaces.Animatable;
 import Util.Observer;
@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
-public abstract class VehicleView extends JPanel implements Observer, Animatable {
+public abstract class VehicleView implements Observer, Animatable {
     protected Vehicle vehicle;
     protected Point coord;
     private Point startCoord;

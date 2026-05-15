@@ -1,4 +1,4 @@
-package View.Swing;
+package View.MapElements;
 
 import RoadComponents.RoadSection;
 import Util.Observer;
@@ -7,7 +7,7 @@ import View.Util.Point;
 
 import javax.swing.*;
 
-public class RoadSectionView extends JPanel implements Observer, Animatable {
+public class RoadSectionView implements Observer, Animatable {
     private Point startCoord;
     private Point endCoord;
     private RoadSection roadSection;

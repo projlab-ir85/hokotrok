@@ -5,7 +5,7 @@ import RoadComponents.Road;
 import RoadComponents.RoadSection;
 import Vehicles.GPS.BFS;
 import Vehicles.Vehicle;
-import View.Swing.GameView;
+import View.GameView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

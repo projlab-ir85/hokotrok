@@ -1,4 +1,4 @@
-package View.Swing;
+package View.MapElements;
 
 import RoadComponents.Intersection;
 import Util.Observer;
@@ -6,7 +6,7 @@ import View.Util.Point;
 
 import javax.swing.*;
 
-public class IntersectionView extends JPanel implements Observer {
+public class IntersectionView implements Observer {
     private Point coord;
     private Intersection intersection;
 

@@ -1,8 +1,8 @@
 package View.Util;
 
 import RoadComponents.Road;
-import View.Swing.IntersectionView;
-import View.Swing.RoadSectionView;
+import View.MapElements.IntersectionView;
+import View.MapElements.RoadSectionView;
 
 import java.util.List;
 
