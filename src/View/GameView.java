@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-public class GameView extends JFrame implements View.Interfaces.GameView {
+public class GameView extends JFrame{
     private Controller controller;
     private List<VehicleView> vehicleViews;
     private  List<RoadSectionView> roadSectionViews;
