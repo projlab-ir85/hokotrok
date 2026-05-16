@@ -7,6 +7,7 @@ import View.Util.Point;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public abstract class VehicleView implements Observer, Animatable {

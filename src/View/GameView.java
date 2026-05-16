@@ -71,6 +71,11 @@ public class GameView extends JFrame{
         revalidate();
     }
 
+    public void showGameScene(){
+        setContentPane(new BasePanel(new GameScene(0.5), ae -> showMainMenu()));
+        revalidate();
+    }
+
     public void exitOperation(){
         int result = JOptionPane.showConfirmDialog(
                 this,

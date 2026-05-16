@@ -5,9 +5,14 @@ import Util.Observer;
 import View.Interfaces.Animatable;
 import View.Util.Point;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.security.spec.ECField;
 
 public class RoadSectionView implements Observer, Animatable {
+    private BufferedImage tile;
     private Point startCoord;
     private Point endCoord;
     private RoadSection roadSection;
@@ -24,6 +29,13 @@ public class RoadSectionView implements Observer, Animatable {
         this.roadSection = roadSection;
         this.startCoord = startCoord;
         this.endCoord = endCoord;
+
+        try{
+            tile = ImageIO.read(getClass().getResourceAsStream("/images/roadComponents/roads.png")).getSubimage(512, 256, 256,256);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public Point getStartCoord(){return startCoord;}
@@ -36,5 +48,9 @@ public class RoadSectionView implements Observer, Animatable {
 
     public void tick(){
 
+    }
+
+    public void draw(Graphics g){
+        g.drawImage(tile, (int)startCoord.x, (int)startCoord.y, null);
     }
 }
