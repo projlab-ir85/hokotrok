@@ -17,10 +17,11 @@ public abstract class VehicleView implements Observer, Animatable {
     private Point endCoord;
     private double t;
     private int VIEW_TICKS_PER_GAME_TICK;
-    protected BufferedImage image;
+    protected BufferedImage tile;
 
-    public VehicleView(Vehicle vehicle){
+    public VehicleView(Vehicle vehicle, Point coord){
         this.vehicle = vehicle;
+        this.coord = coord;
     }
 
     public void update(){
@@ -28,7 +29,7 @@ public abstract class VehicleView implements Observer, Animatable {
     }
 
     public void draw(Graphics g){
-
+        g.drawImage(tile, (int)coord.x, (int)coord.y, null);
     }
 
     public void tick(){

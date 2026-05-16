@@ -1,5 +1,6 @@
 package View.Scenes;
 
+import View.MapElements.BusView;
 import View.MapElements.RoadSectionView;
 import View.Util.Point;
 
@@ -15,6 +16,7 @@ public class GameScene extends JPanel{
         this.setLayout(new BorderLayout());
 
         RoadSectionView roadSectionView = new RoadSectionView(null, new Point(0,0), new Point(256,256));
+        BusView busView = new BusView(null, new Point(0,0));
 
         graphicsPanel = new JPanel(){
             @Override
@@ -25,6 +27,7 @@ public class GameScene extends JPanel{
                 g2d.scale(scale,scale);
 
                 roadSectionView.draw(g);
+                busView.draw(g);
             }
         };
 
