@@ -117,10 +117,11 @@ public class RoadSection implements Updateable, Subject {
     }
 
     public boolean accept(Vehicle v){
-        if(accidentHappened){
+        if(accidentHappened || vehicles.size() >= 2){
             v.setStuck(true);
             return false;
         }
+
         vehicles.add(v);
         v.setCurrRoadSection(this);
         v.setCurrIntersection(null);

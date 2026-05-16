@@ -6,13 +6,13 @@ import View.Interfaces.Animatable;
 import View.Util.Point;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.security.spec.ECField;
 
 public class RoadSectionView implements Observer, Animatable {
-    private BufferedImage tile;
+    private BufferedImage roadTile;
+    private BufferedImage iceTile;
+    private BufferedImage snowTile;
     private Point startCoord;
     private Point endCoord;
     private RoadSection roadSection;
@@ -30,8 +30,14 @@ public class RoadSectionView implements Observer, Animatable {
         this.startCoord = startCoord;
         this.endCoord = endCoord;
 
+        //for testing
+        startIce = 1;
+        startSnow = 100;
+
         try{
-            tile = ImageIO.read(getClass().getResourceAsStream("/images/roadComponents/roads.png")).getSubimage(512, 256, 256,256);
+            roadTile = ImageIO.read(getClass().getResourceAsStream("/images/roadComponents/roads.png")).getSubimage(2*256, 0*256, 256,256);
+            iceTile = ImageIO.read(getClass().getResourceAsStream("/images/roadComponents/ice.png")).getSubimage(2*256, 0*256, 256,256);
+            snowTile = ImageIO.read(getClass().getResourceAsStream("/images/roadComponents/snow.png")).getSubimage(2*256, 0*256, 256,256);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -51,6 +57,18 @@ public class RoadSectionView implements Observer, Animatable {
     }
 
     public void draw(Graphics g){
-        g.drawImage(tile, (int)startCoord.x, (int)startCoord.y, null);
+        Graphics2D g2d = (Graphics2D)g;
+
+        g2d.drawImage(roadTile, (int)startCoord.x, (int)startCoord.y, null);
+
+        float snowAlpha = (float)startSnow / 100f;
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, snowAlpha));
+        g2d.drawImage(snowTile, (int)startCoord.x, (int)startCoord.y, null);
+
+        float iceAlpha = (float)startIce / 100f;
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, iceAlpha));
+        g2d.drawImage(iceTile, (int)startCoord.x, (int)startCoord.y, null);
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
 }
