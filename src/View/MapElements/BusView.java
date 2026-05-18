@@ -12,16 +12,13 @@ public class BusView extends VehicleView {
         super(bus, coord);
 
         try{
-            tile = ImageIO.read(getClass().getResourceAsStream("/images/vehicles/Yellow_BUS_CLEAN_8D_000-sheet.png")).getSubimage(0, 0, 210,210);
+            tile = ImageIO.read(getClass().getResourceAsStream("/images/vehicles/32x48_cars_snowplow.png")).getSubimage(0*48, 6*48, 32,48);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public void draw(Graphics g){
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.scale(0.75,0.75);
-
+    public void draw(Graphics2D g2d){
         g2d.drawImage(tile, (int)coord.x, (int)coord.y, null);
     }
 }

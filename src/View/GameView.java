@@ -72,7 +72,7 @@ public class GameView extends JFrame{
     }
 
     public void showGameScene(){
-        setContentPane(new BasePanel(new GameScene(0.5), ae -> showMainMenu()));
+        setContentPane(new BasePanel(new GameScene(0.5, VIEW_TICKS_PER_GAME_TICK, controller.getRoads()), ae -> showMainMenu()));
         revalidate();
     }
 

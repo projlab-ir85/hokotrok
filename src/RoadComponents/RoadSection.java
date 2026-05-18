@@ -166,6 +166,8 @@ public class RoadSection implements Updateable, Subject {
         vehicles.remove(v);
     }
 
+    public int getSublaneIndex(){return sublaneIndex;}
+
     public void addObserver(Observer o){}
     public void removeObserver(Observer o){}
     public void notifyObservers(){}
